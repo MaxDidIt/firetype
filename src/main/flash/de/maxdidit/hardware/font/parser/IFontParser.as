@@ -1,6 +1,6 @@
 package de.maxdidit.hardware.font.parser 
 {
-	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.HardwareFont;
 	import flash.utils.ByteArray;
 	
 	/**
@@ -9,7 +9,7 @@ package de.maxdidit.hardware.font.parser
 	 */
 	public interface IFontParser 
 	{
-		function parseFontData(data:ByteArray):HardwareFontData;
+		function parseFont(data:ByteArray):HardwareFont;
 	}
 	
 }

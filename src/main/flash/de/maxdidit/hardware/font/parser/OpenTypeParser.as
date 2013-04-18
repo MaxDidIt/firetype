@@ -12,7 +12,7 @@ package de.maxdidit.hardware.font.parser
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class OpenTypeParser implements IFontParser
+	public class OpenTypeParser extends FontParser
 	{
 		///////////////////////
 		// Member Fields
@@ -46,7 +46,7 @@ package de.maxdidit.hardware.font.parser
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
 		
-		public function parseFontData(data:ByteArray):HardwareFontData 
+		protected override function parseFontData(data:ByteArray):HardwareFontData 
 		{
 			data.position = 0;
 			

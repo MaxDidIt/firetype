@@ -19,71 +19,31 @@ package de.maxdidit.hardware.font
 		// Member Fields
 		///////////////////////
 		
-		private var _fontParser:IFontParser;
 		private var _data:HardwareFontData;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareFont(fontParser:IFontParser ) 
+		public function HardwareFont() 
 		{
-			_fontParser = fontParser;
 		}
 		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		public function loadFont(url:String):void
+		// data
+		
+		public function get data():HardwareFontData 
 		{
-			var urlRequest:URLRequest = new URLRequest(url);
-			
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
-			
-			urlLoader.addEventListener(Event.COMPLETE, handleFontLoaded);
-			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleFontLoadingFailed);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleFontLoadingFailed);
-			
-			urlLoader.load(urlRequest);
+			return _data;
 		}
 		
-		public function parseFontData(data:ByteArray):void
+		public function set data(value:HardwareFontData):void 
 		{
-			_data = _fontParser.parseFontData(data);
+			_data = value;
 		}
-		
-		private function removeEventHandlerFromLoader(urlLoader:URLLoader):void
-		{
-			urlLoader.removeEventListener(Event.COMPLETE, handleFontLoaded);
-			urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, handleFontLoadingFailed);
-			urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, handleFontLoadingFailed);
-		}
-		
-		///////////////////////
-		// Event Handler
-		///////////////////////
-		
-		private function handleFontLoaded(e:Event):void 
-		{
-			// TODO: provide feedback that font has been loaded.
-			
-			var urlLoader:URLLoader = e.target as URLLoader;
-			removeEventHandlerFromLoader(urlLoader);
-			
-			var data:ByteArray = urlLoader.data as ByteArray;
-			parseFontData(data);
-		}
-		
-		private function handleFontLoadingFailed(e:Event):void 
-		{
-			// TODO: provide feedback that the font could not be loaded and why.
-			
-			var urlLoader:URLLoader = e.target as URLLoader;
-			removeEventHandlerFromLoader(urlLoader);
-		}
-		
 	}
 
 }
