@@ -49,17 +49,13 @@ package de.maxdidit.hardware.font.parser
 		
 		public function parseUnsignedShort(data:ByteArray):uint
 		{
-			var value:uint = ((data.readByte() & 0xFF) << 8);
-			value += (data.readByte() & 0xFF);
+			var value:uint = data.readUnsignedShort();
 			return value;
 		}
 		
 		public function parseUnsignedLong(data:ByteArray):uint
 		{
-			var value:uint = ((data.readByte() & 0xFF) << 24);
-			value += ((data.readByte() & 0xFF) << 16);
-			value += ((data.readByte() & 0xFF) << 8);
-			value += (data.readByte() & 0xFF);
+			var value:uint = data.readUnsignedInt()
 			return value;
 		}
 		

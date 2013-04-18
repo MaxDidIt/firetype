@@ -5,6 +5,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.tables.DigitalSignatureTableParser;
+	import de.maxdidit.hardware.font.parser.tables.GlyphDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
@@ -40,6 +41,7 @@ package de.maxdidit.hardware.font.parser
 			_tableParserMap = new Object();
 			
 			_tableParserMap["DSIG"] = new DigitalSignatureTableParser(_dataTypeParser);
+			_tableParserMap["GDEF"] = new GlyphDefinitionTableParser(_dataTypeParser);
 		}
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
