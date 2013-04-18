@@ -30,7 +30,7 @@ package de.maxdidit.hardware.font
 		
 		public function startUp():void
 		{
-			_hardwareFont = new HardwareFont();
+			//_hardwareFont = new HardwareFont();
 		}
 		
 		///////////////////////
@@ -41,7 +41,7 @@ package de.maxdidit.hardware.font
 		
 		public function tearDown():void
 		{
-			_hardwareFont = null;
+			//_hardwareFont = null;
 		}
 		
 		///////////////////////

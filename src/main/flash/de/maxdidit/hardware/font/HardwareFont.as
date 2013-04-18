@@ -1,5 +1,7 @@
 package de.maxdidit.hardware.font 
 {
+	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.parser.IFontParser;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
@@ -13,14 +15,20 @@ package de.maxdidit.hardware.font
 	 */
 	public class HardwareFont 
 	{
+		///////////////////////
+		// Member Fields
+		///////////////////////
+		
+		private var _fontParser:IFontParser;
+		private var _data:HardwareFontData;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareFont() 
+		public function HardwareFont(fontParser:IFontParser ) 
 		{
-			
+			_fontParser = fontParser;
 		}
 		
 		///////////////////////
@@ -43,7 +51,7 @@ package de.maxdidit.hardware.font
 		
 		public function parseFontData(data:ByteArray):void
 		{
-			
+			_data = _fontParser.parseFontData(data);
 		}
 		
 		private function removeEventHandlerFromLoader(urlLoader:URLLoader):void

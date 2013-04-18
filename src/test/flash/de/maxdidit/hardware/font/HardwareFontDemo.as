@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font 
 {
+	import de.maxdidit.hardware.font.parser.OpenTypeParser;
 	import flash.display.Sprite;
 	
 	/**
@@ -16,7 +17,8 @@ package de.maxdidit.hardware.font
 		
 		public function HardwareFontDemo() 
 		{
-			
+			var hardwareFont:HardwareFont = new HardwareFont(new OpenTypeParser());
+			hardwareFont.loadFont("newscycle-bold.ttf");
 		}
 		
 	}
