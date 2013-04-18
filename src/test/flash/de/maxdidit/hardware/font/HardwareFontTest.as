@@ -20,6 +20,8 @@ package de.maxdidit.hardware.font
 		// Member Fields
 		///////////////////////
 		
+		private var _hardwareFont:HardwareFont;
+		
 		///////////////////////
 		// Start Up
 		///////////////////////
@@ -28,7 +30,7 @@ package de.maxdidit.hardware.font
 		
 		public function startUp():void
 		{
-			
+			_hardwareFont = new HardwareFont();
 		}
 		
 		///////////////////////
@@ -39,7 +41,7 @@ package de.maxdidit.hardware.font
 		
 		public function tearDown():void
 		{
-			
+			_hardwareFont = null;
 		}
 		
 		///////////////////////
