@@ -4,6 +4,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.SFNTWrapper;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
+	import de.maxdidit.hardware.font.parser.tables.DigitalSignatureTableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...

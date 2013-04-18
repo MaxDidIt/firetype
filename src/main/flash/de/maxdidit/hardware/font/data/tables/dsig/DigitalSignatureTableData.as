@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables 
+package de.maxdidit.hardware.font.data.tables.dsig 
 {
 	/**
 	 * ...
