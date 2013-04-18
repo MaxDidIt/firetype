@@ -17,8 +17,8 @@ package de.maxdidit.hardware.font
 		
 		public function HardwareFontDemo() 
 		{
-			var hardwareFont:HardwareFont = new HardwareFont(new OpenTypeParser());
-			hardwareFont.loadFont("newscycle-bold.ttf");
+			var hardwareParser:OpenTypeParser = new OpenTypeParser();
+			hardwareParser.loadFont("newscycle-bold.ttf");
 		}
 		
 	}

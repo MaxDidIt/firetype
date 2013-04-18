@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.parser.tables
 	import de.maxdidit.hardware.font.data.tables.classes.ClassDefinitionTableData1;
 	import de.maxdidit.hardware.font.data.tables.classes.ClassDefinitionTableData2;
 	import de.maxdidit.hardware.font.data.tables.classes.ClassRangeRecord;
+	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**
@@ -36,7 +37,7 @@ package de.maxdidit.hardware.font.parser.tables
 		{
 			data.position = offset;
 			var format:uint = _dataTypeParser.parseUnsignedShort(data);
-			var result:Object;
+			var result:IClassDefinitionTable;
 			
 			if (format == 1)
 			{

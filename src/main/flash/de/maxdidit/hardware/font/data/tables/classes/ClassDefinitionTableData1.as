@@ -38,7 +38,7 @@ package de.maxdidit.hardware.font.data.tables.classes
 		
 		public function set classFormat(value:uint):void 
 		{
-			// TODO: If this is set to anything else than 1, somethings wrong
+			// TODO: If this is set to anything else than 1, something's wrong
 			_classFormat = value;
 		}
 		

@@ -13,9 +13,9 @@ package de.maxdidit.hardware.font.data.tables.gdef
 		private var _version:uint;
 		
 		private var _glyphClassDefinitionsOffset:uint;
-		private var _attachementPointListOffset:uint;
+		private var _attachmentListTableOffset:uint;
 		private var _ligatureCaretListOffset:uint;
-		private var _markAttachementsClassDefinitionsOffset:uint;
+		private var _markAttachmentsClassDefinitionsOffset:uint;
 		private var _markGlyphSetsOffset:uint;
 		
 		///////////////////////
@@ -55,16 +55,16 @@ package de.maxdidit.hardware.font.data.tables.gdef
 			_glyphClassDefinitionsOffset = value;
 		}
 		
-		// attachementPointListOffset
+		// attachmentPointListOffset
 		
-		public function get attachementPointListOffset():uint 
+		public function get attachmentListTableOffset():uint 
 		{
-			return _attachementPointListOffset;
+			return _attachmentListTableOffset;
 		}
 		
-		public function set attachementPointListOffset(value:uint):void 
+		public function set attachmentListTableOffset(value:uint):void 
 		{
-			_attachementPointListOffset = value;
+			_attachmentListTableOffset = value;
 		}
 		
 		// ligatureCaretListOffset
@@ -79,16 +79,16 @@ package de.maxdidit.hardware.font.data.tables.gdef
 			_ligatureCaretListOffset = value;
 		}
 		
-		// markAttachementsClassDefinitionsOffset
+		// markAttachmentsClassDefinitionsOffset
 		
-		public function get markAttachementsClassDefinitionsOffset():uint 
+		public function get markAttachmentsClassDefinitionsOffset():uint 
 		{
-			return _markAttachementsClassDefinitionsOffset;
+			return _markAttachmentsClassDefinitionsOffset;
 		}
 		
-		public function set markAttachementsClassDefinitionsOffset(value:uint):void 
+		public function set markAttachmentsClassDefinitionsOffset(value:uint):void 
 		{
-			_markAttachementsClassDefinitionsOffset = value;
+			_markAttachmentsClassDefinitionsOffset = value;
 		}
 		
 		// markGlyphSetsOffset

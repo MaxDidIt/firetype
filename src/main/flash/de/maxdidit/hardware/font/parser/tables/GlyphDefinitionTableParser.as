@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
+	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionHeader;
 	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionTableData;
@@ -40,7 +41,20 @@ package de.maxdidit.hardware.font.parser.tables
 			
 			result.header = parseGlyphDefinitionTableHeader(data);
 			result.glyphClassDefinitionTable = parseGlyphClassDefinitionTable(data, offset, result.header.glyphClassDefinitionsOffset);
+			result.attachmentListTable = parseAttachmentListTable(data, offset, result.header.attachmentListTableOffset);
 			
+			return result;
+		}
+		
+		private function parseAttachmentListTable(data:ByteArray, offset:uint, attachmentListTableOffset:uint):AttachmentListTableData 
+		{
+			if (attachmentListTableOffset == 0)
+			{
+				return null;
+			}
+			
+			var parser:AttachmentListTableParser = new AttachmentListTableParser(_dataTypeParser);
+			var result:AttachmentListTableData = parser.parseTable(data, offset + attachmentListTableOffset);
 			return result;
 		}
 		
@@ -51,9 +65,9 @@ package de.maxdidit.hardware.font.parser.tables
 			header.version = _dataTypeParser.parseUnsignedLong(data);
 			
 			header.glyphClassDefinitionsOffset = _dataTypeParser.parseUnsignedShort(data);
-			header.attachementPointListOffset = _dataTypeParser.parseUnsignedShort(data);
+			header.attachmentListTableOffset = _dataTypeParser.parseUnsignedShort(data);
 			header.ligatureCaretListOffset = _dataTypeParser.parseUnsignedShort(data);
-			header.markAttachementsClassDefinitionsOffset = _dataTypeParser.parseUnsignedShort(data);
+			header.markAttachmentsClassDefinitionsOffset = _dataTypeParser.parseUnsignedShort(data);
 			
 			if (header.version == 0x00010002)
 			{
@@ -65,6 +79,11 @@ package de.maxdidit.hardware.font.parser.tables
 		
 		private function parseGlyphClassDefinitionTable(data:ByteArray, offset:uint, glyphClassDefinitionsOffset:uint):IClassDefinitionTable 
 		{
+			if (glyphClassDefinitionsOffset == 0)
+			{
+				return null;
+			}
+			
 			var parser:ClassDefinitionTableParser = new ClassDefinitionTableParser(_dataTypeParser);
 			var result:IClassDefinitionTable = parser.parseTable(data, offset + glyphClassDefinitionsOffset);
 			

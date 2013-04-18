@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.gdef 
 {
+	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
 	/**
 	 * ...
@@ -12,7 +13,9 @@ package de.maxdidit.hardware.font.data.tables.gdef
 		///////////////////////
 		
 		private var _header:GlyphDefinitionHeader;
+		
 		private var _glyphClassDefinitionTable:IClassDefinitionTable;
+		private var _attachmentListTable:AttachmentListTableData;
 		
 		///////////////////////
 		// Constructor
@@ -49,6 +52,18 @@ package de.maxdidit.hardware.font.data.tables.gdef
 		public function set glyphClassDefinitionTable(value:IClassDefinitionTable):void 
 		{
 			_glyphClassDefinitionTable = value;
+		}
+		
+		// attachmentListTable
+		
+		public function get attachmentListTable():AttachmentListTableData 
+		{
+			return _attachmentListTable;
+		}
+		
+		public function set attachmentListTable(value:AttachmentListTableData):void 
+		{
+			_attachmentListTable = value;
 		}
 		
 	}
