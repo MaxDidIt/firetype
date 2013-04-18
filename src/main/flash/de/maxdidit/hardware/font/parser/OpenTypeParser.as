@@ -11,6 +11,12 @@ package de.maxdidit.hardware.font.parser
 	 */
 	public class OpenTypeParser implements IFontParser
 	{
+		///////////////////////
+		// Member Fields
+		///////////////////////
+		
+		private var _tableParserMap:Object;
+		private var _dataTypeParser:DataTypeParser;
 		
 		///////////////////////
 		// Constructor
@@ -18,12 +24,21 @@ package de.maxdidit.hardware.font.parser
 		
 		public function OpenTypeParser() 
 		{
+			_dataTypeParser = new DataTypeParser();
 			
+			initializeTableParserMap();
 		}
 		
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		private function initializeTableParserMap():void 
+		{
+			_tableParserMap = new Object();
+			
+			_tableParserMap["DSIG"] = new DigitalSignatureTableParser(_dataTypeParser);
+		}
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
 		
@@ -36,7 +51,31 @@ package de.maxdidit.hardware.font.parser
 			hardwareFontData.sfntWrapper = parseSFNTWrapper(data);
 			hardwareFontData.tables = parseTableRecords(data, hardwareFontData.sfntWrapper.numTables);
 			
+			parseTables(data, hardwareFontData.tables);
+			
 			return hardwareFontData;
+		}
+		
+		private function parseTables(data:ByteArray, tables:Vector.<Table>):void 
+		{
+			const l:uint = tables.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				parseTable(data, tables[i]);
+			}
+		}
+		
+		private function parseTable(data:ByteArray, table:Table):void 
+		{
+			if (!_tableParserMap.hasOwnProperty(table.record.tag))
+			{
+				// no appropriate table parser found
+				return;
+			}
+			
+			var tableParser:ITableParser = _tableParserMap[table.record.tag] as ITableParser;
+			table.data = tableParser.parseTable(data, table.record.offset);
 		}
 		
 		private function parseTableRecords(data:ByteArray, numRecords:uint):Vector.<Table> 
@@ -57,10 +96,10 @@ package de.maxdidit.hardware.font.parser
 		{
 			var tableRecord:TableRecord = new TableRecord();
 			
-			tableRecord.tag = parseUnsignedLongAsString(data);
-			tableRecord.checkSum = parseUnsignedLong(data);
-			tableRecord.offset = parseUnsignedLong(data);
-			tableRecord.length = parseUnsignedLong(data);
+			tableRecord.tag = _dataTypeParser.parseUnsignedLongAsString(data);
+			tableRecord.checkSum = _dataTypeParser.parseUnsignedLong(data);
+			tableRecord.offset = _dataTypeParser.parseUnsignedLong(data);
+			tableRecord.length = _dataTypeParser.parseUnsignedLong(data);
 			
 			return tableRecord;
 		}
@@ -69,61 +108,13 @@ package de.maxdidit.hardware.font.parser
 		{
 			var sfntWrapper:SFNTWrapper = new SFNTWrapper();
 			
-			sfntWrapper.version = parseSFNTVersionNumber(data);
-			sfntWrapper.numTables = parseUnsignedShort(data);
-			sfntWrapper.searchRange = parseUnsignedShort(data);
-			sfntWrapper.entrySelector = parseUnsignedShort(data);
-			sfntWrapper.rangeShift = parseUnsignedShort(data);
+			sfntWrapper.version = _dataTypeParser.parseSFNTVersionNumber(data);
+			sfntWrapper.numTables = _dataTypeParser.parseUnsignedShort(data);
+			sfntWrapper.searchRange = _dataTypeParser.parseUnsignedShort(data);
+			sfntWrapper.entrySelector = _dataTypeParser.parseUnsignedShort(data);
+			sfntWrapper.rangeShift = _dataTypeParser.parseUnsignedShort(data);
 			
 			return sfntWrapper;
-		}
-		
-		// parsing data types
-		
-		private function parseSFNTVersionNumber(data:ByteArray):String
-		{
-			var value:uint = data.readUnsignedInt();
-			
-			if (value == 0x00010000)
-			{
-				return "1.0"; // Font contains TrueType outlines
-			}
-			
-			if (value == 0x4F54544F)
-			{
-				return "OTTO"; // Font contains CFF data
-			}
-			
-			return "unknown";
-		}
-		
-		private function parseFixed(data:ByteArray):Number 
-		{
-			var integerValue:int = data.readInt();
-			var floatValue:Number = Number(integerValue) / Number(0x10000);
-			return floatValue;
-		}
-		
-		private function parseUnsignedShort(data:ByteArray):uint
-		{
-			var value:uint = ((data.readByte() & 0xFF) << 8);
-			value += (data.readByte() & 0xFF);
-			return value;
-		}
-		
-		private function parseUnsignedLong(data:ByteArray):uint
-		{
-			var value:uint = ((data.readByte() & 0xFF) << 24);
-			value += ((data.readByte() & 0xFF) << 16);
-			value += ((data.readByte() & 0xFF) << 8);
-			value += (data.readByte() & 0xFF);
-			return value;
-		}
-		
-		private function parseUnsignedLongAsString(data:ByteArray):String 
-		{
-			var string:String = data.readUTFBytes(4);
-			return string;
 		}
 		
 	}
