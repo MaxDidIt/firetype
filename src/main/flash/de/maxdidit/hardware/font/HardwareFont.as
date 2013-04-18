@@ -1,4 +1,4 @@
-package main.flash.de.maxdidit.hardware.font 
+package de.maxdidit.hardware.font 
 {
 	/**
 	 * ...
@@ -7,7 +7,20 @@ package main.flash.de.maxdidit.hardware.font
 	public class HardwareFont 
 	{
 		
+		///////////////////////
+		// Constructor
+		///////////////////////
+		
 		public function HardwareFont() 
+		{
+			
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function loadFont(url:String):void
 		{
 			
 		}

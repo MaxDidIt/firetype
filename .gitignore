@@ -1,0 +1,8 @@
+/ivy.xml
+/build.xml
+/*.as3proj
+/lib
+/target
+/report
+/obj
+/distrib
