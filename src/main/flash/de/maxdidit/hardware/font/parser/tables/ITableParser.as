@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.parser 
+package de.maxdidit.hardware.font.parser.tables 
 {
 	import flash.utils.ByteArray;
 	/**
