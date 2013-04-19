@@ -39,7 +39,7 @@ package de.maxdidit.hardware.font.parser.tables
 			result.startSize = _dataTypeParser.parseUnsignedShort(data);
 			result.endSize = _dataTypeParser.parseUnsignedShort(data);
 			
-			result.deltaFormat = _dataTypeParser.parseUnsignedShort(dasta);
+			result.deltaFormat = _dataTypeParser.parseUnsignedShort(data);
 			
 			var range:uint = result.endSize - result.startSize;
 			if (result.deltaFormat == 1)

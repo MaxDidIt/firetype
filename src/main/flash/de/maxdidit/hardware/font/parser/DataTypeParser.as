@@ -65,6 +65,12 @@ package de.maxdidit.hardware.font.parser
 			return string;
 		}
 		
+		public function parseShort(data:ByteArray):int 
+		{
+			var value:int = data.readInt();
+			return value;
+		}
+		
 	}
 
 }

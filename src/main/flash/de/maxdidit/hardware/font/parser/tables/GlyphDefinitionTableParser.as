@@ -4,6 +4,7 @@ package de.maxdidit.hardware.font.parser.tables
 	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionHeader;
 	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionTableData;
+	import de.maxdidit.hardware.font.data.tables.ligature.LigatureCaretListTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**
@@ -42,7 +43,20 @@ package de.maxdidit.hardware.font.parser.tables
 			result.header = parseGlyphDefinitionTableHeader(data);
 			result.glyphClassDefinitionTable = parseGlyphClassDefinitionTable(data, offset, result.header.glyphClassDefinitionsOffset);
 			result.attachmentListTable = parseAttachmentListTable(data, offset, result.header.attachmentListTableOffset);
+			result.ligatureCaretList = parseLigatureGlyphTable(data, offset, result.header.ligatureCaretListOffset);
 			
+			return result;
+		}
+		
+		private function parseLigatureGlyphTable(data:ByteArray, offset:uint, ligatureCaretListOffset:uint):LigatureCaretListTableData 
+		{
+			if (ligatureCaretListOffset == 0)
+			{
+				return null;
+			}
+			
+			var parser:LigatureCaretListTableParser = new LigatureCaretListTableParser(_dataTypeParser);
+			var result:LigatureCaretListTableData = parser.parseTable(data, offset + ligatureCaretListOffset);
 			return result;
 		}
 		

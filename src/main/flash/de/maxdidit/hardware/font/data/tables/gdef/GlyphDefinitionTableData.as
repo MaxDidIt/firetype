@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font.data.tables.gdef
 {
 	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
+	import de.maxdidit.hardware.font.data.tables.ligature.LigatureCaretListTableData;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -16,6 +17,7 @@ package de.maxdidit.hardware.font.data.tables.gdef
 		
 		private var _glyphClassDefinitionTable:IClassDefinitionTable;
 		private var _attachmentListTable:AttachmentListTableData;
+		private var _ligatureCaretList:LigatureCaretListTableData;
 		
 		///////////////////////
 		// Constructor
@@ -64,6 +66,18 @@ package de.maxdidit.hardware.font.data.tables.gdef
 		public function set attachmentListTable(value:AttachmentListTableData):void 
 		{
 			_attachmentListTable = value;
+		}
+		
+		// ligatureCaretList
+		
+		public function get ligatureCaretList():LigatureCaretListTableData 
+		{
+			return _ligatureCaretList;
+		}
+		
+		public function set ligatureCaretList(value:LigatureCaretListTableData):void 
+		{
+			_ligatureCaretList = value;
 		}
 		
 	}
