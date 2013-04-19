@@ -42,6 +42,7 @@ package de.maxdidit.hardware.font.parser
 			
 			_tableParserMap["DSIG"] = new DigitalSignatureTableParser(_dataTypeParser);
 			_tableParserMap["GDEF"] = new GlyphDefinitionTableParser(_dataTypeParser);
+			_tableParserMap["head"] = new FontHeaderParser(_dataTypeParser);
 		}
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
