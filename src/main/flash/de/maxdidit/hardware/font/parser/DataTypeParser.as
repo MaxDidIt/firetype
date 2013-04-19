@@ -67,7 +67,14 @@ package de.maxdidit.hardware.font.parser
 		
 		public function parseShort(data:ByteArray):int 
 		{
-			var value:int = data.readInt();
+			var value:int = data.readShort();
+			return value;
+		}
+		
+		public function parseLong64(data:ByteArray):Number 
+		{
+			var value:Number = data.readUnsignedInt() << 32;
+			value += data.readUnsignedInt();
 			return value;
 		}
 		
