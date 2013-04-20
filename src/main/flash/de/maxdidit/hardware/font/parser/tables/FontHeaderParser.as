@@ -1,6 +1,7 @@
-package de.maxdidit.hardware.font.parser 
+package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.FontHeader;
+	import de.maxdidit.hardware.font.data.tables.head.FontHeader;
+	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	import de.maxdidit.hardware.font.HardwareFont;
