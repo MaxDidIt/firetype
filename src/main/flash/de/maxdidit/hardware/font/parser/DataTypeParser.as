@@ -78,6 +78,12 @@ package de.maxdidit.hardware.font.parser
 			return value;
 		}
 		
+		public function parseByte(data:ByteArray):uint 
+		{
+			var value:uint = data.readUnsignedByte();
+			return value;
+		}
+		
 	}
 
 }
