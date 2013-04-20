@@ -4,6 +4,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.SFNTWrapper;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
+	import de.maxdidit.hardware.font.parser.tables.CharacterIndexMappingTableParser;
 	import de.maxdidit.hardware.font.parser.tables.DigitalSignatureTableParser;
 	import de.maxdidit.hardware.font.parser.tables.FontHeaderParser;
 	import de.maxdidit.hardware.font.parser.tables.GlyphDefinitionTableParser;
@@ -46,6 +47,7 @@ package de.maxdidit.hardware.font.parser
 			_tableParserMap["GDEF"] = new GlyphDefinitionTableParser(_dataTypeParser);
 			_tableParserMap["head"] = new FontHeaderParser(_dataTypeParser);
 			_tableParserMap["maxp"] = new MaximumProfileTableParser(_dataTypeParser);
+			_tableParserMap["cmap"] = new CharacterIndexMappingTableParser(_dataTypeParser);
 		}
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
