@@ -13,6 +13,7 @@ package de.maxdidit.hardware.font.data
 		
 		private var _sfntWrapper:SFNTWrapper;
 		private var _tables:Vector.<Table>;
+		private var _tableMap:Object;
 		
 		///////////////////////
 		// Constructor
@@ -49,6 +50,26 @@ package de.maxdidit.hardware.font.data
 		public function set tables(value:Vector.<Table>):void 
 		{
 			_tables = value;
+			
+			mapTables();
+		}
+		
+		///////////////////////
+		// Member Properties
+		///////////////////////
+		
+		private function mapTables():void 
+		{
+			if (!_tableMap)
+			{
+				_tableMap = new Object();
+			}
+			
+			const l:uint = _tables.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				_tableMap[_tables[i].record.tag] = _tables[i];
+			}
 		}
 		
 		
