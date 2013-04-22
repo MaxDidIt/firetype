@@ -4,7 +4,7 @@ package de.maxdidit.hardware.font.data.tables.required.head
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class FontHeader 
+	public class FontHeaderData
 	{
 		///////////////////////
 		// Member Fields
@@ -58,7 +58,7 @@ package de.maxdidit.hardware.font.data.tables.required.head
 		// Constructor
 		///////////////////////
 		
-		public function FontHeader() 
+		public function FontHeaderData() 
 		{
 			
 		}

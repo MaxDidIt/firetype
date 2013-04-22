@@ -1,6 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables.required 
 {
-	import de.maxdidit.hardware.font.data.tables.required.head.FontHeader;
+	import de.maxdidit.hardware.font.data.tables.required.head.FontHeaderData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
@@ -36,7 +36,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 		{
 			data.position = offset;
 			
-			var result:FontHeader = new FontHeader();
+			var result:FontHeaderData = new FontHeaderData();
 			
 			result.tableVersion = _dataTypeParser.parseFixed(data);
 			result.fontRevision = _dataTypeParser.parseFixed(data);
