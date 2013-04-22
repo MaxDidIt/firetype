@@ -1,11 +1,11 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.caret.CaretValue1;
-	import de.maxdidit.hardware.font.data.tables.caret.CaretValue2;
-	import de.maxdidit.hardware.font.data.tables.caret.CaretValue3;
-	import de.maxdidit.hardware.font.data.tables.caret.ICaretValue;
-	import de.maxdidit.hardware.font.data.tables.ligature.LigatureCaretListTableData;
-	import de.maxdidit.hardware.font.data.tables.ligature.LigatureGlyphTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.CaretValue1;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.CaretValue2;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.CaretValue3;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.ICaretValue;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureGlyphTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

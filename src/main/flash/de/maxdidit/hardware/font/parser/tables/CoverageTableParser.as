@@ -1,9 +1,9 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.coverage.CoverageTableData1;
-	import de.maxdidit.hardware.font.data.tables.coverage.CoverageTableData2;
-	import de.maxdidit.hardware.font.data.tables.coverage.ICoverageTable;
-	import de.maxdidit.hardware.font.data.tables.coverage.RangeRecord;
+	import de.maxdidit.hardware.font.data.tables.common.coverage.CoverageTableData1;
+	import de.maxdidit.hardware.font.data.tables.common.coverage.CoverageTableData2;
+	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.coverage.RangeRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

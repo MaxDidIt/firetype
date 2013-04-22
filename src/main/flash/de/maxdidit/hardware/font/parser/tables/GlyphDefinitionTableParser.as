@@ -1,10 +1,10 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentListTableData;
-	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
-	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionHeader;
-	import de.maxdidit.hardware.font.data.tables.gdef.GlyphDefinitionTableData;
-	import de.maxdidit.hardware.font.data.tables.ligature.LigatureCaretListTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.IClassDefinitionTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionHeader;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

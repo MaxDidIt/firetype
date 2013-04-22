@@ -1,12 +1,12 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.cmap.CharacterIndexMappingTableData;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.ByteEncodingTableData;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.CharacterIndexMappingSubtable;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.HighByteMappingTableData;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.HighByteSubHeader;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.ICharacterIndexMappingSubtableData;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.SegmentToDeltaMappingSubtableData;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ByteEncodingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.CharacterIndexMappingSubtable;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.HighByteMappingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.HighByteSubHeader;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData;
+	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.SegmentToDeltaMappingSubtableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

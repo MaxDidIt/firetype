@@ -1,6 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.maxp.MaximumProfileTableData;
+	import de.maxdidit.hardware.font.data.tables.required.maxp.MaximumProfileTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

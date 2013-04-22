@@ -1,9 +1,9 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.classes.ClassDefinitionTableData1;
-	import de.maxdidit.hardware.font.data.tables.classes.ClassDefinitionTableData2;
-	import de.maxdidit.hardware.font.data.tables.classes.ClassRangeRecord;
-	import de.maxdidit.hardware.font.data.tables.classes.IClassDefinitionTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.ClassDefinitionTableData1;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.ClassDefinitionTableData2;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.ClassRangeRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**

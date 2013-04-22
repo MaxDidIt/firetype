@@ -1,8 +1,8 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
-	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentListTableData;
-	import de.maxdidit.hardware.font.data.tables.attachment.AttachmentPointTableData;
-	import de.maxdidit.hardware.font.data.tables.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentPointTableData;
+	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**
