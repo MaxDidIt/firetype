@@ -10,6 +10,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.advanced.GlyphDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import de.maxdidit.hardware.font.parser.tables.required.MaximumProfileTableParser;
+	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -43,6 +44,7 @@ package de.maxdidit.hardware.font.parser
 		{
 			_tableParserMap = new Object();
 			
+			_tableParserMap["cvt "] = new ControlValueTableParser(_dataTypeParser);
 			_tableParserMap["DSIG"] = new DigitalSignatureTableParser(_dataTypeParser);
 			_tableParserMap["GDEF"] = new GlyphDefinitionTableParser(_dataTypeParser);
 			_tableParserMap["head"] = new FontHeaderParser(_dataTypeParser);
