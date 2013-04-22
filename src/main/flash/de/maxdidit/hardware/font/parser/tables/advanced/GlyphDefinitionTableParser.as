@@ -5,16 +5,16 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionHeader;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
-	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class GlyphDefinitionTableParser implements ISubTableParser
+	public class GlyphDefinitionTableParser implements ITableParser
 	{
 		///////////////////////
 		// Member Fields
@@ -37,16 +37,16 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, record:TableRecord):* 
 		{
-			data.position = offset;
+			data.position = record.offset;
 			
 			var result:GlyphDefinitionTableData = new GlyphDefinitionTableData();
 			
 			result.header = parseGlyphDefinitionTableHeader(data);
-			result.glyphClassDefinitionTable = parseGlyphClassDefinitionTable(data, offset, result.header.glyphClassDefinitionsOffset);
-			result.attachmentListTable = parseAttachmentListTable(data, offset, result.header.attachmentListTableOffset);
-			result.ligatureCaretList = parseLigatureGlyphTable(data, offset, result.header.ligatureCaretListOffset);
+			result.glyphClassDefinitionTable = parseGlyphClassDefinitionTable(data, record.offset, result.header.glyphClassDefinitionsOffset);
+			result.attachmentListTable = parseAttachmentListTable(data, record.offset, result.header.attachmentListTableOffset);
+			result.ligatureCaretList = parseLigatureGlyphTable(data, record.offset, result.header.ligatureCaretListOffset);
 			
 			return result;
 		}
