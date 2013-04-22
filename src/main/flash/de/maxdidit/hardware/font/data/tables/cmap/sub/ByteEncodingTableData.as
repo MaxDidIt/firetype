@@ -4,7 +4,7 @@ package de.maxdidit.hardware.font.data.tables.cmap.sub
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ByteEncodingTable implements ICharacterIndexMappingSubtableData 
+	public class ByteEncodingTableData implements ICharacterIndexMappingSubtableData 
 	{
 		///////////////////////
 		// Member Fields
@@ -19,7 +19,7 @@ package de.maxdidit.hardware.font.data.tables.cmap.sub
 		// Constructor
 		///////////////////////
 		
-		public function ByteEncodingTable() 
+		public function ByteEncodingTableData() 
 		{
 			
 		}
