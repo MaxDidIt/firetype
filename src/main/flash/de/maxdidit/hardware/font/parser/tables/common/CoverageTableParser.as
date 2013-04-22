@@ -1,10 +1,11 @@
-package de.maxdidit.hardware.font.parser.tables 
+package de.maxdidit.hardware.font.parser.tables.common 
 {
 	import de.maxdidit.hardware.font.data.tables.common.coverage.CoverageTableData1;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.CoverageTableData2;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.RangeRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...

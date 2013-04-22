@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gdef.classes 
+package de.maxdidit.hardware.font.data.tables.common.classes 
 {
 	/**
 	 * ...

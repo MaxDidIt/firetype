@@ -1,8 +1,9 @@
-package de.maxdidit.hardware.font.parser.tables 
+package de.maxdidit.hardware.font.parser.tables.other 
 {
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignature;
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignatureTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...

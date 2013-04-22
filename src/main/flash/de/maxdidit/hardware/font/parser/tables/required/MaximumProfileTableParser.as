@@ -1,13 +1,14 @@
-package de.maxdidit.hardware.font.parser.tables 
+package de.maxdidit.hardware.font.parser.tables.required 
 {
 	import de.maxdidit.hardware.font.data.tables.required.maxp.MaximumProfileTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class MaximumProfileTableParser implements ITableParser 
+	public class MaximumProfileTableParser implements ITableParser
 	{
 		///////////////////////
 		// Member Fields

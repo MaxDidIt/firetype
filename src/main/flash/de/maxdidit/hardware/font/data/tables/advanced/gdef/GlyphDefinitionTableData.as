@@ -1,7 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gdef 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
-	import de.maxdidit.hardware.font.data.tables.advanced.gdef.classes.IClassDefinitionTable;
+	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
 	/**
 	 * ...

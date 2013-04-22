@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.parser.tables 
+package de.maxdidit.hardware.font.parser.tables.required 
 {
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ByteEncodingTableData;
@@ -8,6 +8,7 @@ package de.maxdidit.hardware.font.parser.tables
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.SegmentToDeltaMappingSubtableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...

@@ -4,12 +4,12 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.SFNTWrapper;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
-	import de.maxdidit.hardware.font.parser.tables.CharacterIndexMappingTableParser;
-	import de.maxdidit.hardware.font.parser.tables.DigitalSignatureTableParser;
-	import de.maxdidit.hardware.font.parser.tables.FontHeaderParser;
-	import de.maxdidit.hardware.font.parser.tables.GlyphDefinitionTableParser;
+	import de.maxdidit.hardware.font.parser.tables.required.CharacterIndexMappingTableParser;
+	import de.maxdidit.hardware.font.parser.tables.other.DigitalSignatureTableParser;
+	import de.maxdidit.hardware.font.parser.tables.required.FontHeaderParser;
+	import de.maxdidit.hardware.font.parser.tables.advanced.GlyphDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
-	import de.maxdidit.hardware.font.parser.tables.MaximumProfileTableParser;
+	import de.maxdidit.hardware.font.parser.tables.required.MaximumProfileTableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...

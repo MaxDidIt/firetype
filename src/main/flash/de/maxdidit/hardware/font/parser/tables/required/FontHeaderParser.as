@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.parser.tables 
+package de.maxdidit.hardware.font.parser.tables.required 
 {
 	import de.maxdidit.hardware.font.data.tables.required.head.FontHeader;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
