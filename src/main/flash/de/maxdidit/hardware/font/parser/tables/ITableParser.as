@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -7,7 +8,7 @@ package de.maxdidit.hardware.font.parser.tables
 	 */
 	public interface ITableParser 
 	{
-		function parseTable(data:ByteArray, offset:uint):*;
+		function parseTable(data:ByteArray, record:TableRecord):*;
 	}
 
 }

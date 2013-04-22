@@ -5,13 +5,14 @@ package de.maxdidit.hardware.font.parser.tables.common
 	import de.maxdidit.hardware.font.data.tables.common.classes.ClassRangeRecord;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ClassDefinitionTableParser implements ITableParser
+	public class ClassDefinitionTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields

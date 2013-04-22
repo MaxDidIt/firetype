@@ -3,15 +3,17 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentPointTableData;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class AttachmentListTableParser implements ITableParser
+	public class AttachmentListTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields

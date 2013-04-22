@@ -7,6 +7,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.HighByteSubHeader;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.SegmentToDeltaMappingSubtableData;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
@@ -38,9 +39,9 @@ package de.maxdidit.hardware.font.parser.tables.required
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, record:TableRecord):* 
 		{
-			data.position = offset;
+			data.position = record.offset;
 			
 			var result:CharacterIndexMappingTableData = new CharacterIndexMappingTableData();
 			
@@ -49,7 +50,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 			
 			result.subTables = parseSubTableEncodingRecords(data, result.numTables);
 			
-			parseSubTables(data, offset, result.subTables);
+			parseSubTables(data, record.offset, result.subTables);
 			
 			return result;
 		}

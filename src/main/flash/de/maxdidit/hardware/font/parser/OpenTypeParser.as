@@ -85,7 +85,7 @@ package de.maxdidit.hardware.font.parser
 			}
 			
 			var tableParser:ITableParser = _tableParserMap[table.record.tag] as ITableParser;
-			table.data = tableParser.parseTable(data, table.record.offset);
+			table.data = tableParser.parseTable(data, table.record);
 		}
 		
 		private function parseTableRecords(data:ByteArray, numRecords:uint):Vector.<Table> 

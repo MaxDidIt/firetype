@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font.parser.tables.other
 {
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignature;
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignatureTableData;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
@@ -32,9 +33,9 @@ package de.maxdidit.hardware.font.parser.tables.other
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.ITableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, record:TableRecord):* 
 		{
-			data.position = offset;
+			data.position = record.offset;
 			
 			var result:DigitalSignatureTableData = new DigitalSignatureTableData();
 			
@@ -43,7 +44,7 @@ package de.maxdidit.hardware.font.parser.tables.other
 			result.flags = _dataTypeParser.parseUnsignedShort(data);
 			
 			result.signatures = parseSignatureEntries(data, result.numSignatures);
-			parseSignatures(data, offset, result.signatures);
+			parseSignatures(data, record.offset, result.signatures);
 			
 			return result;
 		}

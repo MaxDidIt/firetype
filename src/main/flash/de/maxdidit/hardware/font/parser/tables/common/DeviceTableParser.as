@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 {
 	import de.maxdidit.hardware.font.data.tables.common.device.DeviceTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	
@@ -9,7 +10,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class DeviceTableParser implements ITableParser
+	public class DeviceTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields

@@ -4,14 +4,16 @@ package de.maxdidit.hardware.font.parser.tables.common
 	import de.maxdidit.hardware.font.data.tables.common.coverage.CoverageTableData2;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.RangeRecord;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class CoverageTableParser implements ITableParser
+	public class CoverageTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields
@@ -34,7 +36,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, offset:uint ):* 
 		{
 			data.position = offset;
 			var format:uint = _dataTypeParser.parseUnsignedShort(data);

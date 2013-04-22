@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.parser.tables.required 
 {
 	import de.maxdidit.hardware.font.data.tables.required.maxp.MaximumProfileTableData;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
@@ -32,9 +33,9 @@ package de.maxdidit.hardware.font.parser.tables.required
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, record:TableRecord):* 
 		{
-			data.position = offset;
+			data.position = record.offset;
 			
 			var result:MaximumProfileTableData = new MaximumProfileTableData();
 			

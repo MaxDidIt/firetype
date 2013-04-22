@@ -6,16 +6,18 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.ICaretValue;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureGlyphTable;
+	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.DeviceTableParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class LigatureCaretListTableParser implements ITableParser 
+	public class LigatureCaretListTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields

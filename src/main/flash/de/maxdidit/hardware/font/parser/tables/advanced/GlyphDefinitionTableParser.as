@@ -7,13 +7,14 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
+	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class GlyphDefinitionTableParser implements ITableParser
+	public class GlyphDefinitionTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields
