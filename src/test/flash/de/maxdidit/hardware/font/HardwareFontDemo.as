@@ -18,8 +18,9 @@ package de.maxdidit.hardware.font
 		public function HardwareFontDemo() 
 		{
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
+			hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
-			hardwareParser.loadFont("HDZB_5.TTF");
+			//hardwareParser.loadFont("HDZB_5.TTF");
 		}
 		
 	}

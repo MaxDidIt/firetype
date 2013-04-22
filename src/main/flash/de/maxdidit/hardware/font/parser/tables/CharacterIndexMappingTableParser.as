@@ -1,11 +1,12 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
 	import de.maxdidit.hardware.font.data.tables.cmap.CharacterIndexMappingTableData;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.ByteEncodingTable;
+	import de.maxdidit.hardware.font.data.tables.cmap.sub.ByteEncodingTableData;
 	import de.maxdidit.hardware.font.data.tables.cmap.sub.CharacterIndexMappingSubtable;
-	import de.maxdidit.hardware.font.data.tables.cmap.sub.HighByteMappingTable;
+	import de.maxdidit.hardware.font.data.tables.cmap.sub.HighByteMappingTableData;
 	import de.maxdidit.hardware.font.data.tables.cmap.sub.HighByteSubHeader;
 	import de.maxdidit.hardware.font.data.tables.cmap.sub.ICharacterIndexMappingSubtableData;
+	import de.maxdidit.hardware.font.data.tables.cmap.sub.SegmentToDeltaMappingSubtableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import flash.utils.ByteArray;
 	/**
@@ -74,15 +75,88 @@ package de.maxdidit.hardware.font.parser.tables
 					case 2:
 						subTableData = parseHighByteMappingTable(data);
 						break;
+						
+					case 4:
+						subTableData = parseSegmentToDeltaTable(data);
+						break;
 				}
 				
 				subTable.data = subTableData;
 			}
 		}
 		
-		private function parseHighByteMappingTable(data:ByteArray):HighByteMappingTable 
+		private function parseSegmentToDeltaTable(data:ByteArray):SegmentToDeltaMappingSubtableData 
 		{
-			var result:HighByteMappingTable = new HighByteMappingTable();
+			var result:SegmentToDeltaMappingSubtableData = new SegmentToDeltaMappingSubtableData();
+			
+			result.length = _dataTypeParser.parseUnsignedShort(data);
+			result.language = _dataTypeParser.parseUnsignedShort(data);
+			
+			result.segCountX2 = _dataTypeParser.parseUnsignedShort(data);
+			result.searchRange = _dataTypeParser.parseUnsignedShort(data);
+			result.entrySelector = _dataTypeParser.parseUnsignedShort(data);
+			result.rangeShift = _dataTypeParser.parseUnsignedShort(data);
+			
+			const segCount:uint = result.segCountX2 >> 1;
+			// parse endCount
+			var endCount:Vector.<uint> = new Vector.<uint>();
+			for (var i:uint = 0; i < segCount; i++)
+			{
+				var value:uint = _dataTypeParser.parseUnsignedShort(data);
+				endCount.push(value);
+			}
+			result.endCount = endCount;
+			
+			data.position += 2; // reserved short
+			
+			// parse startCount
+			var startCount:Vector.<uint> = new Vector.<uint>();
+			for (i = 0; i < segCount; i++)
+			{
+				value = _dataTypeParser.parseUnsignedShort(data);
+				startCount.push(value);
+			}
+			result.startCount = startCount;
+			
+			// parse idDelta
+			var idDelta:Vector.<int> = new Vector.<int>();
+			for (i = 0; i < segCount; i++)
+			{
+				value = _dataTypeParser.parseShort(data);
+				idDelta.push(value);
+			}
+			result.idDelta = idDelta;
+			
+			// parse idRangeOffset/glyphIdArray
+			var idRangeOffset:Vector.<uint> = new Vector.<uint>();
+			var glyphIdArray:Vector.<uint> = new Vector.<uint>();
+			for (i = 0; i < segCount; i++)
+			{
+				value = _dataTypeParser.parseUnsignedShort(data);
+				idRangeOffset.push(value);
+				
+				// TODO: The documentation is a little unclear on how to handle the glyphIdArray.
+				// not sure if this is correct.
+				if (value != 0)
+				{
+					var offset:uint = result.startCount[i] + value;
+					var currentPosition:uint = data.position;
+					
+					data.position = currentPosition + offset;
+					var glyphID:uint = _dataTypeParser.parseUnsignedShort(data);
+					data.position = currentPosition;
+					
+					glyphIdArray.push(glyphID);
+				}
+			}
+			result.idRangeOffset = idRangeOffset;
+			
+			return result;
+		}
+		
+		private function parseHighByteMappingTable(data:ByteArray):HighByteMappingTableData 
+		{
+			var result:HighByteMappingTableData = new HighByteMappingTableData();
 			
 			result.length = _dataTypeParser.parseUnsignedShort(data);
 			result.language = _dataTypeParser.parseUnsignedShort(data);
@@ -148,9 +222,9 @@ package de.maxdidit.hardware.font.parser.tables
 			return subHeaders;
 		}
 		
-		private function parseByteEncodingTable(data:ByteArray):ByteEncodingTable 
+		private function parseByteEncodingTable(data:ByteArray):ByteEncodingTableData 
 		{
-			var result:ByteEncodingTable = new ByteEncodingTable();
+			var result:ByteEncodingTableData = new ByteEncodingTableData();
 			
 			result.length = _dataTypeParser.parseUnsignedShort(data);
 			result.language = _dataTypeParser.parseUnsignedShort(data);
