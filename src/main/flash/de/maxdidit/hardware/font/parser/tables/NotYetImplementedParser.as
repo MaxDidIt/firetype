@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables 
 {
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.NotYetImplementedTableData;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import flash.utils.ByteArray;
@@ -24,7 +25,7 @@ package de.maxdidit.hardware.font.parser.tables
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
 			return new NotYetImplementedTableData();
 		}

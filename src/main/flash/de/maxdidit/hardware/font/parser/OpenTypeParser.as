@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.parser 
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.SFNTWrapper;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
@@ -13,6 +14,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.required.MaximumProfileTableParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
+	import de.maxdidit.hardware.font.parser.tables.truetype.LocationTableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -27,6 +29,8 @@ package de.maxdidit.hardware.font.parser
 		private var _tableParserMap:Object;
 		private var _dataTypeParser:DataTypeParser;
 		
+		private var _tableParsingPriority:Object;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -36,6 +40,7 @@ package de.maxdidit.hardware.font.parser
 			_dataTypeParser = new DataTypeParser();
 			
 			initializeTableParserMap();
+			initializeTableParsingPriorities();
 		}
 		
 		///////////////////////
@@ -64,7 +69,7 @@ package de.maxdidit.hardware.font.parser
 			_tableParserMap[TableNames.CONTROL_VALUE_TABLE]			= new ControlValueTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.FONT_PROGRAM]			 	= notYetImplementedParser;
 			_tableParserMap[TableNames.GLYPH_DATA]					= notYetImplementedParser;
-			_tableParserMap[TableNames.INDEX_TO_LOCATION]			= notYetImplementedParser;
+			_tableParserMap[TableNames.INDEX_TO_LOCATION]			= new LocationTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.CVT_PROGRAM]					= notYetImplementedParser;
 			
 			// postscript tables
@@ -99,6 +104,53 @@ package de.maxdidit.hardware.font.parser
 			_tableParserMap[TableNames.VERTICAL_METRICS]			= notYetImplementedParser;
 		}
 		
+		private function initializeTableParsingPriorities():void 
+		{
+			_tableParsingPriority = new Object();
+			
+			const iDontCare:uint = 0xFFFFFFFF;
+			var priority:uint = 0;
+			
+			_tableParsingPriority[TableNames.FONT_HEADER]					= priority++; // font header should be parsed first
+			_tableParsingPriority[TableNames.MAXIMUM_PROFILE]				= priority++;
+			_tableParsingPriority[TableNames.INDEX_TO_LOCATION]				= priority++;
+			_tableParsingPriority[TableNames.GLYPH_DATA]					= priority++;
+			
+			_tableParsingPriority[TableNames.CHARACTER_INDEX_MAPPING]		= iDontCare;
+			_tableParsingPriority[TableNames.HORIZONTAL_HEADER]				= iDontCare;
+			_tableParsingPriority[TableNames.HORIZONTAL_METRICS]			= iDontCare;
+			_tableParsingPriority[TableNames.NAMING_TABLE]					= iDontCare;
+			_tableParsingPriority[TableNames.OS2_WINDOWS_METRICS]			= iDontCare;
+			_tableParsingPriority[TableNames.POSTSCRIPT_INFORMATION]		= iDontCare;
+			
+			_tableParsingPriority[TableNames.CONTROL_VALUE_TABLE]			= iDontCare;
+			_tableParsingPriority[TableNames.FONT_PROGRAM]			 		= iDontCare;
+			_tableParsingPriority[TableNames.CVT_PROGRAM]					= iDontCare;
+			
+			_tableParsingPriority[TableNames.POSTSCRIPT_FONT_PROGRAM]		= iDontCare;
+			_tableParsingPriority[TableNames.VERTICAL_ORIGIN]				= iDontCare;
+			
+			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_DATA]			= iDontCare;
+			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_LOCATIONS]		= iDontCare;
+			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_SCALING]		= iDontCare;
+			
+			_tableParsingPriority[TableNames.BASELINE_DATA]					= iDontCare;
+			_tableParsingPriority[TableNames.GLYPH_DEFINITION_DATA]			= iDontCare;
+			_tableParsingPriority[TableNames.GLYPH_POSITIONING_DATA]		= iDontCare;
+			_tableParsingPriority[TableNames.GLYPH_SUBSTITUTION_DATA]		= iDontCare;
+			_tableParsingPriority[TableNames.JUSTIFICATION_DATA]			= iDontCare;
+			
+			_tableParsingPriority[TableNames.DIGITAL_SIGNATURE]				= iDontCare;
+			_tableParsingPriority[TableNames.GRID_FITTING]					= iDontCare;
+			_tableParsingPriority[TableNames.HORIZONTAL_DEVICE_METRICS]		= iDontCare;
+			_tableParsingPriority[TableNames.KERNING]						= iDontCare;
+			_tableParsingPriority[TableNames.LINEAR_THRESHOLD_DATA]			= iDontCare;
+			_tableParsingPriority[TableNames.PCL5_DATA]						= iDontCare;
+			_tableParsingPriority[TableNames.VERTICAL_DEVICE_METRICS]		= iDontCare;
+			_tableParsingPriority[TableNames.VERTICAL_METRICS_HEADER]		= iDontCare;
+			_tableParsingPriority[TableNames.VERTICAL_METRICS]				= iDontCare;
+		}
+		
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */
 		
 		protected override function parseFontData(data:ByteArray):HardwareFontData 
@@ -110,22 +162,37 @@ package de.maxdidit.hardware.font.parser
 			hardwareFontData.sfntWrapper = parseSFNTWrapper(data);
 			hardwareFontData.tables = parseTableRecords(data, hardwareFontData.sfntWrapper.numTables);
 			
-			parseTables(data, hardwareFontData.tables);
+			sortTablesForParsing(hardwareFontData.tables); // bring tables into the correct order for parsing. example: maxp has to be parsed before loca.
+			
+			parseTables(data, hardwareFontData.tables, hardwareFontData);
 			
 			return hardwareFontData;
 		}
 		
-		private function parseTables(data:ByteArray, tables:Vector.<Table>):void 
+		private function sortTablesForParsing(tables:Vector.<Table>):void 
+		{
+			tables.sort(compareTablePriority);
+		}
+		
+		private function compareTablePriority(tableA:Table, tableB:Table):Number 
+		{
+			var priorityA:uint = uint(_tableParsingPriority[tableA.record.tag]);
+			var priorityB:uint = uint(_tableParsingPriority[tableB.record.tag]);
+			
+			return Number(priorityA) - Number(priorityB)
+		}
+		
+		private function parseTables(data:ByteArray, tables:Vector.<Table>, tableMap:ITableMap):void 
 		{
 			const l:uint = tables.length;
 			
 			for (var i:uint = 0; i < l; i++)
 			{
-				parseTable(data, tables[i]);
+				parseTable(data, tables[i], tableMap);
 			}
 		}
 		
-		private function parseTable(data:ByteArray, table:Table):void 
+		private function parseTable(data:ByteArray, table:Table, tableMap:ITableMap):void 
 		{
 			if (!_tableParserMap.hasOwnProperty(table.record.tag))
 			{
@@ -134,7 +201,7 @@ package de.maxdidit.hardware.font.parser
 			}
 			
 			var tableParser:ITableParser = _tableParserMap[table.record.tag] as ITableParser;
-			table.data = tableParser.parseTable(data, table.record);
+			table.data = tableParser.parseTable(data, table.record, tableMap);
 		}
 		
 		private function parseTableRecords(data:ByteArray, numRecords:uint):Vector.<Table> 

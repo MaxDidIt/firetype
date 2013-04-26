@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables.advanced 
 {
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionHeader;
@@ -37,7 +38,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
 			data.position = record.offset;
 			

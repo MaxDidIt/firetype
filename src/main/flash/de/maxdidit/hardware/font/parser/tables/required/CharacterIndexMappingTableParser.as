@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables.required 
 {
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.ByteEncodingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.sub.CharacterIndexMappingSubtable;
@@ -39,7 +40,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
 			data.position = record.offset;
 			

@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables.truetype 
 {
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.data.tables.truetype.ControlValueTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
@@ -33,7 +34,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
 			var result:ControlValueTableData = new ControlValueTableData();
 			

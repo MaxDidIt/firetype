@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.parser.tables.other 
 {
+	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignature;
 	import de.maxdidit.hardware.font.data.tables.other.dsig.DigitalSignatureTableData;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
@@ -33,7 +34,7 @@ package de.maxdidit.hardware.font.parser.tables.other
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
 			data.position = record.offset;
 			
