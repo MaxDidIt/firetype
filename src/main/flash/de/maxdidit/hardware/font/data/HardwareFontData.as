@@ -5,7 +5,7 @@ package de.maxdidit.hardware.font.data
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class HardwareFontData 
+	public class HardwareFontData implements ITableMap
 	{
 		///////////////////////
 		// Member Fields
@@ -55,7 +55,7 @@ package de.maxdidit.hardware.font.data
 		}
 		
 		///////////////////////
-		// Member Properties
+		// Member Functions
 		///////////////////////
 		
 		private function mapTables():void 
@@ -72,7 +72,23 @@ package de.maxdidit.hardware.font.data
 			}
 		}
 		
+		/* INTERFACE de.maxdidit.hardware.font.data.ITableMap */
 		
+		public function retrieveTable(tag:String):Table 
+		{
+			if (!_tableMap.hasOwnProperty(tag))
+			{
+				// TODO: User feedback
+				return null;
+			}
+			
+			return _tableMap[tag];
+		}
+		
+		public function registerTable(table:Table):void 
+		{
+			_tableMap[table.record.tag] = table;
+		}
 		
 	}
 
