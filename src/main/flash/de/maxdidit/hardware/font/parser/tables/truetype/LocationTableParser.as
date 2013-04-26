@@ -62,7 +62,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			
 			for (var i:uint = 0; i < l; i++)
 			{
-				result[i] = _dataTypeParser.parseUnsignedLong(data) << 1; // The actual local offset divided by 2 is stored in the byte array.
+				result[i] = _dataTypeParser.parseUnsignedLong(data);
 			}
 			
 			return result;
@@ -75,7 +75,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			
 			for (var i:uint = 0; i < l; i++)
 			{
-				result[i] = _dataTypeParser.parseUnsignedShort(data);
+				result[i] = _dataTypeParser.parseUnsignedShort(data) << 1; // The actual local offset divided by 2 is stored in the byte array.
 			}
 			
 			return result;
