@@ -14,6 +14,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.required.MaximumProfileTableParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
+	import de.maxdidit.hardware.font.parser.tables.truetype.GlyphDataTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.LocationTableParser;
 	import flash.utils.ByteArray;
 	/**
@@ -68,7 +69,7 @@ package de.maxdidit.hardware.font.parser
 			
 			_tableParserMap[TableNames.CONTROL_VALUE_TABLE]			= new ControlValueTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.FONT_PROGRAM]			 	= notYetImplementedParser;
-			_tableParserMap[TableNames.GLYPH_DATA]					= notYetImplementedParser;
+			_tableParserMap[TableNames.GLYPH_DATA]					= new GlyphDataTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.INDEX_TO_LOCATION]			= new LocationTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.CVT_PROGRAM]					= notYetImplementedParser;
 			
@@ -113,8 +114,8 @@ package de.maxdidit.hardware.font.parser
 			
 			_tableParsingPriority[TableNames.FONT_HEADER]					= priority++; // font header should be parsed first
 			_tableParsingPriority[TableNames.MAXIMUM_PROFILE]				= priority++;
-			_tableParsingPriority[TableNames.INDEX_TO_LOCATION]				= priority++;
-			_tableParsingPriority[TableNames.GLYPH_DATA]					= priority++;
+			_tableParsingPriority[TableNames.INDEX_TO_LOCATION]				= priority++; // font header and maximum profile need to be parsed before this
+			_tableParsingPriority[TableNames.GLYPH_DATA]					= priority++; // index to location needs to be parsed before this
 			
 			_tableParsingPriority[TableNames.CHARACTER_INDEX_MAPPING]		= iDontCare;
 			_tableParsingPriority[TableNames.HORIZONTAL_HEADER]				= iDontCare;
@@ -122,24 +123,19 @@ package de.maxdidit.hardware.font.parser
 			_tableParsingPriority[TableNames.NAMING_TABLE]					= iDontCare;
 			_tableParsingPriority[TableNames.OS2_WINDOWS_METRICS]			= iDontCare;
 			_tableParsingPriority[TableNames.POSTSCRIPT_INFORMATION]		= iDontCare;
-			
 			_tableParsingPriority[TableNames.CONTROL_VALUE_TABLE]			= iDontCare;
 			_tableParsingPriority[TableNames.FONT_PROGRAM]			 		= iDontCare;
 			_tableParsingPriority[TableNames.CVT_PROGRAM]					= iDontCare;
-			
 			_tableParsingPriority[TableNames.POSTSCRIPT_FONT_PROGRAM]		= iDontCare;
 			_tableParsingPriority[TableNames.VERTICAL_ORIGIN]				= iDontCare;
-			
 			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_DATA]			= iDontCare;
 			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_LOCATIONS]		= iDontCare;
 			_tableParsingPriority[TableNames.EMBEDDED_BITMAP_SCALING]		= iDontCare;
-			
 			_tableParsingPriority[TableNames.BASELINE_DATA]					= iDontCare;
 			_tableParsingPriority[TableNames.GLYPH_DEFINITION_DATA]			= iDontCare;
 			_tableParsingPriority[TableNames.GLYPH_POSITIONING_DATA]		= iDontCare;
 			_tableParsingPriority[TableNames.GLYPH_SUBSTITUTION_DATA]		= iDontCare;
 			_tableParsingPriority[TableNames.JUSTIFICATION_DATA]			= iDontCare;
-			
 			_tableParsingPriority[TableNames.DIGITAL_SIGNATURE]				= iDontCare;
 			_tableParsingPriority[TableNames.GRID_FITTING]					= iDontCare;
 			_tableParsingPriority[TableNames.HORIZONTAL_DEVICE_METRICS]		= iDontCare;
