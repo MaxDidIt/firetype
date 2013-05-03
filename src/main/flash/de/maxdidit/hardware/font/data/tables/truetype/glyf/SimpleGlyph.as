@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	/**
@@ -22,6 +23,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		
 		private var _xCoordinates:Vector.<int>;
 		private var _yCoordinates:Vector.<int>;
+		
+		private var _contours:Vector.<Contour>;
 		
 		///////////////////////
 		// Constructor
@@ -118,6 +121,18 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set yCoordinates(value:Vector.<int>):void 
 		{
 			_yCoordinates = value;
+		}
+		
+		// contours
+		
+		public function get contours():Vector.<Contour> 
+		{
+			return _contours;
+		}
+		
+		public function set contours(value:Vector.<Contour>):void 
+		{
+			_contours = value;
 		}
 		
 	}

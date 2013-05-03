@@ -3,6 +3,9 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.IPathSegment;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphHeader;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
@@ -12,6 +15,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
+	import de.maxdidit.hardware.font.parser.tables.truetype.contours.ContourParser;
 	import flash.utils.ByteArray;
 	
 	/**
@@ -131,7 +135,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var yCoordinates:Vector.<int> = parseYCoordinates(data, flags);
 			result.yCoordinates = yCoordinates;
 			
-			
+			var contourParser:ContourParser = new ContourParser();
+			result.contours = contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags);
 			
 			result.header = header;	
 			return result;
@@ -152,7 +157,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				
 				if (!flags.sameXAsPrevious)
 				{
-					delta = flags.shortXVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "short" means a 1-byte value, not a 2-byte value as usual.
+					delta = flags.shortXVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortXVector" indicates a 1-byte value, not a 2-byte value as usual.
 					delta = flags.shortXVector && !flags.isXPositive ? -delta : delta;
 					
 					x += delta;
@@ -179,7 +184,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				
 				if (!flags.sameYAsPrevious)
 				{
-					delta = flags.shortYVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "short" means a 1-byte value, not a 2-byte value as usual.
+					delta = flags.shortYVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortYVector" indicates a 1-byte value, not a 2-byte value as usual.
 					delta = flags.shortYVector && !flags.isYPositive ? -delta : delta;
 					
 					y += delta;
@@ -207,7 +212,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				flags.shortYVector = ((flagData >> 2) & 1) == 1;
 				
 				flags.isRepeated = ((flagData >> 3) & 1) == 1;
-				flags.numRepeats = flags.isRepeated ? _dataTypeParser.parseByte(data) : 1;
+				flags.numRepeats = flags.isRepeated ? _dataTypeParser.parseByte(data) + 1 : 1;
 				
 				flags.isXPositive = flags.shortXVector ? ((flagData >> 4) & 1) == 1 : false;
 				flags.sameXAsPrevious = !flags.shortXVector ? ((flagData >> 4) & 1) == 1 : false;
