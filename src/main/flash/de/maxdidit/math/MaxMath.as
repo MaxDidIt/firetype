@@ -40,7 +40,7 @@ package de.maxdidit.math
 		// Constructor
 		///////////////////////
 		
-		public function Math() 
+		public function MaxMath() 
 		{
 			throw new Error("This class should not be instantiated");
 		}
