@@ -71,7 +71,22 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 			_glyphIDs = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
 		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData */
+		
+		public function getGlyphIndex(charCode:Number):int 
+		{
+			if (charCode >= _glyphIDs.length)
+			{
+				return 0;
+			}
+			
+			var glyphIndex:int = _glyphIDs[charCode];
+			return glyphIndex;
+		}
 		
 	}
 

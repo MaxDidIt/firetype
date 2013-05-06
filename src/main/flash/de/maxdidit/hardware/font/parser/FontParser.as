@@ -1,8 +1,11 @@
 package de.maxdidit.hardware.font.parser 
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.HardwareFont;
+	import flash.display3D.Context3D;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
@@ -13,15 +16,35 @@ package de.maxdidit.hardware.font.parser
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class FontParser implements IFontParser 
+	public class FontParser extends EventDispatcher implements IFontParser
 	{
+		///////////////////////
+		// Member Fields
+		///////////////////////
+		
+		protected var _context3D:Context3D;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function FontParser() 
+		public function FontParser(context3D:Context3D) 
 		{
-			
+			this._context3D = context3D;
+		}
+		
+		///////////////////////
+		// Member Properties
+		///////////////////////
+		
+		public function get context3D():Context3D 
+		{
+			return _context3D;
+		}
+		
+		public function set context3D(value:Context3D):void 
+		{
+			_context3D = value;
 		}
 		
 		///////////////////////
@@ -44,7 +67,7 @@ package de.maxdidit.hardware.font.parser
 		
 		public function parseFont(data:ByteArray):HardwareFont
 		{
-			var hardwareFont:HardwareFont = new HardwareFont();
+			var hardwareFont:HardwareFont = new HardwareFont(_context3D);
 			
 			hardwareFont.data = parseFontData(data);
 			
@@ -78,7 +101,7 @@ package de.maxdidit.hardware.font.parser
 			var data:ByteArray = urlLoader.data as ByteArray;
 			var font:HardwareFont = parseFont(data);
 			
-			// TODO: pass font to user via event.
+			dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
 		}
 		
 		private function handleFontLoadingFailed(e:Event):void 

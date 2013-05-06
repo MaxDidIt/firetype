@@ -100,6 +100,17 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 			_glyphIndexArray = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData */
+		
+		public function getGlyphIndex(charCode:Number):int 
+		{
+			// TODO: Not yet implemented.
+			return 0;
+		}
 	}
 
 }

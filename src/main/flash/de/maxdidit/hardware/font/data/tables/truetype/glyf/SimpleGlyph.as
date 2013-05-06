@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf 
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	/**
@@ -133,6 +134,23 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set contours(value:Vector.<Contour>):void 
 		{
 			_contours = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
+		{
+			const l:uint = _contours.length;
+			var shapes:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>(l);
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				shapes[i] = _contours[i].retrievePath(subdivisions);
+			}
+			
+			return shapes;
 		}
 		
 	}

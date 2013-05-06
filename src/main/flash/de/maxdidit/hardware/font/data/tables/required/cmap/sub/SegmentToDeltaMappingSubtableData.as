@@ -162,6 +162,41 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 			_glyphIdArray = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData */
+		
+		public function getGlyphIndex(charCode:Number):int 
+		{
+			// search endcode
+			const l:uint = _endCount.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var endCount:uint = _endCount[i];
+				if (endCount >= charCode)
+				{
+					break;
+				}
+			}
+			
+			if (!(_startCount[i] <= charCode))
+			{
+				return 0;
+			}
+			
+			var glyphID:int;
+			if (_idRangeOffset[i] == 0)
+			{
+				glyphID = charCode + _idDelta[i]
+				return glyphID;
+			}
+			
+			// TODO: This part has not been tested yet.
+			var idIndex:uint = _idRangeOffset[i] / 2 + (charCode - _startCount[i]);
+			return _glyphIdArray[idIndex];
+		}
 	}
 
 }

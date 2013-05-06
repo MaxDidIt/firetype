@@ -16,7 +16,7 @@ package de.maxdidit.math
 			
 			var factorialN:Number = factorial(n);
 			
-			for (var i:uint = 0; i < n; i++)
+			for (var i:uint = 0; i <= n; i++)
 			{
 				result[i] = factorialN / (factorial(i) * factorial(n - i));
 			}
@@ -28,7 +28,7 @@ package de.maxdidit.math
 		{
 			var result:Number = 1;
 			
-			for (var i:uint = 1; i < n; i++)
+			for (var i:uint = 1; i <= n; i++)
 			{
 				result *= i;
 			}

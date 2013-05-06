@@ -12,6 +12,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		///////////////////////
 		
 		private var _controlPoints:Vector.<Vertex>;
+		private var _coefficients:Vector.<Number>;
 		
 		///////////////////////
 		// Constructor
@@ -22,6 +23,10 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			if ($controlPoints)
 			{
 				_controlPoints = $controlPoints;
+				
+				// binomial coefficients for each vertex
+				const n:uint = _controlPoints.length - 1;
+				_coefficients = MaxMath.calculateBinomialCoefficients(n);
 			}
 			else
 			{
@@ -83,37 +88,36 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		
 		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint):void 
 		{
-			var n:uint = _controlPoints.length;
+			const n:uint = _controlPoints.length - 1;
 			
-			// binomial coefficients for each vertex
-			var coefficients:Vector.<Number> = MaxMath.calculateBinomialCoefficients(n);
+			const l:uint = subdivisions + 1;
 			
-			for (var s:uint = 1; s < subdivisions; s++)
+			for (var s:uint = 1; s < l; s++)
 			{
-				var t:Number = Number(s) / Number(subdivisions);
+				var t:Number = Number(s) / Number(l);
 				var vertex:Vertex = new Vertex();
 				
 				// iterate over control points
-				for (var i:uint = 0; i < n; i++)
+				for (var i:uint = 0; i <= n; i++)
 				{
-					var weight:Number = bernsteinPolynomial(coefficients, i, n, t);
+					var weight:Number = bernsteinPolynomial(_coefficients, i, n, t);
 					
 					vertex.x += _controlPoints[i].x * weight;
 					vertex.y += _controlPoints[i].y * weight;
 				}
 				
-				list.push(_controlPoints);
+				list.push(vertex);
 			}
 			
 			// add second anchor point
-			list.push(_controlPoints[n - 1]);
-			
-			super.addVerticesToList(list, subdivisions);
+			list.push(_controlPoints[n]);
 		}
 		
 		private function bernsteinPolynomial(coefficients:Vector.<Number>, i:uint, n:uint, t:Number):Number
 		{
-			return bernsteinPolynomial[i] * Math.pow(t, i) * Math.pow(1 - t, n - i);
+			var factor1:Number = Math.pow(t, i);
+			var factor2:Number = Math.pow(1 - t, n - i);
+			return coefficients[i] * factor1 * factor2;
 		}
 		
 	}

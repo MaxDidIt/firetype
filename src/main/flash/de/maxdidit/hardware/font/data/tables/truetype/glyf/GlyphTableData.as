@@ -37,6 +37,20 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			_glyphs = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function retrieveGlyph(id:uint):Glyph 
+		{
+			if (id >= _glyphs.length)
+			{
+				return null;
+			}
+			
+			return _glyphs[id];
+		}
+		
 	}
 
 }

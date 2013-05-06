@@ -15,6 +15,7 @@ package de.maxdidit.hardware.font.data.tables.required.cmap
 		private var _numTables:uint;
 		
 		private var _subTables:Vector.<CharacterIndexMappingSubtable>;
+		private var _tableMap:Object;
 		
 		///////////////////////
 		// Constructor
@@ -62,7 +63,56 @@ package de.maxdidit.hardware.font.data.tables.required.cmap
 		
 		public function set subTables(value:Vector.<CharacterIndexMappingSubtable>):void 
 		{
-			_subTables = value;
+			if (_subTables != value)
+			{
+				_subTables = value;
+				mapSubTables();
+			}
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function getGlyphIndex(charCode:Number, platformID:int, encodingID:int):int
+		{
+			var subTable:CharacterIndexMappingSubtable = _tableMap[platformID][encodingID];
+			var glyphIndex:int = subTable.data.getGlyphIndex(charCode);
+			
+			return glyphIndex;
+		}
+		
+		private function mapSubTables():void 
+		{
+			if (!_subTables)
+			{
+				return;
+			}
+			
+			var tableMap:Object = new Object();
+			const l:uint = _subTables.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var subtable:CharacterIndexMappingSubtable = _subTables[i];
+				
+				var platformID:String = String(subtable.platformID);
+				var encodingID:String = String(subtable.encodingID);
+				
+				var subMap:Object;
+				if (tableMap.hasOwnProperty(String(platformID)))
+				{
+					subMap = tableMap[platformID];
+				}
+				else
+				{
+					subMap = new Object();
+					tableMap[platformID] = subMap;
+				}
+				
+				subMap[encodingID] = subtable;
+			}
+			
+			_tableMap = tableMap;
 		}
 		
 	}

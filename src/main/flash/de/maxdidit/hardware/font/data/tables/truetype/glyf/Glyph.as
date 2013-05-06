@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -35,6 +36,11 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set header(value:GlyphHeader):void 
 		{
 			_header = value;
+		}
+		
+		public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
+		{
+			throw new Error("Can't execute retrieveShape for Glyph. Extend the glyph class and implement this function.");
 		}
 		
 	}

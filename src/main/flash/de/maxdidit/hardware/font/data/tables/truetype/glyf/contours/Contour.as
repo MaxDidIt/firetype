@@ -47,6 +47,23 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			_vertices = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function retrievePath(subdivision:uint):Vector.<Vertex>
+		{
+			var path:Vector.<Vertex> = new Vector.<Vertex>();
+			
+			const l:uint = _segments.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				_segments[i].addVerticesToList(path, subdivision);
+			}
+			
+			return path;
+		}
+		
 	}
 
 }

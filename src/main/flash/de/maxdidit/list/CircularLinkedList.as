@@ -1,5 +1,6 @@
 package de.maxdidit.list 
 {
+	import de.maxdidit.list.elements.UnsignedIntegerListElement;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -12,6 +13,8 @@ package de.maxdidit.list
 		
 		private var _firstElement:LinkedListElement;
 		private var _lastElement:LinkedListElement;
+		
+		private var _numElements:uint = 0;
 		
 		///////////////////////
 		// Constructor
@@ -36,6 +39,18 @@ package de.maxdidit.list
 			return _lastElement;
 		}
 		
+		// numElements
+		
+		public function get numElements():uint
+		{
+			return _numElements;
+		}
+		
+		public function set numElements(value:uint):void 
+		{
+			_numElements = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -57,6 +72,27 @@ package de.maxdidit.list
 			element.next = _firstElement;
 			
 			_lastElement = element;
+			_firstElement.previous = lastElement;
+			
+			_numElements++;
+		}
+		
+		public function removeElement(element:LinkedListElement):void 
+		{
+			if (element == _firstElement)
+			{
+				_firstElement = element.next;
+			}
+			
+			if (element == _lastElement)
+			{
+				_lastElement = element.previous;
+			}
+			
+			element.previous.next = element.next;
+			element.next.previous = element.previous;
+			
+			_numElements--;
 		}
 		
 	}

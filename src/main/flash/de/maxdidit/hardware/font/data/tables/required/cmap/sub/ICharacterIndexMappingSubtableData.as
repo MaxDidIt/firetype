@@ -14,6 +14,8 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		
 		function get language():uint;
 		function set language(value:uint):void;
+		
+		function getGlyphIndex(charCode:Number):int;
 	}
 
 }

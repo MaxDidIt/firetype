@@ -16,6 +16,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.GlyphDataTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.LocationTableParser;
+	import flash.display3D.Context3D;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -36,8 +37,10 @@ package de.maxdidit.hardware.font.parser
 		// Constructor
 		///////////////////////
 		
-		public function OpenTypeParser() 
+		public function OpenTypeParser(context3D:Context3D) 
 		{
+			super(context3D);
+			
 			_dataTypeParser = new DataTypeParser();
 			
 			initializeTableParserMap();
