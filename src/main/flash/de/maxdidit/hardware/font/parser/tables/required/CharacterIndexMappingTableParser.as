@@ -131,6 +131,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 			result.idDelta = idDelta;
 			
 			// parse idRangeOffset/glyphIdArray
+			// *(idRangeOffset[i]/2 + (c - startCount[i]) + &idRangeOffset[i])
 			var idRangeOffset:Vector.<uint> = new Vector.<uint>();
 			var glyphIdArray:Vector.<uint> = new Vector.<uint>();
 			for (i = 0; i < segCount; i++)
@@ -138,21 +139,25 @@ package de.maxdidit.hardware.font.parser.tables.required
 				value = _dataTypeParser.parseUnsignedShort(data);
 				idRangeOffset.push(value);
 				
-				// TODO: The documentation is a little unclear on how to handle the glyphIdArray.
-				// not sure if this is correct.
+				value /= 2;
 				if (value != 0)
 				{
-					var offset:uint = result.startCount[i] + value;
-					var currentPosition:uint = data.position;
+					var currentPosition:int = data.position - 2; // rewind to offset of id range offset value.
 					
-					data.position = currentPosition + offset;
-					var glyphID:uint = _dataTypeParser.parseUnsignedShort(data);
-					data.position = currentPosition;
-					
-					glyphIdArray.push(glyphID);
+					var range:int = endCount[i] - startCount[i];
+					for (var c:uint = 0; c <= range; c++)
+					{
+						var offset:uint = ((c + value) * 2);
+						data.position = currentPosition + offset;
+						var glyphID:uint = _dataTypeParser.parseUnsignedShort(data);
+						glyphIdArray.push(glyphID);
+					}
+						
+					data.position = currentPosition + 2;
 				}
 			}
 			result.idRangeOffset = idRangeOffset;
+			result.glyphIdArray = glyphIdArray;
 			
 			return result;
 		}
