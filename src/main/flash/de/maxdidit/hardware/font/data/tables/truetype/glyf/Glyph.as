@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.AxisAlignedBoundingBox;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	/**
 	 * ...
@@ -19,7 +20,6 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		
 		public function Glyph() 
 		{
-			
 		}
 		
 		///////////////////////
@@ -37,6 +37,10 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		{
 			_header = value;
 		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
 		
 		public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
 		{

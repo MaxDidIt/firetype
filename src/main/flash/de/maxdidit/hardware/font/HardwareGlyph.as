@@ -56,13 +56,25 @@ package de.maxdidit.hardware.font
 		
 		public function initialize(paths:Vector.<Vector.<Vertex>>, context3d:Context3D):void
 		{
-			var path:Vector.<Vertex> = connectAllPaths(paths);
+			//var path:Vector.<Vertex> = connectAllPaths(paths);
 			
-			var indices:Vector.<uint> = triangulatePath(path);
-			var vertexData:Vector.<Number> = createVertexData(path);
+			var indices:Vector.<uint> = new Vector.<uint>(); 
+			var vertexData:Vector.<Number> = new Vector.<Number>(); 
 			
-			vertexBuffer = context3d.createVertexBuffer(path.length, 3);
-			vertexBuffer.uploadFromVector(vertexData, 0, path.length);
+			const l:uint = paths.length;
+			var indexOffset:uint = 0;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var path:Vector.<Vertex> = paths[i];
+				
+				triangulatePath(path, indices, indexOffset);
+				indexOffset += path.length;
+				
+				createVertexData(path, vertexData);
+			}
+			
+			vertexBuffer = context3d.createVertexBuffer(vertexData.length / 3, 3);
+			vertexBuffer.uploadFromVector(vertexData, 0, vertexData.length / 3);
 			
 			indexBuffer = context3d.createIndexBuffer(indices.length);
 			indexBuffer.uploadFromVector(indices, 0, indices.length);
@@ -81,25 +93,20 @@ package de.maxdidit.hardware.font
 			context3d.drawTriangles(indexBuffer, 0, numTriangles);
 		}
 		
-		private function createVertexData(path:Vector.<Vertex>):Vector.<Number> 
+		private function createVertexData(path:Vector.<Vertex>, result:Vector.<Number>):void
 		{
 			const l:uint = path.length;
-			var result:Vector.<Number> = new Vector.<Number>(l * 3);
 			
 			for (var i:uint = 0; i < l; i++)
 			{
 				var index:uint = i * 3;
 				var vertex:Vertex = path[i];
 				
-				result[index] = vertex.x;
-				result[index + 1] = vertex.y;
-				result[index + 2] = 0;
+				result.push(vertex.x, vertex.y, 0);
 			}
-			
-			return result;
 		}
 		
-		private function triangulatePath(path:Vector.<Vertex>):Vector.<uint> 
+		private function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):void
 		{			
 			const l:uint = path.length;
 			
@@ -112,15 +119,11 @@ package de.maxdidit.hardware.font
 			
 			// ear clipping algorithm
 			
-			var result:Vector.<uint> = new Vector.<uint>();
-			
 			var currentVertex:Vertex;
 			var previousVertex:Vertex;
 			var nextVertex:Vertex;
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
-			
-			//var iterations:int = 0; // temporary variable
 			
 			while (availableIndices.numElements >= 3)
 			{	
@@ -149,22 +152,20 @@ package de.maxdidit.hardware.font
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
-				
+					
 					continue;
 				}
 				
 				// add triangle to result
-				result.push((currentIndex.previous as UnsignedIntegerListElement).value);
-				result.push(currentIndex.value);
-				result.push((currentIndex.next as UnsignedIntegerListElement).value);
+				result.push((currentIndex.previous as UnsignedIntegerListElement).value + indexOffset);
+				result.push(currentIndex.value + indexOffset);
+				result.push((currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
 				
 				// remove current index
 				availableIndices.removeElement(currentIndex);
 				
 				currentIndex = availableIndices.firstElement as UnsignedIntegerListElement;
 			}
-			
-			return result;
 		}
 		
 		private function containsAnyPointFromPath(path:Vector.<Vertex>, vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, startElement:UnsignedIntegerListElement, endElement:UnsignedIntegerListElement):Boolean 
@@ -223,85 +224,7 @@ package de.maxdidit.hardware.font
 			const u:Number = inverseDenominator * (dot11 * dot02 - dot01 * dot12);
 			const v:Number = inverseDenominator * (dot00 * dot12 - dot01 * dot02);
 			
-			return (u >= 0) && (v >= 0) && (u + v < 1);
-		}
-		
-		private function connectAllPaths(paths:Vector.<Vector.<Vertex>>):Vector.<Vertex> 
-		{
-			var firstPath:Vector.<Vertex> = paths[0];
-			const l:uint = paths.length;
-			
-			var result:Vector.<Vertex> = firstPath;
-			
-			// connect first path to other paths
-			// find closest vertices in paths
-			for (var i:uint = 1; i < l; i++)
-			{
-				result = connectPaths(result, paths[i]);
-			}
-			
-			return result;
-		}
-		
-		private function connectPaths(pathA:Vector.<Vertex>, pathB:Vector.<Vertex>):Vector.<Vertex>
-		{
-			var result:Vector.<Vertex> = new Vector.<Vertex>();
-			
-			// find shortest distance between vertices
-			const lA:uint = pathA.length;
-			const lB:uint = pathB.length;
-			
-			var smallestA:uint = 0;
-			var smallestB:uint = 0;
-			var smallestDistance:Number = Number.MAX_VALUE;
-			
-			for (var a:uint = 0; a < lA; a++)
-			{
-				var vertexA:Vertex = pathA[a];
-				
-				for (var b:uint = 0; b < lB; b++)
-				{
-					var vertexB:Vertex = pathB[b];
-					
-					var dX:Number = vertexB.x - vertexA.x;
-					var dY:Number = vertexB.y - vertexA.y;
-					
-					var distance:Number = dX * dX + dY * dY;
-					if (distance <= smallestDistance)
-					{
-						smallestA = a;
-						smallestB = b;
-						smallestDistance = distance;
-					}
-				}
-			}
-			
-			// fill result
-			// fill up to bridge vertex in A
-			for (var i:uint = 0; i <= smallestA; i++)
-			{
-				result.push(pathA[i]);
-			}
-			
-			// fill from bridge vertex in B till end
-			for (i = smallestB; i < lB; i++)
-			{
-				result.push(pathB[i]);
-			}
-			
-			// fill from beginning to bridge vertex in B
-			for (i = 0; i <= smallestB; i++)
-			{
-				result.push(pathB[i]);
-			}
-			
-			// fill from bridge vertex in A till end
-			for (i = smallestA; i < lA; i++)
-			{
-				result.push(pathA[i]);
-			}
-			
-			return result;
+			return (u > 0) && (v > 0) && (u + v < 1);
 		}
 	}
 

@@ -27,6 +27,9 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 				// binomial coefficients for each vertex
 				const n:uint = _controlPoints.length - 1;
 				_coefficients = MaxMath.calculateBinomialCoefficients(n);
+				
+				// bounding box
+				calculateBoundingBox();
 			}
 			else
 			{
@@ -118,6 +121,32 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			var factor1:Number = Math.pow(t, i);
 			var factor2:Number = Math.pow(1 - t, n - i);
 			return coefficients[i] * factor1 * factor2;
+		}
+		
+		private function calculateBoundingBox():void 
+		{
+			const l:uint = _controlPoints.length;
+			
+			var minX:Number = Number.MAX_VALUE;
+			var minY:Number = Number.MAX_VALUE;
+			
+			var maxX:Number = Number.MIN_VALUE;
+			var maxY:Number = Number.MIN_VALUE;
+			
+			var currentVertex:Vertex;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				currentVertex = _controlPoints[i];
+				
+				minX = currentVertex.x < minX ? currentVertex.x : minX;
+				minY = currentVertex.y < minY ? currentVertex.y : minY;
+				
+				maxX = currentVertex.x < maxX ? currentVertex.x : maxX;
+				maxY = currentVertex.y < maxY ? currentVertex.y : maxY;
+			}
+			
+			
 		}
 		
 	}

@@ -82,9 +82,9 @@ package de.maxdidit.hardware.font
 			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 4, false);
 			
 			viewProjectionMtx = new Matrix3D();
-			viewProjectionMtx.appendTranslation(-3000, 600, -1600);
+			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
 			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
-			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 200, 2000);
+			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
 			viewProjectionMtx.append(perspectiveMtx);
 		}
 		
@@ -100,16 +100,17 @@ package de.maxdidit.hardware.font
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
 			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
-			hardwareParser.loadFont("newscycle-bold.ttf");
+			//hardwareParser.loadFont("newscycle-bold.ttf");
+			hardwareParser.loadFont("DAUNPENH.TTF");
 			
 			programPair = context3d.createProgram();
 			programPair.upload(vertexAssembly.agalcode, fragmentAssembly.agalcode);
 			context3d.setProgram(programPair);
 			
 			viewProjectionMtx = new Matrix3D();
-			viewProjectionMtx.appendTranslation(-3000, 600, -1600);
+			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
 			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
-			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 200, 2000);
+			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
 			viewProjectionMtx.append(perspectiveMtx);
 			
 			var color:Vector.<Number> = new Vector.<Number>();
@@ -149,15 +150,15 @@ package de.maxdidit.hardware.font
 			hardwareGlyph0 = font.getHardwareGlyph("B".charCodeAt(0), 8);
 			hardwareGlyph0.position = new Vector3D(4800, -2000, 0);
 			
-			hardwareGlyphA = font.getHardwareGlyph("i".charCodeAt(0), 0);
+			hardwareGlyphA = font.getHardwareGlyph("i".charCodeAt(0), 4);
 			hardwareGlyphA.position = new Vector3D(0, -4000, 0);
-			hardwareGlyphB = font.getHardwareGlyph("i".charCodeAt(0), 1);
+			hardwareGlyphB = font.getHardwareGlyph("%".charCodeAt(0), 4);
 			hardwareGlyphB.position = new Vector3D(1200, -4000, 0);
-			hardwareGlyphC = font.getHardwareGlyph("i".charCodeAt(0), 2);
+			hardwareGlyphC = font.getHardwareGlyph("&".charCodeAt(0), 4);
 			hardwareGlyphC.position = new Vector3D(2400, -4000, 0);
-			hardwareGlyphD = font.getHardwareGlyph("i".charCodeAt(0), 4);
+			hardwareGlyphD = font.getHardwareGlyph("@".charCodeAt(0), 4);
 			hardwareGlyphD.position = new Vector3D(3600, -4000, 0);
-			hardwareGlyphE = font.getHardwareGlyph("i".charCodeAt(0), 8);
+			hardwareGlyphE = font.getHardwareGlyph("8".charCodeAt(0), 4);
 			hardwareGlyphE.position = new Vector3D(4800, -4000, 0);
 			
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);

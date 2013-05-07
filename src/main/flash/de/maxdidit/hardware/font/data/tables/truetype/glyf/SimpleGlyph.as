@@ -134,6 +134,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set contours(value:Vector.<Contour>):void 
 		{
 			_contours = value;
+			distributeHoles();
 		}
 		
 		///////////////////////
@@ -153,6 +154,62 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			return shapes;
 		}
 		
+		private function distributeHoles():void 
+		{
+			var hole:Contour;
+			var currentContour:Contour;
+			
+			var container:Contour;
+			
+			for (var i:int = _contours.length - 1; i >= 0; i--)
+			{
+				hole = _contours[i];
+				
+				if (hole.clockWise)
+				{
+					// not a hole;
+					continue;
+				}
+				
+				container = null;
+				
+				for (var j:uint = 0; j < _contours.length; j++)
+				{
+					currentContour = _contours[j];
+					
+					if (!currentContour.clockWise)
+					{
+						// is a hole;
+						continue;
+					}
+					
+					if (!currentContour.contains(hole))
+					{
+						continue;
+					}
+					
+					if (!container)
+					{
+						container = currentContour;
+					}
+					else if(container.boundingBox.width > currentContour.boundingBox.width || container.boundingBox.height > currentContour.boundingBox.height)
+					{
+						container = currentContour;
+					}
+				}
+				
+				if (container)
+				{
+					_contours.splice(i, 1);
+					container.addHole(hole);
+				}
+			}
+			
+			for (i = 0; i < _contours.length; i++)
+			{
+				_contours[i].sortHoles();
+			}
+		}
 	}
 
 }
