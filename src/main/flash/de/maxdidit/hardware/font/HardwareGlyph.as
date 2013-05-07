@@ -125,7 +125,7 @@ package de.maxdidit.hardware.font
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
-			while (availableIndices.numElements >= 3)
+			while (availableIndices.numElements > 3)
 			{	
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];
@@ -166,6 +166,11 @@ package de.maxdidit.hardware.font
 				
 				currentIndex = availableIndices.firstElement as UnsignedIntegerListElement;
 			}
+			
+			// add the last triangle
+			result.push((currentIndex.previous as UnsignedIntegerListElement).value + indexOffset);
+			result.push(currentIndex.value + indexOffset);
+			result.push((currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
 		}
 		
 		private function containsAnyPointFromPath(path:Vector.<Vertex>, vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, startElement:UnsignedIntegerListElement, endElement:UnsignedIntegerListElement):Boolean 

@@ -134,9 +134,9 @@ package de.maxdidit.hardware.font
 			hardwareGlyph2.position = new Vector3D(1200, 0, 0);
 			hardwareGlyph3 = font.getHardwareGlyph("a".charCodeAt(0), 2);
 			hardwareGlyph3.position = new Vector3D(2400, 0, 0);
-			hardwareGlyph4 = font.getHardwareGlyph("a".charCodeAt(0), 4);
+			hardwareGlyph4 = font.getHardwareGlyph("a".charCodeAt(0), 3);
 			hardwareGlyph4.position = new Vector3D(3600, 0, 0);
-			hardwareGlyph5 = font.getHardwareGlyph("a".charCodeAt(0), 8);
+			hardwareGlyph5 = font.getHardwareGlyph("a".charCodeAt(0), 4);
 			hardwareGlyph5.position = new Vector3D(4800, 0, 0);
 			
 			hardwareGlyph6 = font.getHardwareGlyph("B".charCodeAt(0), 0);
@@ -145,20 +145,20 @@ package de.maxdidit.hardware.font
 			hardwareGlyph7.position = new Vector3D(1200, -2000, 0);
 			hardwareGlyph8 = font.getHardwareGlyph("B".charCodeAt(0), 2);
 			hardwareGlyph8.position = new Vector3D(2400, -2000, 0);
-			hardwareGlyph9 = font.getHardwareGlyph("B".charCodeAt(0), 4);
+			hardwareGlyph9 = font.getHardwareGlyph("B".charCodeAt(0), 3);
 			hardwareGlyph9.position = new Vector3D(3600, -2000, 0);
-			hardwareGlyph0 = font.getHardwareGlyph("B".charCodeAt(0), 8);
+			hardwareGlyph0 = font.getHardwareGlyph("B".charCodeAt(0), 4);
 			hardwareGlyph0.position = new Vector3D(4800, -2000, 0);
 			
-			hardwareGlyphA = font.getHardwareGlyph("i".charCodeAt(0), 4);
+			hardwareGlyphA = font.getHardwareGlyph("i".charCodeAt(0), 2);
 			hardwareGlyphA.position = new Vector3D(0, -4000, 0);
-			hardwareGlyphB = font.getHardwareGlyph("%".charCodeAt(0), 4);
+			hardwareGlyphB = font.getHardwareGlyph("%".charCodeAt(0), 2);
 			hardwareGlyphB.position = new Vector3D(1200, -4000, 0);
-			hardwareGlyphC = font.getHardwareGlyph("&".charCodeAt(0), 4);
+			hardwareGlyphC = font.getHardwareGlyph("&".charCodeAt(0), 2);
 			hardwareGlyphC.position = new Vector3D(2400, -4000, 0);
-			hardwareGlyphD = font.getHardwareGlyph("@".charCodeAt(0), 4);
+			hardwareGlyphD = font.getHardwareGlyph("@".charCodeAt(0), 2);
 			hardwareGlyphD.position = new Vector3D(3600, -4000, 0);
-			hardwareGlyphE = font.getHardwareGlyph("8".charCodeAt(0), 4);
+			hardwareGlyphE = font.getHardwareGlyph("8".charCodeAt(0), 2);
 			hardwareGlyphE.position = new Vector3D(4800, -4000, 0);
 			
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);
