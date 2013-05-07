@@ -49,6 +49,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 					vertices.addElement(new VertexListElement(vertex));
 				}
 				
+				addImplicitVertices(vertices);
 				contour.vertices = vertices;
 				contour.segments = parseContourSegments(vertices);
 				result[c] = contour;
@@ -57,11 +58,36 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 			return result;
 		}
 		
+		private function addImplicitVertices(vertices:CircularLinkedList):void
+		{
+			var currentVertex:VertexListElement = vertices.firstElement as VertexListElement;
+			
+			do
+			{
+				var nextVertex:VertexListElement = currentVertex.next as VertexListElement;
+				
+				if (!currentVertex.vertex.onCurve && !nextVertex.vertex.onCurve)
+				{
+					var newVertex:Vertex = new Vertex((currentVertex.vertex.x + nextVertex.vertex.x) / 2, //
+						(currentVertex.vertex.y + nextVertex.vertex.y) / 2);
+					vertices.addElementAfter(new VertexListElement(newVertex), currentVertex);
+				}
+				
+				currentVertex = nextVertex;
+			} while (currentVertex != vertices.firstElement);
+		}
+		
 		private function parseContourSegments(vertices:CircularLinkedList):Vector.<IPathSegment>
 		{
 			var result:Vector.<IPathSegment> = new Vector.<IPathSegment>();
 			
 			var startVertex:VertexListElement = getStartVertex(vertices);
+			if (!startVertex)
+			{
+				// TODO: Somehow handle contours with only off curve points
+				return null;
+			}
+			
 			var thisVertex:VertexListElement = startVertex;
 			var nextVertex:VertexListElement;
 			
@@ -108,6 +134,12 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 			
 			while (!result.vertex.onCurve)
 			{
+				if (result == vertices.lastElement)
+				{
+					// end of list reached, none of the vertices are on the curve, exit.
+					return null;
+				}
+				
 				result = result.next as VertexListElement;
 			}
 			

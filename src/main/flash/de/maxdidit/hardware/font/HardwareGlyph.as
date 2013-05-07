@@ -4,9 +4,12 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.list.CircularLinkedList;
 	import de.maxdidit.list.elements.UnsignedIntegerListElement;
 	import flash.display3D.Context3D;
+	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
+	import flash.geom.Matrix3D;
+	import flash.geom.Vector3D;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -22,13 +25,29 @@ package de.maxdidit.hardware.font
 		
 		private var numTriangles:uint;
 		
+		private var transform:Matrix3D;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
 		public function HardwareGlyph() 
 		{
-			
+			transform = new Matrix3D();
+		}
+		
+		///////////////////////
+		// Member Properties
+		///////////////////////
+		
+		public function get position():Vector3D
+		{
+			return transform.position;
+		}
+		
+		public function set position(value:Vector3D):void
+		{
+			transform.position = value;
 		}
 		
 		///////////////////////
@@ -51,8 +70,13 @@ package de.maxdidit.hardware.font
 			numTriangles = indices.length / 3;
 		}
 		
-		public function render(context3d:Context3D):void
+		public function render(context3d:Context3D, viewProjection:Matrix3D):void
 		{
+			var finalTransform:Matrix3D = new Matrix3D();
+			finalTransform.append(transform);
+			finalTransform.append(viewProjection);
+			
+			context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 0, finalTransform, true );
 			context3d.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			context3d.drawTriangles(indexBuffer, 0, numTriangles);
 		}
@@ -76,7 +100,7 @@ package de.maxdidit.hardware.font
 		}
 		
 		private function triangulatePath(path:Vector.<Vertex>):Vector.<uint> 
-		{
+		{			
 			const l:uint = path.length;
 			
 			// create index array
@@ -96,9 +120,9 @@ package de.maxdidit.hardware.font
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
-			var iterations:int = 0; // temporary variable
+			//var iterations:int = 0; // temporary variable
 			
-			while (availableIndices.numElements >= 3 && iterations < 2000)
+			while (availableIndices.numElements >= 3)
 			{	
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];
@@ -117,8 +141,7 @@ package de.maxdidit.hardware.font
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
-				
-					iterations++;
+					
 					continue;
 				}
 				
@@ -127,7 +150,6 @@ package de.maxdidit.hardware.font
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
 				
-					iterations++;
 					continue;
 				}
 				
@@ -167,6 +189,20 @@ package de.maxdidit.hardware.font
 		private function isInsideTriangle(currentVertex:Vertex, vertexA:Vertex, vertexB:Vertex, vertexC:Vertex):Boolean 
 		{
 			// source: http://www.blackpawn.com/texts/pointinpoly/
+			if (currentVertex.x == vertexA.x && currentVertex.y == vertexA.y)
+			{
+				return false;
+			}
+			
+			if (currentVertex.x == vertexB.x && currentVertex.y == vertexB.y)
+			{
+				return false;
+			}
+			
+			if (currentVertex.x == vertexC.x && currentVertex.y == vertexC.y)
+			{
+				return false;
+			}
 			
 			const v0_x:Number = vertexC.x - vertexA.x;
 			const v0_y:Number = vertexC.y - vertexA.y;
@@ -187,7 +223,7 @@ package de.maxdidit.hardware.font
 			const u:Number = inverseDenominator * (dot11 * dot02 - dot01 * dot12);
 			const v:Number = inverseDenominator * (dot00 * dot12 - dot01 * dot02);
 			
-			return (u > 0) && (v > 0) && (u + v <= 1);
+			return (u >= 0) && (v >= 0) && (u + v < 1);
 		}
 		
 		private function connectAllPaths(paths:Vector.<Vector.<Vertex>>):Vector.<Vertex> 
@@ -231,7 +267,7 @@ package de.maxdidit.hardware.font
 					var dY:Number = vertexB.y - vertexA.y;
 					
 					var distance:Number = dX * dX + dY * dY;
-					if (distance < smallestDistance)
+					if (distance <= smallestDistance)
 					{
 						smallestA = a;
 						smallestB = b;

@@ -1,5 +1,7 @@
 package de.maxdidit.list 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.VertexListElement;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.list.elements.UnsignedIntegerListElement;
 	/**
 	 * ...
@@ -93,6 +95,22 @@ package de.maxdidit.list
 			element.next.previous = element.previous;
 			
 			_numElements--;
+		}
+		
+		public function addElementAfter(element:LinkedListElement, afterElement:LinkedListElement):void 
+		{
+			if (afterElement == _lastElement)
+			{
+				_lastElement = afterElement;
+			}
+			
+			element.previous = afterElement;
+			element.next = afterElement.next;
+			
+			afterElement.next.previous = element;
+			afterElement.next = element;
+			
+			_numElements++;
 		}
 		
 	}
