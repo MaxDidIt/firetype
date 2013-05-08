@@ -1,8 +1,11 @@
-package de.maxdidit.hardware.font.parser.tables.truetype 
+package de.maxdidit.hardware.font.parser.tables.truetype
 {
 	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyph;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyphComponent;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyphFlags;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.IPathSegment;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
@@ -22,7 +25,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class GlyphDataTableParser implements ITableParser 
+	public class GlyphDataTableParser implements ITableParser
 	{
 		///////////////////////
 		// Member Fields
@@ -34,7 +37,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		// Constructor
 		///////////////////////
 		
-		public function GlyphDataTableParser(dataTypeParser:DataTypeParser) 
+		public function GlyphDataTableParser(dataTypeParser:DataTypeParser)
 		{
 			this._dataTypeParser = dataTypeParser;
 		}
@@ -45,7 +48,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */
 		
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):*
 		{
 			var result:GlyphTableData = new GlyphTableData();
 			
@@ -58,7 +61,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			return result;
 		}
 		
-		private function parseGlyphs(data:ByteArray, offset:uint, glyphOffsets:Vector.<uint>):Vector.<Glyph> 
+		private function parseGlyphs(data:ByteArray, offset:uint, glyphOffsets:Vector.<uint>):Vector.<Glyph>
 		{
 			const l:uint = glyphOffsets.length;
 			var result:Vector.<Glyph> = new Vector.<Glyph>(l);
@@ -75,29 +78,150 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			return result;
 		}
 		
-		private function parseGlyph(data:ByteArray, offset:uint, hasContour:Boolean):Glyph 
+		private function parseGlyph(data:ByteArray, offset:uint, hasContour:Boolean):Glyph
 		{
 			data.position = offset;
 			
 			var result:Glyph;
 			var header:GlyphHeader = parseGlyphHeader(data, hasContour);
 			
-			if (!hasContour)
+			if (!hasContour || header.numCountours == 0)
 			{
 				result = new Glyph();
 				result.header = header;
 				return result;
-			}
-			
-			if (header.numCountours > 0)
+			} else if (header.numCountours > 0)
 			{
 				result = parseSimpleGlyph(data, header);
+			}
+			else
+			{
+				result = parseCompositeGlyph(data, header);
 			}
 			
 			return result;
 		}
 		
-		private function parseSimpleGlyph(data:ByteArray, header:GlyphHeader):SimpleGlyph 
+		private function parseCompositeGlyph(data:ByteArray, header:GlyphHeader):CompositeGlyph
+		{
+			var result:CompositeGlyph = new CompositeGlyph();
+			
+			var components:Vector.<CompositeGlyphComponent> = new Vector.<CompositeGlyphComponent>();
+			
+			var flagData:uint;
+			var flags:CompositeGlyphFlags;
+			do
+			{
+				// the composite flag is parsed outside the actual parseCompositeGlyphComponent function,
+				// since they are needed by the enclosing while loop
+				flagData = _dataTypeParser.parseUnsignedShort(data);
+				flags = parseCompositeGlyphFlags(flagData);
+				
+				var component:CompositeGlyphComponent = parseCompositeGlyphComponent(data, flagData, flags);
+				components.push(component);
+				
+			} while (flags.moreComponents);
+			
+			result.components = components;
+			
+			// read last flag to see if the composite glyph contains instructions
+			if (flags.weHaveInstructions)
+			{
+				var numInstructions:uint = _dataTypeParser.parseUnsignedShort(data);
+				var instructions:ByteArray = new ByteArray();
+				data.readBytes(instructions, 0, numInstructions);
+				
+				result.numInstructions = numInstructions;
+				result.instructions = instructions;
+			}
+			
+			return result;
+		}
+		
+		private function parseCompositeGlyphComponent(data:ByteArray, flagData:uint, flags:CompositeGlyphFlags):CompositeGlyphComponent
+		{
+			var result:CompositeGlyphComponent = new CompositeGlyphComponent();
+			
+			result.flagData = flagData;
+			result.flags = flags;
+			
+			var glyphIndex:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.glyphIndex = glyphIndex;
+			
+			var argument1:int;
+			var argument2:int;
+			if (flags.argumentsAreWords)
+			{
+				argument1 = _dataTypeParser.parseShort(data);
+				argument2 = _dataTypeParser.parseShort(data);
+			}
+			else
+			{
+				var argument1and2:uint = _dataTypeParser.parseUnsignedShort(data);
+				argument1 = (argument1and2 >> 8) & 0xFF;
+				argument2 = argument1and2 & 0xFF;
+			}
+			
+			result.argument1 = argument1;
+			result.argument2 = argument2;
+			
+			if (flags.weHaveAScale)
+			{
+				var scale:Number = _dataTypeParser.parseF2Dot14(data);
+				result.mtxA = scale;
+				result.mtxD = scale;
+			}
+			else if (flags.weHaveAnXAndYScale)
+			{
+				var scaleX:Number = _dataTypeParser.parseF2Dot14(data);
+				var scaleY:Number = _dataTypeParser.parseF2Dot14(data);
+				result.mtxA = scaleX;
+				result.mtxD = scaleY;
+			}
+			else if (flags.weHaveATwoByTwo)
+			{
+				var a:Number = _dataTypeParser.parseF2Dot14(data);
+				var b:Number = _dataTypeParser.parseF2Dot14(data);
+				var c:Number = _dataTypeParser.parseF2Dot14(data);
+				var d:Number = _dataTypeParser.parseF2Dot14(data);
+				
+				result.mtxA = a;
+				result.mtxB = b;
+				result.mtxC = c;
+				result.mtxD = d;
+			}
+			
+			return result;
+		}
+		
+		private function parseCompositeGlyphFlags(flagData:uint):CompositeGlyphFlags
+		{
+			var result:CompositeGlyphFlags = new CompositeGlyphFlags();
+			
+			result.argumentsAreWords = (flagData & 0x1) == 1;
+			result.argumentsAreXYValues = ((flagData >> 1) & 0x1) == 1;
+			
+			result.roundXYToGrids = ((flagData >> 2) & 0x1) == 1;
+			
+			result.weHaveAScale = ((flagData >> 3) & 0x1) == 1;
+			
+			result.moreComponents = ((flagData >> 5) & 0x1) == 1;
+			
+			result.weHaveAnXAndYScale = ((flagData >> 6) & 0x1) == 1;
+			result.weHaveATwoByTwo = ((flagData >> 7) & 0x1) == 1;
+			result.weHaveInstructions = ((flagData >> 8) & 0x1) == 1;
+			
+			result.useMyMetrics = ((flagData >> 9) & 0x1) == 1;
+			
+			result.overlapCompound = ((flagData >> 10) & 0x1) == 1;
+			
+			result.scaledComponentOffset = ((flagData >> 11) & 0x1) == 1;
+			result.unscaledComponentOffset = ((flagData >> 12) & 0x1) == 1;
+			
+			return result;
+		}
+		
+		private function parseSimpleGlyph(data:ByteArray, header:GlyphHeader):SimpleGlyph
 		{
 			var result:SimpleGlyph = new SimpleGlyph();
 			
@@ -138,11 +262,11 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var contourParser:ContourParser = new ContourParser();
 			result.contours = contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags);
 			
-			result.header = header;	
+			result.header = header;
 			return result;
 		}
 		
-		private function parseXCoordinates(data:ByteArray, glyphFlags:Vector.<SimpleGlyphFlags>):Vector.<int> 
+		private function parseXCoordinates(data:ByteArray, glyphFlags:Vector.<SimpleGlyphFlags>):Vector.<int>
 		{
 			const l:uint = glyphFlags.length;
 			var result:Vector.<int> = new Vector.<int>(l);
@@ -169,7 +293,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			return result;
 		}
 		
-		private function parseYCoordinates(data:ByteArray, glyphFlags:Vector.<SimpleGlyphFlags>):Vector.<int> 
+		private function parseYCoordinates(data:ByteArray, glyphFlags:Vector.<SimpleGlyphFlags>):Vector.<int>
 		{
 			const l:uint = glyphFlags.length;
 			var result:Vector.<int> = new Vector.<int>(l);
@@ -196,9 +320,9 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			return result;
 		}
 		
-		private function parseFlags(data:ByteArray, numPoints:uint, flagDatas:Vector.<uint>, glyphFlags:Vector.<SimpleGlyphFlags>):void 
+		private function parseFlags(data:ByteArray, numPoints:uint, flagDatas:Vector.<uint>, glyphFlags:Vector.<SimpleGlyphFlags>):void
 		{
-			var i:uint = 0; 
+			var i:uint = 0;
 			while (i < numPoints)
 			{
 				var flagData:uint = _dataTypeParser.parseByte(data);
@@ -228,7 +352,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			}
 		}
 		
-		private function parseGlyphHeader(data:ByteArray, hasContour:Boolean):GlyphHeader 
+		private function parseGlyphHeader(data:ByteArray, hasContour:Boolean):GlyphHeader
 		{
 			var result:GlyphHeader = new GlyphHeader();
 			
@@ -237,7 +361,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			if (hasContour)
 			{
 				result.numCountours = _dataTypeParser.parseShort(data);
-			
+				
 				result.xMin = _dataTypeParser.parseShort(data);
 				result.yMin = _dataTypeParser.parseShort(data);
 				result.xMax = _dataTypeParser.parseShort(data);
@@ -246,7 +370,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			
 			return result;
 		}
-		
+	
 	}
 
 }

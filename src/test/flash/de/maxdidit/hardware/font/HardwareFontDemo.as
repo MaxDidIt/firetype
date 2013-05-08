@@ -98,10 +98,10 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser(context3d);
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			//hardwareParser.loadFont("arial.ttf");
+			hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
-			hardwareParser.loadFont("DAUNPENH.TTF");
+			//hardwareParser.loadFont("DAUNPENH.TTF");
 			
 			programPair = context3d.createProgram();
 			programPair.upload(vertexAssembly.agalcode, fragmentAssembly.agalcode);
@@ -134,9 +134,9 @@ package de.maxdidit.hardware.font
 			hardwareGlyph2.position = new Vector3D(1200, 0, 0);
 			hardwareGlyph3 = font.getHardwareGlyph("a".charCodeAt(0), 2);
 			hardwareGlyph3.position = new Vector3D(2400, 0, 0);
-			hardwareGlyph4 = font.getHardwareGlyph("a".charCodeAt(0), 3);
+			hardwareGlyph4 = font.getHardwareGlyph("a".charCodeAt(0), 2);
 			hardwareGlyph4.position = new Vector3D(3600, 0, 0);
-			hardwareGlyph5 = font.getHardwareGlyph("a".charCodeAt(0), 4);
+			hardwareGlyph5 = font.getHardwareGlyph("a".charCodeAt(0), 2);
 			hardwareGlyph5.position = new Vector3D(4800, 0, 0);
 			
 			hardwareGlyph6 = font.getHardwareGlyph("B".charCodeAt(0), 0);
