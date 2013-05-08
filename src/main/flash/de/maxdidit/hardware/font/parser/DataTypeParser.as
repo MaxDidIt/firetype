@@ -47,6 +47,13 @@ package de.maxdidit.hardware.font.parser
 			return floatValue;
 		}
 		
+		public function parseF2Dot14(data:ByteArray):Number
+		{
+			var integerValue:int = data.readShort();
+			var floatValue:Number = Number(integerValue) / Number(0x20000);
+			return floatValue;
+		}
+		
 		public function parseUnsignedShort(data:ByteArray):uint
 		{
 			var value:uint = data.readUnsignedShort();
