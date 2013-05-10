@@ -12,8 +12,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphHeader;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.SimpleGlyph;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.SimpleGlyphFlags;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.simple.SimpleGlyph;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.simple.SimpleGlyphFlags;
 	import de.maxdidit.hardware.font.data.tables.truetype.LocationTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;

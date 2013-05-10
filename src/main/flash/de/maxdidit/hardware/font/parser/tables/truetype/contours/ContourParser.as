@@ -6,7 +6,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Line;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.VertexListElement;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.SimpleGlyphFlags;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.simple.SimpleGlyphFlags;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import de.maxdidit.list.CircularLinkedList;
 	import de.maxdidit.list.LinkedListElement;
