@@ -3,9 +3,9 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyph;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyphComponent;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.CompositeGlyphFlags;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.composite.CompositeGlyph;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.composite.CompositeGlyphComponent;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.composite.CompositeGlyphFlags;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.IPathSegment;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;

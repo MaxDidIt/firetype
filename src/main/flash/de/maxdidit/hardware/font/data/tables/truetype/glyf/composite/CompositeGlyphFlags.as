@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables.truetype.glyf 
+package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite 
 {
 	/**
 	 * ...

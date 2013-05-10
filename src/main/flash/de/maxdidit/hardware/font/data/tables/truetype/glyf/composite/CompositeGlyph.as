@@ -1,5 +1,6 @@
-package de.maxdidit.hardware.font.data.tables.truetype.glyf 
+package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
