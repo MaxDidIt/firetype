@@ -8,6 +8,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
 	import de.maxdidit.hardware.font.parser.IFontParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
+	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -28,13 +29,15 @@ package de.maxdidit.hardware.font
 		
 		private var _data:HardwareFontData;
 		private var context3d:Context3D;
+		private var _triangulator:ITriangulator;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareFont(context3d:Context3D) 
+		public function HardwareFont(context3d:Context3D, triangulator:ITriangulator) 
 		{
+			this._triangulator = triangulator;
 			this.context3d = context3d;
 		}
 		
@@ -54,6 +57,18 @@ package de.maxdidit.hardware.font
 			_data = value;
 		}
 		
+		// triangulator
+		
+		public function get triangulator():ITriangulator 
+		{
+			return _triangulator;
+		}
+		
+		public function set triangulator(value:ITriangulator):void 
+		{
+			_triangulator = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -67,7 +82,7 @@ package de.maxdidit.hardware.font
 			var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
 			
 			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
-			hardwareGlyph.initialize(paths, context3d);
+			hardwareGlyph.initialize(paths, context3d, _triangulator);
 			
 			return hardwareGlyph;
 		}

@@ -16,6 +16,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.GlyphDataTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.LocationTableParser;
+	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import flash.display3D.Context3D;
 	import flash.utils.ByteArray;
 	/**
@@ -37,9 +38,9 @@ package de.maxdidit.hardware.font.parser
 		// Constructor
 		///////////////////////
 		
-		public function OpenTypeParser(context3D:Context3D) 
+		public function OpenTypeParser(context3D:Context3D, triangulator:ITriangulator) 
 		{
-			super(context3D);
+			super(context3D, triangulator);
 			
 			_dataTypeParser = new DataTypeParser();
 			

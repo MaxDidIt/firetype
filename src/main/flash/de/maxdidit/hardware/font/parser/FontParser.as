@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -23,13 +24,15 @@ package de.maxdidit.hardware.font.parser
 		///////////////////////
 		
 		protected var _context3D:Context3D;
+		private var _triangulator:ITriangulator;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function FontParser(context3D:Context3D) 
+		public function FontParser(context3D:Context3D, triangulator:ITriangulator) 
 		{
+			this._triangulator = triangulator;
 			this._context3D = context3D;
 		}
 		
@@ -45,6 +48,18 @@ package de.maxdidit.hardware.font.parser
 		public function set context3D(value:Context3D):void 
 		{
 			_context3D = value;
+		}
+		
+		// triangulator
+		
+		public function get triangulator():ITriangulator 
+		{
+			return _triangulator;
+		}
+		
+		public function set triangulator(value:ITriangulator):void 
+		{
+			_triangulator = value;
 		}
 		
 		///////////////////////
@@ -67,7 +82,7 @@ package de.maxdidit.hardware.font.parser
 		
 		public function parseFont(data:ByteArray):HardwareFont
 		{
-			var hardwareFont:HardwareFont = new HardwareFont(_context3D);
+			var hardwareFont:HardwareFont = new HardwareFont(_context3D, _triangulator);
 			
 			hardwareFont.data = parseFontData(data);
 			

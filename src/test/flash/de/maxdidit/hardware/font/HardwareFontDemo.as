@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.parser.OpenTypeParser;
+	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
 	import flash.display.StageAlign;
@@ -95,13 +96,13 @@ package de.maxdidit.hardware.font
 			context3d.enableErrorChecking = true;
 			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 4, false);
 			
-			var hardwareParser:OpenTypeParser = new OpenTypeParser(context3d);
+			var hardwareParser:OpenTypeParser = new OpenTypeParser(context3d, new EarClippingTriangulator());
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			hardwareParser.loadFont("arial.ttf");
+			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
-			//hardwareParser.loadFont("DAUNPENH.TTF");
+			hardwareParser.loadFont("DAUNPENH.TTF");
 			
 			programPair = context3d.createProgram();
 			programPair.upload(vertexAssembly.agalcode, fragmentAssembly.agalcode);
