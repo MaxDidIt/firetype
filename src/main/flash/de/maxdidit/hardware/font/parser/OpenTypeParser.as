@@ -12,6 +12,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.parser.tables.advanced.GlyphDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import de.maxdidit.hardware.font.parser.tables.required.MaximumProfileTableParser;
+	import de.maxdidit.hardware.font.parser.tables.required.NamingTableParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.font.parser.tables.truetype.ControlValueTableParser;
 	import de.maxdidit.hardware.font.parser.tables.truetype.GlyphDataTableParser;
@@ -65,7 +66,7 @@ package de.maxdidit.hardware.font.parser
 			_tableParserMap[TableNames.HORIZONTAL_HEADER]			= notYetImplementedParser;
 			_tableParserMap[TableNames.HORIZONTAL_METRICS]			= notYetImplementedParser;
 			_tableParserMap[TableNames.MAXIMUM_PROFILE]				= new MaximumProfileTableParser(_dataTypeParser);
-			_tableParserMap[TableNames.NAMING_TABLE]				= notYetImplementedParser;
+			_tableParserMap[TableNames.NAMING_TABLE]				= new NamingTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.OS2_WINDOWS_METRICS]			= notYetImplementedParser;
 			_tableParserMap[TableNames.POSTSCRIPT_INFORMATION]		= notYetImplementedParser;
 			
