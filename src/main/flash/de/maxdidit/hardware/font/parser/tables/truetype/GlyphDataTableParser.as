@@ -72,6 +72,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				var hasContour:Boolean = i + 1 == l ? true : glyphOffsets[i] != glyphOffsets[i + 1];
 				
 				var glyph:Glyph = parseGlyph(data, offset + glyphOffsets[i], hasContour);
+				glyph.header.index = i;
 				result[i] = glyph;
 			}
 			
@@ -88,21 +89,20 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			if (!hasContour || header.numCountours == 0)
 			{
 				result = new Glyph();
-				result.header = header;
-				return result;
 			} else if (header.numCountours > 0)
 			{
 				result = parseSimpleGlyph(data, header);
 			}
 			else
 			{
-				result = parseCompositeGlyph(data, header);
+				result = parseCompositeGlyph(data);
 			}
 			
+			result.header = header;
 			return result;
 		}
 		
-		private function parseCompositeGlyph(data:ByteArray, header:GlyphHeader):CompositeGlyph
+		private function parseCompositeGlyph(data:ByteArray):CompositeGlyph
 		{
 			var result:CompositeGlyph = new CompositeGlyph();
 			
@@ -262,7 +262,6 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var contourParser:ContourParser = new ContourParser();
 			result.contours = contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags);
 			
-			result.header = header;
 			return result;
 		}
 		

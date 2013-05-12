@@ -82,7 +82,7 @@ package de.maxdidit.hardware.font.parser
 		
 		public function parseFont(data:ByteArray):HardwareFont
 		{
-			var hardwareFont:HardwareFont = new HardwareFont(_context3D, _triangulator);
+			var hardwareFont:HardwareFont = new HardwareFont();
 			
 			hardwareFont.data = parseFontData(data);
 			

@@ -23,9 +23,10 @@ package de.maxdidit.hardware.font.triangulation
 		// Member Functions
 		///////////////////////
 		
-		public function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):void
+		public function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):uint
 		{			
 			const l:uint = path.length;
+			var numTriangles:uint = 0;
 			
 			// create index array
 			var availableIndices:CircularLinkedList = new CircularLinkedList();
@@ -42,7 +43,8 @@ package de.maxdidit.hardware.font.triangulation
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
-			while (availableIndices.numElements > 3)
+			var iterations:uint = 0; // fail safe to prevent infinite loops
+			while (availableIndices.numElements > 3 && iterations < 500)
 			{	
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];
@@ -61,7 +63,7 @@ package de.maxdidit.hardware.font.triangulation
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
-					
+					iterations++;
 					continue;
 				}
 				
@@ -69,7 +71,7 @@ package de.maxdidit.hardware.font.triangulation
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
-					
+					iterations++;
 					continue;
 				}
 				
@@ -78,16 +80,23 @@ package de.maxdidit.hardware.font.triangulation
 				result.push(currentIndex.value + indexOffset);
 				result.push((currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
 				
+				numTriangles++;
+				
 				// remove current index
 				availableIndices.removeElement(currentIndex);
 				
 				currentIndex = availableIndices.firstElement as UnsignedIntegerListElement;
+				iterations = 0;
 			}
 			
 			// add the last triangle
 			result.push((currentIndex.previous as UnsignedIntegerListElement).value + indexOffset);
 			result.push(currentIndex.value + indexOffset);
 			result.push((currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
+			
+			numTriangles++;
+			
+			return numTriangles;
 		}
 		
 		private function containsAnyPointFromPath(path:Vector.<Vertex>, vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, startElement:UnsignedIntegerListElement, endElement:UnsignedIntegerListElement):Boolean 

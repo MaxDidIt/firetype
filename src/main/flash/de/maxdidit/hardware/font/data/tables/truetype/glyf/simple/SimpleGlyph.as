@@ -1,8 +1,13 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple 
 {
+	import de.maxdidit.hardware.text.HardwareCharacterCache;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.text.HardwareCharacter;
+	import de.maxdidit.hardware.font.HardwareGlyph;
+	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	/**
@@ -141,6 +146,18 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter 
+		{
+			var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, this.header.index);
+			
+			var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
+			
+			var character:HardwareCharacter = new HardwareCharacter();
+			character.addGlyphInstance(glyphInstance);
+			
+			return character;
+		}
 		
 		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
 		{

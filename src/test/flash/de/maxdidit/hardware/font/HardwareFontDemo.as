@@ -3,6 +3,9 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.parser.OpenTypeParser;
+	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.HardwareFontFormat;
+	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
@@ -27,31 +30,9 @@ package de.maxdidit.hardware.font
 		private var stage3d:Stage3D;
 		private var context3d:Context3D;
 		
-		private const VERTEX_SHADER:String = "m44 op, va0, vc0"
-		
-		private const FRAGMENT_SHADER:String = "mov oc, fc0";
-		
-		private var vertexAssembly:AGALMiniAssembler = new AGALMiniAssembler();
-		private var fragmentAssembly:AGALMiniAssembler = new AGALMiniAssembler();
-		private var programPair:Program3D;
-		private var hardwareGlyph1:HardwareGlyph;
-		private var hardwareGlyph2:HardwareGlyph;
-		private var hardwareGlyph3:HardwareGlyph;
-		private var hardwareGlyph4:HardwareGlyph;
-		private var hardwareGlyph5:HardwareGlyph;
-		private var hardwareGlyph6:HardwareGlyph;
-		private var hardwareGlyph7:HardwareGlyph;
-		private var hardwareGlyph8:HardwareGlyph;
-		private var hardwareGlyph9:HardwareGlyph;
-		private var hardwareGlyph0:HardwareGlyph;
-		private var hardwareGlyphA:HardwareGlyph;
-		private var hardwareGlyphB:HardwareGlyph;
-		private var hardwareGlyphC:HardwareGlyph;
-		private var hardwareGlyphD:HardwareGlyph;
-		private var hardwareGlyphE:HardwareGlyph;
-		private var hardwareGlyphF:HardwareGlyph;
-		
 		private var viewProjectionMtx:Matrix3D;
+		private var cache:HardwareCharacterCache;
+		private var hardwareText:HardwareText;
 		
 		
 		///////////////////////
@@ -72,10 +53,6 @@ package de.maxdidit.hardware.font
 			stage3d.addEventListener(Event.CONTEXT3D_CREATE, handleContextCreated);
 			stage3d.addEventListener(ErrorEvent.ERROR, handleContextCreationError);
 			stage3d.requestContext3D(Context3DRenderMode.AUTO);
-			
-			// init shaders
-			vertexAssembly.assemble(Context3DProgramType.VERTEX, VERTEX_SHADER);
-			fragmentAssembly.assemble(Context3DProgramType.FRAGMENT, FRAGMENT_SHADER);
 		}
 		
 		private function handleResize(e:Event):void 
@@ -99,14 +76,10 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser(context3d, new EarClippingTriangulator());
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			//hardwareParser.loadFont("arial.ttf");
+			hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
-			hardwareParser.loadFont("DAUNPENH.TTF");
-			
-			programPair = context3d.createProgram();
-			programPair.upload(vertexAssembly.agalcode, fragmentAssembly.agalcode);
-			context3d.setProgram(programPair);
+			//hardwareParser.loadFont("DAUNPENH.TTF");
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
@@ -116,9 +89,6 @@ package de.maxdidit.hardware.font
 			
 			var color:Vector.<Number> = new Vector.<Number>();
 			color.push(0.0, 0.0, 0.0, 1.0);
-			
-			context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 0, viewProjectionMtx, true );
-			context3d.setProgramConstantsFromVector( Context3DProgramType.FRAGMENT, 0, color, 1 );
 		}
 		
 		private function handleContextCreationError(e:ErrorEvent):void
@@ -128,39 +98,19 @@ package de.maxdidit.hardware.font
 		
 		private function handleFontParsed(e:FontEvent):void
 		{
+			var hardwareFontFormat:HardwareFontFormat = new HardwareFontFormat();
+			hardwareFontFormat.font = e.font;
+			hardwareFontFormat.subdivisions = 1;
+			
+			cache = new HardwareCharacterCache(context3d, new EarClippingTriangulator());
+			
+			hardwareText = new HardwareText(cache);
+			hardwareText.scaleX = hardwareText.scaleY = 0.15;
+			hardwareText.width = 40000;
+			hardwareText.standardFormat = hardwareFontFormat;
+			hardwareText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.";
+			
 			var font:HardwareFont = e.font;
-			
-			hardwareGlyph1 = font.getHardwareGlyph("a".charCodeAt(0), 0);
-			hardwareGlyph2 = font.getHardwareGlyph("a".charCodeAt(0), 1);
-			hardwareGlyph2.position = new Vector3D(1200, 0, 0);
-			hardwareGlyph3 = font.getHardwareGlyph("a".charCodeAt(0), 2);
-			hardwareGlyph3.position = new Vector3D(2400, 0, 0);
-			hardwareGlyph4 = font.getHardwareGlyph("a".charCodeAt(0), 2);
-			hardwareGlyph4.position = new Vector3D(3600, 0, 0);
-			hardwareGlyph5 = font.getHardwareGlyph("a".charCodeAt(0), 2);
-			hardwareGlyph5.position = new Vector3D(4800, 0, 0);
-			
-			hardwareGlyph6 = font.getHardwareGlyph("B".charCodeAt(0), 0);
-			hardwareGlyph6.position = new Vector3D(0, -2000, 0);
-			hardwareGlyph7 = font.getHardwareGlyph("B".charCodeAt(0), 1);
-			hardwareGlyph7.position = new Vector3D(1200, -2000, 0);
-			hardwareGlyph8 = font.getHardwareGlyph("B".charCodeAt(0), 2);
-			hardwareGlyph8.position = new Vector3D(2400, -2000, 0);
-			hardwareGlyph9 = font.getHardwareGlyph("B".charCodeAt(0), 3);
-			hardwareGlyph9.position = new Vector3D(3600, -2000, 0);
-			hardwareGlyph0 = font.getHardwareGlyph("B".charCodeAt(0), 4);
-			hardwareGlyph0.position = new Vector3D(4800, -2000, 0);
-			
-			hardwareGlyphA = font.getHardwareGlyph("i".charCodeAt(0), 2);
-			hardwareGlyphA.position = new Vector3D(0, -4000, 0);
-			hardwareGlyphB = font.getHardwareGlyph("%".charCodeAt(0), 2);
-			hardwareGlyphB.position = new Vector3D(1200, -4000, 0);
-			hardwareGlyphC = font.getHardwareGlyph("&".charCodeAt(0), 2);
-			hardwareGlyphC.position = new Vector3D(2400, -4000, 0);
-			hardwareGlyphD = font.getHardwareGlyph("@".charCodeAt(0), 2);
-			hardwareGlyphD.position = new Vector3D(3600, -4000, 0);
-			hardwareGlyphE = font.getHardwareGlyph("8".charCodeAt(0), 2);
-			hardwareGlyphE.position = new Vector3D(4800, -4000, 0);
 			
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 		}
@@ -169,23 +119,10 @@ package de.maxdidit.hardware.font
 		{
 			context3d.clear(1, 1, 1);
 			
-			hardwareGlyph1.render(context3d, viewProjectionMtx);
-			hardwareGlyph2.render(context3d, viewProjectionMtx);
-			hardwareGlyph3.render(context3d, viewProjectionMtx);
-			hardwareGlyph4.render(context3d, viewProjectionMtx);
-			hardwareGlyph5.render(context3d, viewProjectionMtx);
+			hardwareText.calculateTransformations(viewProjectionMtx);
+			cache.render();
 			
-			hardwareGlyph6.render(context3d, viewProjectionMtx);
-			hardwareGlyph7.render(context3d, viewProjectionMtx);
-			hardwareGlyph8.render(context3d, viewProjectionMtx);
-			hardwareGlyph9.render(context3d, viewProjectionMtx);
-			hardwareGlyph0.render(context3d, viewProjectionMtx);
-			
-			hardwareGlyphA.render(context3d, viewProjectionMtx);
-			hardwareGlyphB.render(context3d, viewProjectionMtx);
-			hardwareGlyphC.render(context3d, viewProjectionMtx);
-			hardwareGlyphD.render(context3d, viewProjectionMtx);
-			hardwareGlyphE.render(context3d, viewProjectionMtx);
+			hardwareText.y += 2;
 			
 			context3d.present();
 		}

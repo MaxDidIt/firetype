@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 {
 	import de.maxdidit.list.CircularLinkedList;
+	import de.maxdidit.math.AxisAlignedBoundingBox;
 	
 	/**
 	 * ...

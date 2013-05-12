@@ -8,7 +8,7 @@ package de.maxdidit.hardware.font.triangulation
 	 */
 	public interface ITriangulator 
 	{
-		function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):void
+		function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):uint
 	}
 	
 }

@@ -10,6 +10,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		// Member Fields
 		///////////////////////
 		
+		private var _index:int;
+		
 		private var _numCountours:int; // If the number of contours is greater than or equal to zero, this is a single glyph; if negative, this is a composite glyph.
 		
 		// bounding box
@@ -105,6 +107,18 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set hasContour(value:Boolean):void 
 		{
 			_hasContour = value;
+		}
+		
+		// index
+		
+		public function get index():int 
+		{
+			return _index;
+		}
+		
+		public function set index(value:int):void 
+		{
+			_index = value;
 		}
 		
 	}

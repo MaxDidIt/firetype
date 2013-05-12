@@ -1,6 +1,12 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.HardwareGlyph;
+	import de.maxdidit.hardware.text.HardwareCharacter;
+	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -64,6 +70,34 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		public function set instructions(value:ByteArray):void 
 		{
 			_instructions = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
+		{
+			return null;
+		}
+		
+		override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter
+		{
+			var character:HardwareCharacter = new HardwareCharacter();
+			
+			const l:uint = _components.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var currentComponent:CompositeGlyphComponent = _components[i];
+				
+				var index:uint = currentComponent.glyphIndex;
+				var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, index);
+				var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
+				
+				character.addGlyphInstance(glyphInstance);
+			}
+			
+			return character;
 		}
 		
 	}

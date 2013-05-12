@@ -1,7 +1,9 @@
-package de.maxdidit.hardware.font 
+package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableNameID;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
@@ -9,6 +11,8 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.parser.IFontParser;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
+	import de.maxdidit.hardware.text.HardwareCharacter;
+	import de.maxdidit.hardware.text.HardwareCharacterCache;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -17,28 +21,25 @@ package de.maxdidit.hardware.font
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class HardwareFont 
+	public class HardwareFont
 	{
 		///////////////////////
 		// Member Fields
 		///////////////////////
 		
 		private var _data:HardwareFontData;
-		private var context3d:Context3D;
-		private var _triangulator:ITriangulator;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareFont(context3d:Context3D, triangulator:ITriangulator) 
+		public function HardwareFont()
 		{
-			this._triangulator = triangulator;
-			this.context3d = context3d;
 		}
 		
 		///////////////////////
@@ -47,47 +48,60 @@ package de.maxdidit.hardware.font
 		
 		// data
 		
-		public function get data():HardwareFontData 
+		public function get data():HardwareFontData
 		{
 			return _data;
 		}
 		
-		public function set data(value:HardwareFontData):void 
+		public function set data(value:HardwareFontData):void
 		{
 			_data = value;
 		}
 		
-		// triangulator
+		// fontFamily
 		
-		public function get triangulator():ITriangulator 
+		public function get fontFamily():String
 		{
-			return _triangulator;
+			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
+			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
 		}
 		
-		public function set triangulator(value:ITriangulator):void 
+		public function get fontSubFamily():String
 		{
-			_triangulator = value;
+			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
+			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
+		}
+		
+		public function get uniqueIdentifier():String
+		{
+			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
+			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
 		}
 		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		public function getHardwareGlyph(charCode:Number, subdivisions:uint):HardwareGlyph
-		{
+		//public function getHardwareGlyph(index:uint, subdivisions:uint):HardwareGlyph
+		//{
 			// TODO: only do this if glyph hasn't been cached yet
-			var id:uint = getGlyphIndex(charCode);
-			var glyph:Glyph = retrieveGlyph(id);
-			
-			var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
-			
-			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
-			hardwareGlyph.initialize(paths, context3d, _triangulator);
-			
-			return hardwareGlyph;
-		}
+			//var id:uint = getGlyphIndex(charCode);
+			//var glyph:Glyph = retrieveGlyph(index);
+			//
+			//var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
+			//
+			//if (paths)
+			//{
+				//var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
+				//hardwareGlyph.initialize(paths, context3d, _triangulator);
+				//
+				//return hardwareGlyph;
+			//}
+			//
+			//return null;
+		//}
 		
-		private function retrieveGlyph(id:uint):Glyph 
+		public function retrieveGlyph(id:uint):Glyph
 		{
 			var glyfTable:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
 			if (!glyfTable)
@@ -96,10 +110,15 @@ package de.maxdidit.hardware.font
 			}
 			
 			var glyf:Glyph = (glyfTable.data as GlyphTableData).retrieveGlyph(id);
+			if (!glyf.header.hasContour)
+			{
+				glyf = (glyfTable.data as GlyphTableData).retrieveGlyph(0);
+			}
+			
 			return glyf;
 		}
 		
-		private function getGlyphIndex(charCode:Number):int 
+		public function getGlyphIndex(charCode:Number):int
 		{
 			var cmapTable:Table = _data.retrieveTable(TableNames.CHARACTER_INDEX_MAPPING);
 			if (!cmapTable)
