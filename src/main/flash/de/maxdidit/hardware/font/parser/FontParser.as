@@ -23,44 +23,17 @@ package de.maxdidit.hardware.font.parser
 		// Member Fields
 		///////////////////////
 		
-		protected var _context3D:Context3D;
-		private var _triangulator:ITriangulator;
-		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function FontParser(context3D:Context3D, triangulator:ITriangulator) 
+		public function FontParser() 
 		{
-			this._triangulator = triangulator;
-			this._context3D = context3D;
 		}
 		
 		///////////////////////
 		// Member Properties
 		///////////////////////
-		
-		public function get context3D():Context3D 
-		{
-			return _context3D;
-		}
-		
-		public function set context3D(value:Context3D):void 
-		{
-			_context3D = value;
-		}
-		
-		// triangulator
-		
-		public function get triangulator():ITriangulator 
-		{
-			return _triangulator;
-		}
-		
-		public function set triangulator(value:ITriangulator):void 
-		{
-			_triangulator = value;
-		}
 		
 		///////////////////////
 		// Member Functions

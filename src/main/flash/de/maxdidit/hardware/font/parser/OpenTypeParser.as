@@ -39,9 +39,9 @@ package de.maxdidit.hardware.font.parser
 		// Constructor
 		///////////////////////
 		
-		public function OpenTypeParser(context3D:Context3D, triangulator:ITriangulator) 
+		public function OpenTypeParser() 
 		{
-			super(context3D, triangulator);
+			super();
 			
 			_dataTypeParser = new DataTypeParser();
 			
