@@ -20,7 +20,7 @@ package de.maxdidit.hardware.text
 		
 		protected var _children:Vector.<TransformedInstance>;
 		
-		private var _isDirty:Boolean;
+		private var _isDirty:Boolean = true;
 		private var _localTransformation:Matrix3D;
 		private var _globalTransformation:Matrix3D;
 		
@@ -137,7 +137,7 @@ package de.maxdidit.hardware.text
 			_children.length = 0;
 		}
 		
-		public function calculateTransformations(parentGlobalTransformation:Matrix3D = null):void
+		public function calculateTransformations(parentGlobalTransformation:Matrix3D = null, parentChanged:Boolean = false):void
 		{
 			// calculate local transformation
 			if (_isDirty)
@@ -149,26 +149,29 @@ package de.maxdidit.hardware.text
 				_rawLocalData[13] = _y;
 				
 				_localTransformation.rawData = _rawLocalData;
+			}
+			
+			if (_isDirty || parentChanged)
+			{
+				if (parentGlobalTransformation)
+				{
+					_globalTransformation.copyFrom(parentGlobalTransformation);
+				}
+				else
+				{
+					_globalTransformation.identity();
+				}
 				
-				_isDirty = false;
+				_globalTransformation.prepend(_localTransformation);
 			}
-			
-			if (parentGlobalTransformation)
-			{
-				_globalTransformation.copyFrom(parentGlobalTransformation);
-			}
-			else
-			{
-				_globalTransformation.identity();
-			}
-			
-			_globalTransformation.prepend(_localTransformation);
 			
 			const l:uint = _children.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				_children[i].calculateTransformations(_globalTransformation);
+				_children[i].calculateTransformations(_globalTransformation, _isDirty || parentChanged);
 			}
+			
+			_isDirty = false;
 		}
 		
 		public function clone():TransformedInstance
