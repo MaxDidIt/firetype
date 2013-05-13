@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
+	import de.maxdidit.hardware.font.data.tables.required.hhea.HorizontalHeaderData;
 	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableNameID;
 	import de.maxdidit.hardware.font.data.tables.Table;
@@ -78,6 +79,18 @@ package de.maxdidit.hardware.font
 			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
 		}
 		
+		public function get ascender():int
+		{
+			var horizontalHeaderData:HorizontalHeaderData = _data.retrieveTable(TableNames.HORIZONTAL_HEADER).data as HorizontalHeaderData;
+			return horizontalHeaderData.ascender;
+		}
+		
+		public function get descender():int
+		{
+			var horizontalHeaderData:HorizontalHeaderData = _data.retrieveTable(TableNames.HORIZONTAL_HEADER).data as HorizontalHeaderData;
+			return horizontalHeaderData.descender;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -110,10 +123,10 @@ package de.maxdidit.hardware.font
 			}
 			
 			var glyf:Glyph = (glyfTable.data as GlyphTableData).retrieveGlyph(id);
-			if (!glyf.header.hasContour)
-			{
-				glyf = (glyfTable.data as GlyphTableData).retrieveGlyph(0);
-			}
+			//if (!glyf.header.hasContour)
+			//{
+				//glyf = (glyfTable.data as GlyphTableData).retrieveGlyph(0);
+			//}
 			
 			return glyf;
 		}
