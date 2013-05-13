@@ -7,6 +7,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.text.HardwareFontFormat;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
+	import de.maxdidit.hardware.text.renderer.SingleGlyphRenderer;
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
 	import flash.display.StageAlign;
@@ -17,6 +18,7 @@ package de.maxdidit.hardware.font
 	import flash.display3D.Program3D;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 	
@@ -33,6 +35,10 @@ package de.maxdidit.hardware.font
 		private var viewProjectionMtx:Matrix3D;
 		private var cache:HardwareCharacterCache;
 		private var hardwareText:HardwareText;
+		
+		private var mouseDown:Boolean;
+		private var textClickY:Number;
+		private var mouseClickY:Number;
 		
 		
 		///////////////////////
@@ -76,10 +82,10 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser(context3d, new EarClippingTriangulator());
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			hardwareParser.loadFont("arial.ttf");
+			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
-			//hardwareParser.loadFont("DAUNPENH.TTF");
+			hardwareParser.loadFont("DAUNPENH.TTF");
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
@@ -89,6 +95,23 @@ package de.maxdidit.hardware.font
 			
 			var color:Vector.<Number> = new Vector.<Number>();
 			color.push(0.0, 0.0, 0.0, 1.0);
+			
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseUp);
+		}
+		
+		private function handleMouseUp(e:MouseEvent):void 
+		{
+			mouseDown = false;
+		}
+		
+		private function handleMouseDown(e:MouseEvent):void 
+		{
+			textClickY = hardwareText.y;
+			
+			mouseClickY = e.stageY;
+			
+			mouseDown = true;
 		}
 		
 		private function handleContextCreationError(e:ErrorEvent):void
@@ -102,7 +125,7 @@ package de.maxdidit.hardware.font
 			hardwareFontFormat.font = e.font;
 			hardwareFontFormat.subdivisions = 1;
 			
-			cache = new HardwareCharacterCache(context3d, new EarClippingTriangulator());
+			cache = new HardwareCharacterCache(new SingleGlyphRenderer(context3d, new EarClippingTriangulator()));
 			
 			hardwareText = new HardwareText(cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
@@ -122,7 +145,11 @@ package de.maxdidit.hardware.font
 			hardwareText.calculateTransformations(viewProjectionMtx);
 			cache.render();
 			
-			hardwareText.y += 2;
+			//hardwareText.y += 2;
+			if (mouseDown)
+			{
+				hardwareText.y = textClickY - (stage.mouseY - mouseClickY) * 10;
+			}
 			
 			context3d.present();
 		}

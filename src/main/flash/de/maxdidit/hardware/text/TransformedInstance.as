@@ -34,6 +34,7 @@ package de.maxdidit.hardware.text
 		{
 			_children = new Vector.<TransformedInstance>();
 			_localTransformation = new Matrix3D();
+			_globalTransformation = new Matrix3D();
 			
 			_rawLocalData = new Vector.<Number>();
 			_rawLocalData.push(	1, 0, 0, 0, //
@@ -154,11 +155,11 @@ package de.maxdidit.hardware.text
 			
 			if (parentGlobalTransformation)
 			{
-				_globalTransformation = parentGlobalTransformation.clone();
+				_globalTransformation.copyFrom(parentGlobalTransformation);
 			}
 			else
 			{
-				_globalTransformation = new Matrix3D();
+				_globalTransformation.identity();
 			}
 			
 			_globalTransformation.prepend(_localTransformation);
