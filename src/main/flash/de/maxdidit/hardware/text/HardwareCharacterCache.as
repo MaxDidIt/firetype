@@ -82,6 +82,11 @@ package de.maxdidit.hardware.text
 			var id:uint = font.getGlyphIndex(charCode);
 			var glyph:Glyph = font.retrieveGlyph(id);
 			
+			if (!glyph.header.hasContour)
+			{
+				return null;
+			}
+			
 			var hardwareCharacter:HardwareCharacter = glyph.retrieveHardwareCharacter(font, subdivisions, this);
 			
 			return hardwareCharacter;

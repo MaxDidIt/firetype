@@ -47,6 +47,11 @@ package de.maxdidit.hardware.text
 		// Member Properties
 		///////////////////////
 		
+		public function get numChildren():uint
+		{
+			return _children.length;
+		}
+		
 		// x
 		
 		public function get x():Number

@@ -90,6 +90,7 @@ package de.maxdidit.hardware.text
 		{
 			loseAllChildren();
 			var currentLine:HardwareLine = new HardwareLine();
+			currentLine.y = -_standardFormat.font.ascender;
 			addChild(currentLine);
 			
 			var words:Array = _text.split(/([\s\-]+)/);
@@ -98,15 +99,15 @@ package de.maxdidit.hardware.text
 			for (var i:uint = 0; i < l; i++)
 			{
 				var currentWord:HardwareWord = new HardwareWord();
-				currentWord.initialize(words[i], _standardFormat, _cache);
+				currentWord.initialize(words[i], _standardFormat, _cache, currentLine.numChildren == 0);
 				
-				if (_fixedWidth && currentLine.boundingBox.right + currentWord.boundingBox.right > _width || (words[i] as String) == "\n")
+				if (_fixedWidth && currentLine.boundingBox.right + currentWord.boundingBox.right > _width)
 				{
 					// start new line
 					var previousLine:HardwareLine = currentLine;
 					currentLine = new HardwareLine();
 					
-					currentLine.y = -previousLine.boundingBox.height + previousLine.y;
+					currentLine.y = -(_standardFormat.font.ascender - _standardFormat.font.descender) + previousLine.y;
 					
 					addChild(currentLine);
 				}

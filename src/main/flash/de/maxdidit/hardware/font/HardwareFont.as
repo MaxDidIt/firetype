@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.hhea.HorizontalHeaderData;
+	import de.maxdidit.hardware.font.data.tables.required.hmtx.HorizontalMetricsData;
 	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.name.NamingTableNameID;
 	import de.maxdidit.hardware.font.data.tables.Table;
@@ -95,26 +96,7 @@ package de.maxdidit.hardware.font
 		// Member Functions
 		///////////////////////
 		
-		//public function getHardwareGlyph(index:uint, subdivisions:uint):HardwareGlyph
-		//{
-			// TODO: only do this if glyph hasn't been cached yet
-			//var id:uint = getGlyphIndex(charCode);
-			//var glyph:Glyph = retrieveGlyph(index);
-			//
-			//var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
-			//
-			//if (paths)
-			//{
-				//var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
-				//hardwareGlyph.initialize(paths, context3d, _triangulator);
-				//
-				//return hardwareGlyph;
-			//}
-			//
-			//return null;
-		//}
-		
-		public function retrieveGlyph(id:uint):Glyph
+		public function retrieveGlyph(index:uint):Glyph
 		{
 			var glyfTable:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
 			if (!glyfTable)
@@ -122,11 +104,7 @@ package de.maxdidit.hardware.font
 				throw new Error("Cannot retrieve glyph, no glyph data table found.");
 			}
 			
-			var glyf:Glyph = (glyfTable.data as GlyphTableData).retrieveGlyph(id);
-			//if (!glyf.header.hasContour)
-			//{
-				//glyf = (glyfTable.data as GlyphTableData).retrieveGlyph(0);
-			//}
+			var glyf:Glyph = (glyfTable.data as GlyphTableData).retrieveGlyph(index);
 			
 			return glyf;
 		}
@@ -141,6 +119,18 @@ package de.maxdidit.hardware.font
 			
 			var glyphIndex:int = (cmapTable.data as CharacterIndexMappingTableData).getGlyphIndex(charCode, 3, 1);
 			return glyphIndex;
+		}
+		
+		public function getGlyphAdvanceWidth(index:uint):uint
+		{
+			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
+			return horizontalMetricsData.getAdvanceWidth(index);
+		}
+		
+		public function getGlyphLeftSideBearing(index:uint):int
+		{
+			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
+			return horizontalMetricsData.getLeftSideBearing(index);
 		}
 	}
 

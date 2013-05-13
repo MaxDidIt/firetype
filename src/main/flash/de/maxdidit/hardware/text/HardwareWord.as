@@ -1,7 +1,8 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.math.AxisAlignedBoundingBox;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -18,7 +19,7 @@ package de.maxdidit.hardware.text
 		// Constructor
 		///////////////////////
 		
-		public function HardwareWord() 
+		public function HardwareWord()
 		{
 			_boundingBox = new AxisAlignedBoundingBox();
 		}
@@ -27,12 +28,12 @@ package de.maxdidit.hardware.text
 		// Member Properties
 		///////////////////////
 		
-		public function get boundingBox():AxisAlignedBoundingBox 
+		public function get boundingBox():AxisAlignedBoundingBox
 		{
 			return _boundingBox;
 		}
 		
-		public function set boundingBox(value:AxisAlignedBoundingBox):void 
+		public function set boundingBox(value:AxisAlignedBoundingBox):void
 		{
 			_boundingBox = value;
 		}
@@ -41,7 +42,7 @@ package de.maxdidit.hardware.text
 		// Member Functions
 		///////////////////////
 		
-		public function initialize(string:String, fontFormat:HardwareFontFormat, cache:HardwareCharacterCache):void 
+		public function initialize(string:String, fontFormat:HardwareFontFormat, cache:HardwareCharacterCache, firstWord:Boolean):void
 		{
 			const l:uint = string.length;
 			
@@ -50,25 +51,45 @@ package de.maxdidit.hardware.text
 			loseAllChildren();
 			_boundingBox.setValues(0, 0, 0, 0);
 			
+			// don't render whitespace at the start of a line
+			if (/\s/.test(string) && firstWord)
+			{
+				return;
+			}
+			
 			for (var i:uint = 0; i < l; i++)
 			{
 				var charCode:uint = string.charCodeAt(i);
+				var index:uint = fontFormat.font.getGlyphIndex(charCode);
+				var leftBearing:int = fontFormat.font.getGlyphLeftSideBearing(index);
 				
 				var character:HardwareCharacter = cache.getCachedCharacter(fontFormat.font, fontFormat.subdivisions, charCode);
-				var characterInstance:HardwareCharacterInstance = new HardwareCharacterInstance(character);
-				characterInstance.registerGlyphInstances(fontFormat.font.uniqueIdentifier, fontFormat.subdivisions, fontFormat.color, cache);
 				
-				characterInstance.x = x;
-				x += character.boundingBox.right;
+				if (character)
+				{
+					var characterInstance:HardwareCharacterInstance = new HardwareCharacterInstance(character);
+					characterInstance.registerGlyphInstances(fontFormat.font.uniqueIdentifier, fontFormat.subdivisions, fontFormat.color, cache);
 				
-				_boundingBox.expandTopBottom(character.boundingBox);
+					characterInstance.x = x
+					if (!firstWord)
+					{
+						characterInstance.x += leftBearing;
+					}
+					_boundingBox.expandTopBottom(character.boundingBox);
+					
+					addChild(characterInstance);
+				}
 				
-				addChild(characterInstance);
+				x += fontFormat.font.getGlyphAdvanceWidth(index);
+				if (firstWord)
+				{
+					x -= leftBearing;
+				}
 			}
 			
-			_boundingBox.right = x + character.boundingBox.right;
+			_boundingBox.right = x;
 		}
-		
+	
 	}
 
 }

@@ -92,6 +92,10 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("impact.ttf");
 			hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
+			//hardwareParser.loadFont("TIMES.TTF");
+			//hardwareParser.loadFont("L_10646.TTF");
+			//hardwareParser.loadFont("CONSOLA.TTF");
+			//hardwareParser.loadFont("COUR.TTF");
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
@@ -129,7 +133,7 @@ package de.maxdidit.hardware.font
 		{
 			var hardwareFontFormat:HardwareFontFormat = new HardwareFontFormat();
 			hardwareFontFormat.font = e.font;
-			hardwareFontFormat.subdivisions = 1;
+			hardwareFontFormat.subdivisions = 2;
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRenderer(context3d, new EarClippingTriangulator()));
 			
