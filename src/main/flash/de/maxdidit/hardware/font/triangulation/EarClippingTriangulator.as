@@ -44,7 +44,7 @@ package de.maxdidit.hardware.font.triangulation
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
 			var iterations:uint = 0; // fail safe to prevent infinite loops
-			while (availableIndices.numElements > 3 && iterations < 500)
+			while (availableIndices.numElements > 3 && iterations < 1000)
 			{	
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];

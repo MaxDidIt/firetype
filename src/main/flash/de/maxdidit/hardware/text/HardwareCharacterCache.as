@@ -1,6 +1,6 @@
 package de.maxdidit.hardware.text 
 {
-	import de.maxdidit.hardware.font.AGALMiniAssembler;
+	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
