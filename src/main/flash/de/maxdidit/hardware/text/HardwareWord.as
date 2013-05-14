@@ -57,6 +57,12 @@ package de.maxdidit.hardware.text
 				return;
 			}
 			
+			// don't render new line characters
+			if (/\n/.test(string))
+			{
+				return;
+			}
+			
 			for (var i:uint = 0; i < l; i++)
 			{
 				var charCode:uint = string.charCodeAt(i);

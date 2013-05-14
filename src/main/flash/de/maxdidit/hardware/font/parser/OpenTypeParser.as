@@ -5,6 +5,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.SFNTWrapper;
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
+	import de.maxdidit.hardware.font.parser.tables.advanced.GlyphPositioningTableParser;
 	import de.maxdidit.hardware.font.parser.tables.NotYetImplementedParser;
 	import de.maxdidit.hardware.font.parser.tables.required.CharacterIndexMappingTableParser;
 	import de.maxdidit.hardware.font.parser.tables.other.DigitalSignatureTableParser;
@@ -95,7 +96,7 @@ package de.maxdidit.hardware.font.parser
 			
 			_tableParserMap[TableNames.BASELINE_DATA]				= notYetImplementedParser;
 			_tableParserMap[TableNames.GLYPH_DEFINITION_DATA]		= new GlyphDefinitionTableParser(_dataTypeParser);
-			_tableParserMap[TableNames.GLYPH_POSITIONING_DATA]		= notYetImplementedParser;
+			_tableParserMap[TableNames.GLYPH_POSITIONING_DATA]		= new GlyphPositioningTableParser(_dataTypeParser);
 			_tableParserMap[TableNames.GLYPH_SUBSTITUTION_DATA]		= notYetImplementedParser;
 			_tableParserMap[TableNames.JUSTIFICATION_DATA]			= notYetImplementedParser;
 			
