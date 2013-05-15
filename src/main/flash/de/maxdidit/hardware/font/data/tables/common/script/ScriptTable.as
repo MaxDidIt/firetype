@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.common.script 
 {
 	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemRecord;
+	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemTable;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -11,9 +12,11 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		// Member Fields
 		///////////////////////
 		
-		private var _offset:uint;
+		private var _defaultLanguageSystemTableOffset:uint;
 		private var _languageSystemCount:uint;
 		private var _languageSystemRecords:Vector.<LanguageSystemRecord>;
+		
+		private var _defaultLanguageSystemTable:LanguageSystemTable;
 		
 		///////////////////////
 		// Constructor
@@ -28,14 +31,14 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		// Member Properties
 		///////////////////////
 		
-		public function get offset():uint 
+		public function get defaultLanguageSystemTableOffset():uint 
 		{
-			return _offset;
+			return _defaultLanguageSystemTableOffset;
 		}
 		
-		public function set offset(value:uint):void 
+		public function set defaultLanguageSystemTableOffset(value:uint):void 
 		{
-			_offset = value;
+			_defaultLanguageSystemTableOffset = value;
 		}
 		
 		public function get languageSystemCount():uint 
@@ -56,6 +59,16 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		public function set languageSystemRecords(value:Vector.<LanguageSystemRecord>):void 
 		{
 			_languageSystemRecords = value;
+		}
+		
+		public function get defaultLanguageSystemTable():LanguageSystemTable 
+		{
+			return _defaultLanguageSystemTable;
+		}
+		
+		public function set defaultLanguageSystemTable(value:LanguageSystemTable):void 
+		{
+			_defaultLanguageSystemTable = value;
 		}
 		
 	}

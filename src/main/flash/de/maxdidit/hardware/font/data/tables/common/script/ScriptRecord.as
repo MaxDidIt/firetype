@@ -10,7 +10,7 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		// Member Fields
 		///////////////////////
 		
-		private var _scriptTag:Vector.<uint>;
+		private var _scriptTag:String;
 		private var _scriptOffset:uint;
 		private var _script:ScriptTable;
 		
@@ -27,12 +27,12 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		// Member Properties
 		///////////////////////
 		
-		public function get scriptTag():Vector.<uint> 
+		public function get scriptTag():String
 		{
 			return _scriptTag;
 		}
 		
-		public function set scriptTag(value:Vector.<uint>):void 
+		public function set scriptTag(value:String):void 
 		{
 			_scriptTag = value;
 		}

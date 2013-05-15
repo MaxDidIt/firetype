@@ -91,15 +91,9 @@ package de.maxdidit.hardware.font.parser
 			return value;
 		}
 		
-		public function parseTag(data:ByteArray):Vector.<uint> 
+		public function parseTag(data:ByteArray):String
 		{
-			var result:Vector.<uint> = new Vector.<uint>(4);
-			
-			result[0] = data.readUnsignedByte();
-			result[1] = data.readUnsignedByte();
-			result[2] = data.readUnsignedByte();
-			result[3] = data.readUnsignedByte();
-			
+			var result:String = data.readUTFBytes(4);
 			return result;
 		}
 		

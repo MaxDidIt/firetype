@@ -12,7 +12,7 @@ package de.maxdidit.hardware.font.data.tables.common.language
 		
 		private var _requiredFeatureIndex:uint;
 		private var _featureCount:uint;
-		private var _featureIndex:Vector.<uint>;
+		private var _featureIndices:Vector.<uint>;
 		
 		///////////////////////
 		// Constructor
@@ -47,14 +47,14 @@ package de.maxdidit.hardware.font.data.tables.common.language
 			_featureCount = value;
 		}
 		
-		public function get featureIndex():Vector.<uint> 
+		public function get featureIndices():Vector.<uint> 
 		{
-			return _featureIndex;
+			return _featureIndices;
 		}
 		
-		public function set featureIndex(value:Vector.<uint>):void 
+		public function set featureIndices(value:Vector.<uint>):void 
 		{
-			_featureIndex = value;
+			_featureIndices = value;
 		}
 		
 	}

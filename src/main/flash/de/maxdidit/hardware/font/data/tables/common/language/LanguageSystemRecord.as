@@ -10,7 +10,7 @@ package de.maxdidit.hardware.font.data.tables.common.language
 		// Member Fields
 		///////////////////////
 		
-		private var _languageSystemTag:Vector.<uint>;
+		private var _languageSystemTag:String;
 		private var _languageSystemOffset:uint;
 		private var _languageSystemTable:LanguageSystemTable;
 		
@@ -27,12 +27,12 @@ package de.maxdidit.hardware.font.data.tables.common.language
 		// Member Properties
 		///////////////////////
 		
-		public function get languageSystemTag():Vector.<uint> 
+		public function get languageSystemTag():String
 		{
 			return _languageSystemTag;
 		}
 		
-		public function set languageSystemTag(value:Vector.<uint>):void 
+		public function set languageSystemTag(value:String):void 
 		{
 			_languageSystemTag = value;
 		}

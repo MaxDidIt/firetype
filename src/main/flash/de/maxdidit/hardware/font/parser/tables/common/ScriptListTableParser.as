@@ -1,7 +1,10 @@
-package de.maxdidit.hardware.font.parser.tables.common 
+package de.maxdidit.hardware.font.parser.tables.common
 {
+	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemRecord;
+	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemTable;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptRecord;
+	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import flash.utils.ByteArray;
@@ -10,7 +13,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ScriptListTableParser implements ISubTableParser 
+	public class ScriptListTableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields
@@ -22,7 +25,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 		// Constructor
 		///////////////////////
 		
-		public function ScriptListTableParser($dataTypeParser:DataTypeParser) 
+		public function ScriptListTableParser($dataTypeParser:DataTypeParser)
 		{
 			_dataTypeParser = $dataTypeParser;
 		}
@@ -33,7 +36,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 		
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ISubTableParser */
 		
-		public function parseTable(data:ByteArray, offset:uint):* 
+		public function parseTable(data:ByteArray, offset:uint):*
 		{
 			data.position = offset;
 			
@@ -44,12 +47,79 @@ package de.maxdidit.hardware.font.parser.tables.common
 			
 			var scriptRecords:Vector.<ScriptRecord> = parseScriptRecords(data, scriptCount);
 			result.scriptRecords = scriptRecords;
-			// TODO: parse scriptTables pointed to by script records
+			parseScriptTables(data, scriptRecords, offset);
 			
 			return result;
 		}
 		
-		private function parseScriptRecords(data:ByteArray, scriptCount:uint):Vector.<ScriptRecord> 
+		private function parseScriptTables(data:ByteArray, scriptRecords:Vector.<ScriptRecord>, offset:uint):void
+		{
+			var languageSystemParser:LanguageSystemParser = new LanguageSystemParser(_dataTypeParser);
+			
+			const l:uint = scriptRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var record:ScriptRecord = scriptRecords[i];
+				var scriptTable:ScriptTable = parseScriptTable(data, languageSystemParser, record.scriptOffset + offset);
+				
+				record.script = scriptTable;
+			}
+		}
+		
+		private function parseScriptTable(data:ByteArray, languageSystemParser:LanguageSystemParser, offset:uint):ScriptTable
+		{
+			var result:ScriptTable = new ScriptTable();
+			
+			data.position = offset;
+			
+			var defaultLanguageSystemTableOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.defaultLanguageSystemTableOffset = defaultLanguageSystemTableOffset;
+			var languageSystemCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.languageSystemCount = languageSystemCount;
+			
+			var languageSystemRecords:Vector.<LanguageSystemRecord> = parseLanguageSystemRecords(data, languageSystemCount, languageSystemParser);
+			result.languageSystemRecords = languageSystemRecords;
+			
+			if (defaultLanguageSystemTableOffset != 0)
+			{
+				var defaultLanguageSystemTable:LanguageSystemTable = languageSystemParser.parseTable(data, offset + defaultLanguageSystemTableOffset);
+				result.defaultLanguageSystemTable = defaultLanguageSystemTable;
+			}
+			
+			parseLanguageSystemTables(data, languageSystemRecords, languageSystemParser, offset);
+			
+			return result;
+		}
+		
+		private function parseLanguageSystemTables(data:ByteArray, languageSystemRecords:Vector.<LanguageSystemRecord>, languageSystemParser:LanguageSystemParser, offset:uint):void 
+		{
+			const l:uint = languageSystemRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var record:LanguageSystemRecord = languageSystemRecords[i];
+				
+				if (record.languageSystemOffset != 0)
+				{
+					var languageSystemTable:LanguageSystemTable = languageSystemParser.parseTable(data, record.languageSystemOffset + offset) as LanguageSystemTable;
+					record.languageSystemTable = languageSystemTable;
+				}
+			}
+		}
+		
+		private function parseLanguageSystemRecords(data:ByteArray, languageSystemCount:uint, languageSystemParser:LanguageSystemParser):Vector.<LanguageSystemRecord> 
+		{
+			var result:Vector.<LanguageSystemRecord> = new Vector.<LanguageSystemRecord>(languageSystemCount);
+			
+			for (var i:uint = 0; i < languageSystemCount; i++)
+			{
+				var languageSystemRecord:LanguageSystemRecord = languageSystemParser.parseLanguageSystemRecord(data);
+				result[i] = languageSystemRecord;
+			}
+			
+			return result;
+		}
+		
+		private function parseScriptRecords(data:ByteArray, scriptCount:uint):Vector.<ScriptRecord>
 		{
 			var result:Vector.<ScriptRecord> = new Vector.<ScriptRecord>(scriptCount);
 			
@@ -62,7 +132,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 			return result;
 		}
 		
-		private function parseScriptRecord(data:ByteArray):ScriptRecord 
+		private function parseScriptRecord(data:ByteArray):ScriptRecord
 		{
 			var result:ScriptRecord = new ScriptRecord();
 			
@@ -71,7 +141,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 			
 			return result;
 		}
-		
+	
 	}
 
 }
