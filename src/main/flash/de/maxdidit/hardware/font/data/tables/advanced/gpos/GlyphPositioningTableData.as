@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos 
 {
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupListTable;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	/**
 	 * ...
@@ -20,6 +21,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 		
 		private var _scriptListTable:ScriptListTableData;
 		private var _featureListTable:FeatureListTableData;
+		private var _lookupTable:LookupListTable;
 		
 		///////////////////////
 		// Constructor
@@ -92,6 +94,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 		public function set featureListTable(value:FeatureListTableData):void 
 		{
 			_featureListTable = value;
+		}
+		
+		public function get lookupTable():LookupListTable 
+		{
+			return _lookupTable;
+		}
+		
+		public function set lookupTable(value:LookupListTable):void 
+		{
+			_lookupTable = value;
 		}
 		
 	}
