@@ -2,9 +2,11 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 {
 	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.common.FeatureListTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ScriptListTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
 	import flash.utils.ByteArray;
@@ -57,6 +59,10 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			var scriptListTableParser:ScriptListTableParser = new ScriptListTableParser(_dataTypeParser);
 			var scriptListTableData:ScriptListTableData = scriptListTableParser.parseTable(data, record.offset + scriptListOffset);
 			result.scriptListTable = scriptListTableData;
+			
+			var featureListTableParser:FeatureListTableParser = new FeatureListTableParser(_dataTypeParser);
+			var featureListTableData:FeatureListTableData = featureListTableParser.parseTable(data, record.offset + featuresListOffset);
+			result.featureListTable = featureListTableData;
 			
 			return result;
 		}
