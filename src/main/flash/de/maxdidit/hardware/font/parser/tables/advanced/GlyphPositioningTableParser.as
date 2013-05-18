@@ -2,14 +2,17 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 {
 	import adobe.utils.CustomActions;
 	import de.maxdidit.hardware.font.data.ITableMap;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive.CursiveAttachmentPositioningSubtable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive.EntryExitRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningLookupType;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.PairAdjustmentPositioningSubtable1;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.PairSet;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.PairValueRecord;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.SingleAdjustmentPositioningSubtable;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.ValueFormat;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.ValueRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairAdjustmentPositioningSubtable1;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairSet;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairValueRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.AnchorTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.single.SingleAdjustmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
@@ -128,11 +131,120 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 					case GlyphPositioningLookupType.PAIR_ADJUSTMENT: 
 						subTable = parsePairAdjustmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
 						break;
+						
+					case GlyphPositioningLookupType.CURSIVE_ATTACHMENT:
+						subTable = parseCursiveAttachmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
+						break;
+						
+					case GlyphPositioningLookupType.MARK_TO_BASE_ATTACHMENT:
+						subTable = parseMarkToBaseAttachment(data, offset + subTableOffset, coverageParser);
+						break;
 				}
 				
 				subTables[i] = subTable;
 			}
 			result.subTables = subTables;
+			
+			return result;
+		}
+		
+		private function parseMarkToBaseAttachment(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
+		{
+			
+		}
+		
+		private function parseCursiveAttachmentPositioningSubtable(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
+		{
+			data.position = subTableOffset;
+			
+			var result:CursiveAttachmentPositioningSubtable = new CursiveAttachmentPositioningSubtable();
+			
+			var posFormat:uint = _dataTypeParser.parseUnsignedShort(data);
+			
+			var coverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.coverageOffset = coverageOffset;
+			
+			var entryExitCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.entryExitCount = entryExitCount;
+			
+			var entryExitRecords:Vector.<EntryExitRecord> = parseEntryExitRecords(data, entryExitCount);
+			result.entryExitRecords = entryExitRecords;
+			
+			if (coverageOffset != 0)
+			{
+				var coverage:ICoverageTable = coverageParser.parseTable(data, subTableOffset + coverageOffset);
+				result.coverage = coverage;
+			}
+			
+			parseEntryExitAnchors(data, subTableOffset, entryExitRecords);
+			
+			return result;
+		}
+		
+		private function parseEntryExitAnchors(data:ByteArray, subTableOffset:uint, entryExitRecords:Vector.<EntryExitRecord>):void 
+		{
+			const l:uint = entryExitRecords.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var entryExitRecord:EntryExitRecord = entryExitRecords[i];
+				entryExitRecord.entryAnchor = parseAnchor(data, subTableOffset + entryExitRecord.entryAnchorOffset);
+				entryExitRecord.exitAnchor = parseAnchor(data, subTableOffset + entryExitRecord.exitAnchorOffset);
+			}
+		}
+		
+		private function parseAnchor(data:ByteArray, entryAnchorOffset:uint):AnchorTable 
+		{
+			var result:AnchorTable = new AnchorTable();
+			
+			var format:uint = _dataTypeParser.parseUnsignedShort(data);
+			
+			var xCoordinate:int = _dataTypeParser.parseShort(data);
+			result.xCoordinate = xCoordinate;
+			
+			var yCoordinate:int = _dataTypeParser.parseShort(data);
+			result.yCoordinate = yCoordinate;
+			
+			var anchorPointIndex:int = -1;
+			if (format == 2)
+			{
+				anchorPointIndex = int(_dataTypeParser.parseUnsignedShort(data));
+			}
+			result.anchorPointIndex = anchorPointIndex;
+			
+			if (format == 3)
+			{
+				var xDeviceTableOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+				result.xDeviceTableOffset = xDeviceTableOffset;
+				
+				var yDeviceTableOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+				result.yDeviceTableOffset = yDeviceTableOffset;
+				
+				// TODO: parse device tables pointed to by offsets
+			}
+			
+			return result;
+		}
+		
+		private function parseEntryExitRecords(data:ByteArray, entryExitCount:uint):Vector.<EntryExitRecord>
+		{
+			var result:Vector.<EntryExitRecord> = new Vector.<EntryExitRecord>(entryExitCount);
+			
+			for (var i:uint = 0; i < entryExitCount; i++)
+			{
+				var record:EntryExitRecord = parseEntryExitRecord(data);
+				result[i];
+			}
+			
+			return result;
+		}
+		
+		private function parseEntryExitRecord(data:ByteArray):EntryExitRecord 
+		{
+			var result:EntryExitRecord = new EntryExitRecord();
+			
+			result.entryAnchorOffset = _dataTypeParser.parseUnsignedShort(data);
+			result.exitAnchorOffset = _dataTypeParser.parseUnsignedShort(data);
 			
 			return result;
 		}

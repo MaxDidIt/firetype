@@ -1,5 +1,6 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gpos 
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	/**
 	 * ...
 	 * @author Max Knoblich

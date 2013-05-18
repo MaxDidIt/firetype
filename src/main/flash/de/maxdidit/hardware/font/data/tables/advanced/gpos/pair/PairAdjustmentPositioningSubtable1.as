@@ -1,5 +1,6 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gpos 
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
@@ -80,7 +81,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 			_pairSetCount = value;
 		}
 		
-		public function get valueFormat1():ValueFormat 
+		public function get valueFormat1():ValueFormat
 		{
 			return _valueFormat1;
 		}

@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gpos 
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.shared 
 {
 	/**
 	 * ...

@@ -1,6 +1,5 @@
 package de.maxdidit.hardware.font.parser.tables.common 
 {
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.SingleAdjustmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupListTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTableFlags;

@@ -1,5 +1,7 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gpos 
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.single 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
