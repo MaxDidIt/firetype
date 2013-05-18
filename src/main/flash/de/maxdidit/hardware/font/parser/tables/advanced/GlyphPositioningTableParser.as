@@ -9,6 +9,10 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.BaseArray;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.BaseRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.MarkToBaseAttachmentPositioningSubtable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.ComponentRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.LigatureArray;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.LigatureAttachment;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.MarkToLigatureAttachmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairAdjustmentPositioningSubtable1;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairSet;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairValueRecord;
@@ -142,7 +146,11 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 						break;
 						
 					case GlyphPositioningLookupType.MARK_TO_BASE_ATTACHMENT:
-						subTable = parseMarkToBaseAttachment(data, offset + subTableOffset, coverageParser);
+						subTable = parseMarkToBaseAttachmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
+						break;
+						
+					case GlyphPositioningLookupType.MARK_TO_LIGATURE_ATTACHMENT:
+						subTable = parseMarkToLigatureAttachmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
 						break;
 				}
 				
@@ -153,7 +161,159 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			return result;
 		}
 		
-		private function parseMarkToBaseAttachment(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
+		private function parseMarkToLigatureAttachmentPositioningSubtable(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
+		{
+			data.position = subTableOffset;
+			
+			var result:MarkToLigatureAttachmentPositioningSubtable = new MarkToLigatureAttachmentPositioningSubtable();
+			
+			var posFormat:uint = _dataTypeParser.parseUnsignedShort(data);
+			
+			var markCoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markCoverageOffset = markCoverageOffset;
+			
+			var ligatureCoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.ligatureCoverageOffset = ligatureCoverageOffset;
+			
+			var classCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.classCount = classCount;
+			
+			var markArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markArrayOffset = markArrayOffset;
+			
+			var ligatureArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.ligatureArrayOffset = ligatureArrayOffset;
+			
+			if (markCoverageOffset != 0)
+			{
+				var coverage:ICoverageTable = coverageParser.parseTable(data, subTableOffset + markCoverageOffset);
+				result.markCoverage = coverage;
+			}
+			
+			if (ligatureCoverageOffset != 0)
+			{
+				coverage = coverageParser.parseTable(data, subTableOffset + ligatureCoverageOffset);
+				result.ligatureCoverage = coverage;
+			}
+			
+			if (markArrayOffset != 0)
+			{
+				var markArray:MarkArray = parseMarkArray(data, subTableOffset + markArrayOffset);
+				result.markArray = markArray;
+			}
+			
+			if (ligatureArrayOffset != 0)
+			{
+				var ligatureArray:LigatureArray = parseLigatureArray(data, subTableOffset + ligatureArrayOffset, classCount);
+				result.ligatureArray = ligatureArray;
+			}
+			
+			return result;
+		}
+		
+		private function parseLigatureArray(data:ByteArray, ligatureArrayOffset:uint, classCount:uint):LigatureArray 
+		{
+			data.position = ligatureArrayOffset;
+			
+			var result:LigatureArray = new LigatureArray();
+			
+			var ligatureCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.ligatureCount = ligatureCount;
+			
+			var ligatureAttachementOffsets:Vector.<uint> = new Vector.<uint>(ligatureCount);
+			for (var i:uint = 0; i < ligatureCount; i++)
+			{
+				var offset:uint = _dataTypeParser.parseUnsignedShort(data);
+				ligatureAttachementOffsets[i] = offset;
+			}
+			result.ligatureAttachmentOffsets = ligatureAttachementOffsets;
+			
+			var ligatureAttachments:Vector.<LigatureAttachment> = parseLigatureAttachements(data, ligatureArrayOffset, ligatureAttachementOffsets, classCount);
+			result.ligatureAttachments = ligatureAttachments;
+			
+			return result;
+		}
+		
+		private function parseLigatureAttachements(data:ByteArray, ligatureArrayOffset:uint, ligatureAttachementOffsets:Vector.<uint>, classCount:uint):Vector.<LigatureAttachment> 
+		{
+			const l:uint = ligatureAttachementOffsets.length;
+			
+			var ligatureAttachments:Vector.<LigatureAttachment> = new Vector.<LigatureAttachment>(l);
+			for (var i:uint = 0; i < l; i++)
+			{
+				var attachement:LigatureAttachment = parseLigatureAttachement(data, ligatureArrayOffset + ligatureAttachementOffsets[i], classCount);
+				ligatureAttachments[i] = attachement;
+			}
+			
+			return ligatureAttachments;
+		}
+		
+		private function parseLigatureAttachement(data:ByteArray, offset:uint, classCount:uint):LigatureAttachment 
+		{
+			data.position = offset;
+			
+			var result:LigatureAttachment = new LigatureAttachment();
+			
+			var componentCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.componentCount = componentCount;
+			
+			var componentRecords:Vector.<ComponentRecord> = parseComponentRecords(data, offset, componentCount, classCount);
+			result.componentRecords = componentRecords;
+			
+			return result;
+		}
+		
+		private function parseComponentRecords(data:ByteArray, offset:uint, componentCount:uint, classCount:uint):Vector.<ComponentRecord> 
+		{
+			var result:Vector.<ComponentRecord> = new Vector.<ComponentRecord>(componentCount);
+			
+			for (var i:uint = 0; i < componentCount; i++)
+			{
+				var componentRecord:ComponentRecord = parseComponentRecord(data, classCount);
+				result[i] = componentRecord;
+			}
+			
+			parseComponentRecordAnchors(data, result, offset);
+			
+			return result;
+		}
+		
+		private function parseComponentRecordAnchors(data:ByteArray, result:Vector.<ComponentRecord>, offset:uint):void 
+		{
+			const l:uint = result.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var record:ComponentRecord = result[i];
+				
+				var rl:uint = record.ligatureAnchorOffsets.length;
+				var anchors:Vector.<AnchorTable> = new Vector.<AnchorTable>(rl);
+				for (var r:uint = 0; r < rl; r++)
+				{
+					var anchor:AnchorTable = parseAnchor(data, offset + record.ligatureAnchorOffsets[r]);
+					anchors[r] = anchor;
+				}
+				
+				record.ligatureAnchors = anchors;
+			}
+		}
+		
+		private function parseComponentRecord(data:ByteArray, classCount:uint):ComponentRecord 
+		{
+			var result:ComponentRecord = new ComponentRecord();
+			
+			var ligatureAnchorOffsets:Vector.<uint> = new Vector.<uint>(classCount);
+			for (var i:uint = 0; i < classCount; i++)
+			{
+				var offset:uint = _dataTypeParser.parseUnsignedShort(data);
+				ligatureAnchorOffsets[i] = offset;
+			}
+			result.ligatureAnchorOffsets = ligatureAnchorOffsets;
+			
+			return result;
+		}
+		
+		private function parseMarkToBaseAttachmentPositioningSubtable(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
 		{
 			data.position = subTableOffset;
 			
