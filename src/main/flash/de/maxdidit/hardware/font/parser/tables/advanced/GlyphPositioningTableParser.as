@@ -13,6 +13,9 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.LigatureArray;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.LigatureAttachment;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature.MarkToLigatureAttachmentPositioningSubtable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark.Mark2Array;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark.Mark2Record;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark.MarkToMarkAttachmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairAdjustmentPositioningSubtable1;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairSet;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairValueRecord;
@@ -152,11 +155,130 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 					case GlyphPositioningLookupType.MARK_TO_LIGATURE_ATTACHMENT:
 						subTable = parseMarkToLigatureAttachmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
 						break;
+						
+					case GlyphPositioningLookupType.MARK_TO_MARK_ATTACHMENT:
+						subTable = parseMarkToMarkAttachmentPositioningSubtable(data, offset + subTableOffset, coverageParser);
+						break;
 				}
 				
 				subTables[i] = subTable;
 			}
 			result.subTables = subTables;
+			
+			return result;
+		}
+		
+		private function parseMarkToMarkAttachmentPositioningSubtable(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
+		{
+			data.position = subTableOffset;
+			
+			var result:MarkToMarkAttachmentPositioningSubtable = new MarkToMarkAttachmentPositioningSubtable();
+			
+			var posFormat:uint = _dataTypeParser.parseUnsignedShort(data);
+			
+			var mark1CoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.mark1CoverageOffset = mark1CoverageOffset;
+			
+			var mark2CoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.mark2CoverageOffset = mark2CoverageOffset;
+			
+			var classCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.classCount = classCount;
+			
+			var mark1ArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.mark1ArrayOffset = mark1ArrayOffset;
+			
+			var mark2ArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.mark2ArrayOffset = mark2ArrayOffset;
+			
+			if (mark1CoverageOffset != 0)
+			{
+				var coverage:ICoverageTable = coverageParser.parseTable(data, subTableOffset + mark1CoverageOffset);
+				result.mark1Coverage = coverage;
+			}
+			
+			if (mark2CoverageOffset != 0)
+			{
+				coverage = coverageParser.parseTable(data, subTableOffset + mark2CoverageOffset);
+				result.mark2Coverage = coverage;
+			}
+			
+			if (mark1ArrayOffset != 0)
+			{
+				var markArray:MarkArray = parseMarkArray(data, subTableOffset + mark1ArrayOffset);
+				result.mark1Array = markArray;
+			}
+			
+			if (mark2ArrayOffset != 0)
+			{
+				var mark2Array:Mark2Array = parseMark2Array(data, subTableOffset + mark2ArrayOffset, classCount);
+				result.mark2Array = mark2Array;
+			}
+			
+			return result;
+		}
+		
+		private function parseMark2Array(data:ByteArray, mark2ArrayOffset:uint, classCount:uint):Mark2Array 
+		{
+			data.position = mark2ArrayOffset;
+			
+			var result:Mark2Array = new Mark2Array();
+			
+			var mark2Count:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.mark2Count = mark2Count;
+			
+			var mark2Records:Vector.<Mark2Record> = parseMark2Records(data, mark2Count, mark2ArrayOffset, classCount);
+			result.mark2Records = mark2Records;
+			
+			return result;
+		}
+		
+		private function parseMark2Records(data:ByteArray, mark2Count:uint, mark2ArrayOffset:uint, classCount:uint):Vector.<Mark2Record> 
+		{
+			var result:Vector.<Mark2Record> = new Vector.<Mark2Record>(mark2Count);
+			
+			for (var i:uint = 0; i < mark2Count; i++)
+			{
+				var record:Mark2Record = parseMark2Record(data, classCount);
+				result[i] = record;
+			}
+			
+			parseMark2RecordAnchors(data, result, mark2ArrayOffset);
+			
+			return result;
+		}
+		
+		private function parseMark2RecordAnchors(data:ByteArray, result:Vector.<Mark2Record>, mark2ArrayOffset:uint):void 
+		{
+			const l:uint = result.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var mark2Record:Mark2Record = result[i];
+				var rl:uint = mark2Record.mark2AnchorOffsets.length;
+				
+				var anchors:Vector.<AnchorTable> = new Vector.<AnchorTable>(rl);
+				for (var r:uint = 0; r < rl; r++)
+				{
+					var anchor:AnchorTable = parseAnchor(data, mark2ArrayOffset + mark2Record.mark2AnchorOffsets[r]);
+					anchors[r] = anchor;
+				}
+				
+				mark2Record.mark2Anchors = anchors;
+			}
+		}
+		
+		private function parseMark2Record(data:ByteArray, classCount:uint):Mark2Record 
+		{
+			var result:Mark2Record = new Mark2Record();
+			
+			var mark2AnchorOffsets:Vector.<uint> = new Vector.<uint>(classCount);
+			for (var i:uint = 0; i < classCount; i++)
+			{
+				var offset:uint = _dataTypeParser.parseUnsignedShort(data);
+				mark2AnchorOffsets[i] = offset;
+			}
+			result.mark2AnchorOffsets = mark2AnchorOffsets;
 			
 			return result;
 		}
