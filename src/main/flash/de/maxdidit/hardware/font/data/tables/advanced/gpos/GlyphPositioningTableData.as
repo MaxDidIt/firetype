@@ -21,7 +21,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 		
 		private var _scriptListTable:ScriptListTableData;
 		private var _featureListTable:FeatureListTableData;
-		private var _lookupTable:LookupListTable;
+		private var _lookupListTable:LookupListTable;
 		
 		///////////////////////
 		// Constructor
@@ -96,14 +96,14 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 			_featureListTable = value;
 		}
 		
-		public function get lookupTable():LookupListTable 
+		public function get lookupListTable():LookupListTable 
 		{
-			return _lookupTable;
+			return _lookupListTable;
 		}
 		
-		public function set lookupTable(value:LookupListTable):void 
+		public function set lookupListTable(value:LookupListTable):void 
 		{
-			_lookupTable = value;
+			_lookupListTable = value;
 		}
 		
 	}

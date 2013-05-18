@@ -6,10 +6,15 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive.EntryExitRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningLookupType;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.BaseArray;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.BaseRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase.MarkToBaseAttachmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairAdjustmentPositioningSubtable1;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairSet;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.AnchorTable;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkArray;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.single.SingleAdjustmentPositioningSubtable;
@@ -83,7 +88,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			
 			var lookupTableParser:LookupListTableDataParser = new LookupListTableDataParser(_dataTypeParser);
 			var lookupTableData:LookupListTable = lookupTableParser.parseTable(data, record.offset + lookupListOffset);
-			result.lookupTable = lookupTableData;
+			result.lookupListTable = lookupTableData;
 			
 			var coverageParser:CoverageTableParser = new CoverageTableParser(_dataTypeParser);
 			
@@ -150,7 +155,163 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		
 		private function parseMarkToBaseAttachment(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
 		{
+			data.position = subTableOffset;
 			
+			var result:MarkToBaseAttachmentPositioningSubtable = new MarkToBaseAttachmentPositioningSubtable();
+			
+			var posFormat:uint = _dataTypeParser.parseUnsignedShort(data);
+			
+			var markCoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markCoverageOffset = markCoverageOffset;
+			
+			var baseCoverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.baseCoverageOffset = baseCoverageOffset;
+			
+			var classCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.classCount = classCount;
+			
+			var markArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markArrayOffset = markArrayOffset;
+			
+			var baseArrayOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.baseArrayOffset = baseArrayOffset;
+			
+			if (markCoverageOffset != 0)
+			{
+				var coverage:ICoverageTable = coverageParser.parseTable(data, subTableOffset + markCoverageOffset);
+				result.markCoverage = coverage;
+			}
+			
+			if (baseCoverageOffset != 0)
+			{
+				coverage = coverageParser.parseTable(data, subTableOffset + baseCoverageOffset);
+				result.baseCoverage = coverage;
+			}
+			
+			if (markArrayOffset != 0)
+			{
+				var markArray:MarkArray = parseMarkArray(data, subTableOffset + markArrayOffset);
+				result.markArray = markArray;
+			}
+			
+			if (baseArrayOffset != 0)
+			{
+				var baseArray:BaseArray = parseBaseArray(data, subTableOffset + baseArrayOffset, classCount);
+				result.baseArray = baseArray;
+			}
+			
+			return result;
+		}
+		
+		private function parseBaseArray(data:ByteArray, baseArrayOffset:uint, classCount:uint):BaseArray 
+		{
+			data.position = baseArrayOffset;
+			
+			var result:BaseArray = new BaseArray();
+			
+			var baseCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.baseCount = baseCount;
+			
+			var baseRecords:Vector.<BaseRecord> = new Vector.<BaseRecord>(baseCount);
+			for (var i:uint = 0; i < baseCount; i++)
+			{
+				var baseRecord:BaseRecord = parseBaseRecord(data, classCount);
+				baseRecords[i] = baseRecord;
+			}
+			result.baseRecords = baseRecords;
+			
+			parseBaseRecordAnchors(data, baseArrayOffset, baseRecords);
+			
+			return result;
+		}
+		
+		private function parseBaseRecordAnchors(data:ByteArray, baseArrayOffset:uint, baseRecords:Vector.<BaseRecord>):void 
+		{
+			const l:uint = baseRecords.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var baseRecord:BaseRecord = baseRecords[i];
+				
+				var al:uint = baseRecord.baseAnchorOffsets.length;
+				var anchors:Vector.<AnchorTable> = new Vector.<AnchorTable>(al);
+				for (var a:uint = 0; a < al; a++)
+				{
+					var anchor:AnchorTable = parseAnchor(data, baseArrayOffset + baseRecord.baseAnchorOffsets[a]);
+					anchors[a] = anchor;
+				}
+				
+				baseRecord.baseAnchors = anchors;
+			}
+		}
+		
+		private function parseBaseRecord(data:ByteArray, classCount:uint):BaseRecord 
+		{
+			var result:BaseRecord = new BaseRecord();
+			
+			var baseAnchorOffsets:Vector.<uint> = new Vector.<uint>(classCount);
+			for (var i:uint = 0; i < classCount; i++)
+			{
+				baseAnchorOffsets[i] = _dataTypeParser.parseUnsignedShort(data);
+			}
+			result.baseAnchorOffsets = baseAnchorOffsets;
+			
+			return result;
+		}
+		
+		private function parseMarkArray(data:ByteArray, markArrayOffset:uint):MarkArray 
+		{
+			data.position = markArrayOffset;
+			
+			var result:MarkArray = new MarkArray();
+			
+			var markCount:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markCount = markCount;
+			
+			var markRecords:Vector.<MarkRecord> = parseMarkRecords(data, markArrayOffset, markCount);
+			result.markRecords = markRecords;
+			
+			return result;
+		}
+		
+		private function parseMarkRecords(data:ByteArray, markArrayOffset:uint, markCount:uint):Vector.<MarkRecord> 
+		{
+			var result:Vector.<MarkRecord> = new Vector.<MarkRecord>(markCount);
+			
+			for (var i:uint = 0; i < markCount; i++)
+			{
+				var markRecord:MarkRecord = parseMarkRecord(data);
+				result[i] = markRecord;
+			}
+			
+			parseMarkRecordAnchors(data, result, markArrayOffset);
+			
+			return result;
+		}
+		
+		private function parseMarkRecordAnchors(data:ByteArray, markRecords:Vector.<MarkRecord>, markArrayOffset:uint):void 
+		{
+			const l:uint = markRecords.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var markRecord:MarkRecord = markRecords[i];
+				var anchorTable:AnchorTable = parseAnchor(data, markArrayOffset + markRecord.markAnchorOffset);
+				markRecord.markAnchor = anchorTable;
+			}
+		}
+		
+		private function parseMarkRecord(data:ByteArray):MarkRecord 
+		{
+			var result:MarkRecord = new MarkRecord();
+			
+			var markClass:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markClass = markClass;
+			
+			var markAnchorOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.markAnchorOffset = markAnchorOffset;
+			
+			return result;
 		}
 		
 		private function parseCursiveAttachmentPositioningSubtable(data:ByteArray, subTableOffset:uint, coverageParser:CoverageTableParser):ILookupSubtable 
@@ -195,6 +356,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		
 		private function parseAnchor(data:ByteArray, entryAnchorOffset:uint):AnchorTable 
 		{
+			data.position = entryAnchorOffset;
+			
 			var result:AnchorTable = new AnchorTable();
 			
 			var format:uint = _dataTypeParser.parseUnsignedShort(data);
