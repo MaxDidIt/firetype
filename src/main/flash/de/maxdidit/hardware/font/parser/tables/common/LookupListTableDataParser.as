@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.SingleAdjustmentPositioningSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupListTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTableFlags;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
@@ -53,8 +54,13 @@ package de.maxdidit.hardware.font.parser.tables.common
 			return result;
 		}
 		
-		public function parseLookupTable(data:ByteArray, result:SingleAdjustmentPositioningSubtable):void 
+		public function parseLookupTable(data:ByteArray):LookupTable 
 		{
+			var result:LookupTable = new LookupTable();
+			
+			var lookupType:uint = _dataTypeParser.parseUnsignedShort(data);
+			result.lookupType = lookupType;
+			
 			var lookupFlagData:uint = _dataTypeParser.parseUnsignedShort(data);
 			result.lookupFlagData = lookupFlagData;
 			
@@ -71,8 +77,13 @@ package de.maxdidit.hardware.font.parser.tables.common
 			}
 			result.subTableOffsets = subTableOffsets;
 			
-			var markFilteringSet:uint = _dataTypeParser.parseUnsignedShort(data);
-			result.markFilteringSet = markFilteringSet;
+			if (lookupFlags.useMarkFilteringSet)
+			{
+				var markFilteringSet:uint = _dataTypeParser.parseUnsignedShort(data);
+				result.markFilteringSet = markFilteringSet;
+			}
+			
+			return result;
 		}
 		
 		private function parseLookupFlag(lookupFlagData:uint):LookupTableFlags 

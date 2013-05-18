@@ -10,14 +10,16 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 		// Member Fields
 		///////////////////////
 		
+		private var _lookupType:uint;
+		
 		private var _lookupFlagData:uint;
+		private var _lookupFlags:LookupTableFlags;
 		
 		private var _subTableCount:uint;
 		private var _subTableOffsets:Vector.<uint>;
+		private var _subTables:Vector.<ILookupSubtable>;
 		
 		private var _markFilteringSet:uint;
-		
-		private var _lookupFlags:LookupTableFlags;
 		
 		///////////////////////
 		// Constructor
@@ -80,6 +82,26 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 		public function set lookupFlags(value:LookupTableFlags):void 
 		{
 			_lookupFlags = value;
+		}
+		
+		public function get subTables():Vector.<ILookupSubtable> 
+		{
+			return _subTables;
+		}
+		
+		public function set subTables(value:Vector.<ILookupSubtable>):void 
+		{
+			_subTables = value;
+		}
+		
+		public function get lookupType():uint 
+		{
+			return _lookupType;
+		}
+		
+		public function set lookupType(value:uint):void 
+		{
+			_lookupType = value;
 		}
 		
 	}

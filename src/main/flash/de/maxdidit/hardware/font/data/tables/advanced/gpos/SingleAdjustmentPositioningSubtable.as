@@ -1,12 +1,13 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos 
 {
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class SingleAdjustmentPositioningSubtable extends LookupTable
+	public class SingleAdjustmentPositioningSubtable implements ILookupSubtable
 	{
 		///////////////////////
 		// Member Fields
@@ -16,6 +17,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 		private var _coverage:ICoverageTable;
 		
 		private var _valueFormatData:uint;
+		private var _valueFormat:ValueFormat;
+		
 		private var _valueCount:uint;
 		private var _values:Vector.<ValueRecord>;
 		
@@ -80,6 +83,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos
 		public function set values(value:Vector.<ValueRecord>):void 
 		{
 			_values = value;
+		}
+		
+		public function get valueFormat():ValueFormat 
+		{
+			return _valueFormat;
+		}
+		
+		public function set valueFormat(value:ValueFormat):void 
+		{
+			_valueFormat = value;
 		}
 		
 	}
