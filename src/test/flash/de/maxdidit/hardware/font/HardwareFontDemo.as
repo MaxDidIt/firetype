@@ -1,6 +1,8 @@
 package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.data.tables.common.language.LanguageTag;
+	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTag;
 	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.parser.OpenTypeParser;
 	import de.maxdidit.hardware.text.HardwareCharacterCache;
@@ -140,7 +142,11 @@ package de.maxdidit.hardware.font
 			hardwareText = new HardwareText(cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
 			hardwareText.width = 40000;
+			
 			hardwareText.standardFormat = hardwareFontFormat;
+			hardwareText.standardScript = ScriptTag.LATIN;
+			hardwareText.standardLanguage = LanguageTag.ENGLISH;
+			
 			hardwareText.text = "Hold the left mouse button and drag the text up and down.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.";
 			
 			hardwareText.calculateTransformations(viewProjectionMtx, true);
