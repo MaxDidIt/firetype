@@ -43,6 +43,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			
 			var result:MultipleSubstitutionSubtable = new MultipleSubstitutionSubtable();
 			
+			var format:uint = _dataTypeParser.parseUnsignedShort(data);
+			
 			var coverageOffset:uint = _dataTypeParser.parseUnsignedShort(data);
 			result.coverageOffset = coverageOffset;
 			
