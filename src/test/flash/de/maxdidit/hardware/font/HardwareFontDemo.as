@@ -90,11 +90,11 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			hardwareParser.loadFont("arial.ttf");
+			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
-			//hardwareParser.loadFont("TIMES.TTF");
+			hardwareParser.loadFont("TIMES.TTF");
 			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
@@ -135,7 +135,7 @@ package de.maxdidit.hardware.font
 		{
 			var hardwareFontFormat:HardwareFontFormat = new HardwareFontFormat();
 			hardwareFontFormat.font = e.font;
-			hardwareFontFormat.subdivisions = 2;
+			hardwareFontFormat.subdivisions = 1;
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRenderer(context3d, new EarClippingTriangulator()));
 			

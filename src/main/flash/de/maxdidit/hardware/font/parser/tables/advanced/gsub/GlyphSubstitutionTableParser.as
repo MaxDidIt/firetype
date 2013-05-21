@@ -34,8 +34,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			
 			_subtableParserMap = new Object();
 			
-			_subtableParserMap[String(GlyphSubstitutionLookupType.SINGLE_SUBSTITUTION)]					= notYetImplementedParser;
-			_subtableParserMap[String(GlyphSubstitutionLookupType.MULTIPLE_SUBSTITUTION)]				= notYetImplementedParser;
+			_subtableParserMap[String(GlyphSubstitutionLookupType.SINGLE_SUBSTITUTION)]					= new SingleSubstitutionSubtableParser(_dataTypeParser, _coverageTableParser);
+			_subtableParserMap[String(GlyphSubstitutionLookupType.MULTIPLE_SUBSTITUTION)]				= new MultipleSubstitutionSubtableParser(_dataTypeParser, _coverageTableParser);
 			_subtableParserMap[String(GlyphSubstitutionLookupType.ALTERNATE_SUBSTITUTION)]				= notYetImplementedParser;
 			_subtableParserMap[String(GlyphSubstitutionLookupType.LIGATURE_SUBSTITUTION)]				= notYetImplementedParser;
 			_subtableParserMap[String(GlyphSubstitutionLookupType.CONTEXTUAL_SUBSTITUTION)]				= notYetImplementedParser;
