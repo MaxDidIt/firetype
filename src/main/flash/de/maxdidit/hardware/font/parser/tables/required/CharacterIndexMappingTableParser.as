@@ -134,10 +134,13 @@ package de.maxdidit.hardware.font.parser.tables.required
 			// *(idRangeOffset[i]/2 + (c - startCount[i]) + &idRangeOffset[i])
 			var idRangeOffset:Vector.<uint> = new Vector.<uint>();
 			var glyphIdArray:Vector.<uint> = new Vector.<uint>();
+			var segmentStartIndex:Vector.<uint> = new Vector.<uint>();
 			for (i = 0; i < segCount; i++)
 			{
 				value = _dataTypeParser.parseUnsignedShort(data);
 				idRangeOffset.push(value);
+				
+				segmentStartIndex.push(glyphIdArray.length);
 				
 				value /= 2;
 				if (value != 0)
@@ -158,6 +161,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 			}
 			result.idRangeOffset = idRangeOffset;
 			result.glyphIdArray = glyphIdArray;
+			result.segmentStartIndex = segmentStartIndex;
 			
 			return result;
 		}

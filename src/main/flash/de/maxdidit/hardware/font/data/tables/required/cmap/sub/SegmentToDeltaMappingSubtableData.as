@@ -1,10 +1,11 @@
-package de.maxdidit.hardware.font.data.tables.required.cmap.sub 
+package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 {
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class SegmentToDeltaMappingSubtableData implements ICharacterIndexMappingSubtableData 
+	public class SegmentToDeltaMappingSubtableData implements ICharacterIndexMappingSubtableData
 	{
 		///////////////////////
 		// Member Fields
@@ -26,13 +27,15 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		private var _idRangeOffset:Vector.<uint>; // Offsets into glyphIdArray or 0
 		private var _glyphIdArray:Vector.<uint>; // Glyph index array (arbitrary length)
 		
+		private var _segmentStartIndex:Vector.<uint>;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function SegmentToDeltaMappingSubtableData() 
+		public function SegmentToDeltaMappingSubtableData()
 		{
-			
+		
 		}
 		
 		///////////////////////
@@ -43,123 +46,133 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		
 		// format
 		
-		public function get format():uint 
+		public function get format():uint
 		{
 			return 4;
 		}
 		
 		// length
 		
-		public function get length():uint 
+		public function get length():uint
 		{
 			return _length;
 		}
 		
-		public function set length(value:uint):void 
+		public function set length(value:uint):void
 		{
 			_length = value;
 		}
 		
 		// language
 		
-		public function get language():uint 
+		public function get language():uint
 		{
 			return _language;
 		}
 		
-		public function set language(value:uint):void 
+		public function set language(value:uint):void
 		{
 			_language = value;
 		}
 		
-		public function get segCountX2():uint 
+		public function get segCountX2():uint
 		{
 			return _segCountX2;
 		}
 		
-		public function set segCountX2(value:uint):void 
+		public function set segCountX2(value:uint):void
 		{
 			_segCountX2 = value;
 		}
 		
-		public function get searchRange():uint 
+		public function get searchRange():uint
 		{
 			return _searchRange;
 		}
 		
-		public function set searchRange(value:uint):void 
+		public function set searchRange(value:uint):void
 		{
 			_searchRange = value;
 		}
 		
-		public function get entrySelector():uint 
+		public function get entrySelector():uint
 		{
 			return _entrySelector;
 		}
 		
-		public function set entrySelector(value:uint):void 
+		public function set entrySelector(value:uint):void
 		{
 			_entrySelector = value;
 		}
 		
-		public function get rangeShift():uint 
+		public function get rangeShift():uint
 		{
 			return _rangeShift;
 		}
 		
-		public function set rangeShift(value:uint):void 
+		public function set rangeShift(value:uint):void
 		{
 			_rangeShift = value;
 		}
 		
-		public function get endCount():Vector.<uint> 
+		public function get endCount():Vector.<uint>
 		{
 			return _endCount;
 		}
 		
-		public function set endCount(value:Vector.<uint>):void 
+		public function set endCount(value:Vector.<uint>):void
 		{
 			_endCount = value;
 		}
 		
-		public function get startCount():Vector.<uint> 
+		public function get startCount():Vector.<uint>
 		{
 			return _startCount;
 		}
 		
-		public function set startCount(value:Vector.<uint>):void 
+		public function set startCount(value:Vector.<uint>):void
 		{
 			_startCount = value;
 		}
 		
-		public function get idDelta():Vector.<int> 
+		public function get idDelta():Vector.<int>
 		{
 			return _idDelta;
 		}
 		
-		public function set idDelta(value:Vector.<int>):void 
+		public function set idDelta(value:Vector.<int>):void
 		{
 			_idDelta = value;
 		}
 		
-		public function get idRangeOffset():Vector.<uint> 
+		public function get idRangeOffset():Vector.<uint>
 		{
 			return _idRangeOffset;
 		}
 		
-		public function set idRangeOffset(value:Vector.<uint>):void 
+		public function set idRangeOffset(value:Vector.<uint>):void
 		{
 			_idRangeOffset = value;
 		}
 		
-		public function get glyphIdArray():Vector.<uint> 
+		public function get glyphIdArray():Vector.<uint>
 		{
 			return _glyphIdArray;
 		}
 		
-		public function set glyphIdArray(value:Vector.<uint>):void 
+		public function set glyphIdArray(value:Vector.<uint>):void
 		{
 			_glyphIdArray = value;
+		}
+		
+		public function get segmentStartIndex():Vector.<uint> 
+		{
+			return _segmentStartIndex;
+		}
+		
+		public function set segmentStartIndex(value:Vector.<uint>):void 
+		{
+			_segmentStartIndex = value;
 		}
 		
 		///////////////////////
@@ -168,7 +181,7 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.required.cmap.sub.ICharacterIndexMappingSubtableData */
 		
-		public function getGlyphIndex(charCode:Number):int 
+		public function getGlyphIndex(charCode:Number):int
 		{
 			// search endcode
 			const l:uint = _endCount.length;
@@ -194,7 +207,13 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 			}
 			
 			// TODO: This part has not been tested yet.
-			var idIndex:uint = _idRangeOffset[i] / 2 + (charCode - _startCount[i]);
+			var rangeIndex:uint = charCode - _startCount[i];
+			var idIndex:uint = _segmentStartIndex[i] + rangeIndex;
+			if (idIndex != 0)
+			{
+				idIndex += _idDelta[i];
+			}
+			
 			return _glyphIdArray[idIndex];
 		}
 	}
