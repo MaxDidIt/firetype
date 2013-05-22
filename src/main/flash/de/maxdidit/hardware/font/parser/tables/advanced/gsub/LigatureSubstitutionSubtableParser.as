@@ -68,6 +68,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			}
 			
 			var ligatureSets:Vector.<LigatureSetTable> = parseLigatureSets(data, ligatureSetOffsets, offset);
+			result.ligatureSets = ligatureSets;
 			
 			return result;
 		}
@@ -139,7 +140,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			var componentCount:uint = _dataTypeParser.parseUnsignedShort(data);
 			result.componentCount = componentCount;
 			
-			var componentGlyphIDs:Vector.<uint> = new Vector.<uint>(componentCount);
+			var componentGlyphIDs:Vector.<uint> = new Vector.<uint>(componentCount - 1);
 			for (var i:uint = 0; i < componentCount - 1; i++)
 			{
 				var id:uint = _dataTypeParser.parseUnsignedShort(data);
