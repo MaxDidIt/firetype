@@ -108,8 +108,7 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		
 		public function getGlyphIndex(charCode:Number):int 
 		{
-			// TODO: Not yet implemented.
-			return 0;
+			throw new Error("This function is not yet implemented.");
 		}
 	}
 

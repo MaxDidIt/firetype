@@ -50,6 +50,24 @@ package de.maxdidit.hardware.font.data.tables.common.features
 			_featureRecords = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function retrieveFeatures(indices:Vector.<uint>):Vector.<FeatureRecord>
+		{
+			const l:uint = indices.length;
+			var result:Vector.<FeatureRecord> = new Vector.<FeatureRecord>(l);
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var index:uint = indices[i];
+				result[i] = _featureRecords[index];
+			}
+			
+			return result;
+		}
+		
 	}
 
 }

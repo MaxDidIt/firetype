@@ -12,6 +12,7 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		
 		private var _scriptCount:uint;
 		private var _scriptRecords:Vector.<ScriptRecord>
+		private var _scriptRecordMap:Object;
 		
 		///////////////////////
 		// Constructor
@@ -44,6 +45,37 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		public function set scriptRecords(value:Vector.<ScriptRecord>):void 
 		{
 			_scriptRecords = value;
+			mapScriptRecords();
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		private function mapScriptRecords():void 
+		{
+			if (!_scriptRecordMap)
+			{
+				_scriptRecordMap = new Object();
+			}
+			
+			const l:uint = _scriptRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var scriptRecord:ScriptRecord = _scriptRecords[i];
+				_scriptRecordMap[scriptRecord.scriptTag] = scriptRecord;
+			}
+		}
+		
+		public function retrieveScriptTable(tag:String):ScriptTable
+		{
+			if (!_scriptRecordMap.hasOwnProperty(tag))
+			{
+				return null;
+			}
+			
+			var scriptRecord:ScriptRecord = _scriptRecordMap[tag] as ScriptRecord;
+			return scriptRecord.script;
 		}
 		
 	}

@@ -6,11 +6,12 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.events.FontEvent;
 	import de.maxdidit.hardware.font.parser.OpenTypeParser;
 	import de.maxdidit.hardware.text.HardwareCharacterCache;
-	import de.maxdidit.hardware.text.HardwareFontFormat;
-	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
+	import de.maxdidit.hardware.text.HardwareText;
+	import de.maxdidit.hardware.text.HardwareTextFormat;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRenderer;
 	import de.maxdidit.hardware.text.renderer.SingleGlyphRenderer;
+	import de.maxdidit.hardware.text.Typesetter;
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
 	import flash.display.StageAlign;
@@ -92,12 +93,14 @@ package de.maxdidit.hardware.font
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
 			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("impact.ttf");
-			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
-			hardwareParser.loadFont("TIMES.TTF");
-			//hardwareParser.loadFont("L_10646.TTF");
-			//hardwareParser.loadFont("CONSOLA.TTF");
+			//hardwareParser.loadFont("TIMES.TTF");
+			hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
+			
+			// Missing table implementations
+			//hardwareParser.loadFont("newscycle-bold.ttf");
+			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
@@ -133,9 +136,9 @@ package de.maxdidit.hardware.font
 		
 		private function handleFontParsed(e:FontEvent):void
 		{
-			var hardwareFontFormat:HardwareFontFormat = new HardwareFontFormat();
+			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = e.font;
-			hardwareFontFormat.subdivisions = 1;
+			hardwareFontFormat.subdivisions = 2;
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRenderer(context3d, new EarClippingTriangulator()));
 			
@@ -164,8 +167,8 @@ package de.maxdidit.hardware.font
 				hardwareText.calculateTransformations(viewProjectionMtx);
 			}
 			
-			context3d.clear(1, 1, 1);			
-			cache.render();			
+			context3d.clear(1, 1, 1);
+			cache.render();
 			context3d.present();
 		}
 	

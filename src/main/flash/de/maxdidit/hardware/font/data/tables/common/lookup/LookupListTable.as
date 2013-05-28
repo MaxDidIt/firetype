@@ -59,6 +59,23 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 			_lookupTables = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function retrieveLookupTables(indices:Vector.<uint>):Vector.<LookupTable>
+		{
+			const l:uint = indices.length;
+			var result:Vector.<LookupTable> = new Vector.<LookupTable>(l);
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var index:uint = indices[i];
+				result[i] = _lookupTables[index];
+			}
+			
+			return result;
+		}
 	}
 
 }

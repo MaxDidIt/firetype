@@ -42,7 +42,7 @@ package de.maxdidit.hardware.text
 		// Member Functions
 		///////////////////////
 		
-		public function initialize(string:String, fontFormat:HardwareFontFormat, cache:HardwareCharacterCache, firstWord:Boolean):void
+		public function initialize(string:String, fontFormat:HardwareTextFormat, cache:HardwareCharacterCache, firstWord:Boolean):void
 		{
 			const l:uint = string.length;
 			

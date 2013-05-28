@@ -12,6 +12,7 @@ package de.maxdidit.hardware.text
 		// Member Fields
 		///////////////////////
 		
+		private var _typesetter:Typesetter;
 		private var _cache:HardwareCharacterCache;
 		private var _text:String;
 		
@@ -19,7 +20,7 @@ package de.maxdidit.hardware.text
 		private var _width:Number;
 		private var _height:Number;
 		
-		private var _standardFormat:HardwareFontFormat;
+		private var _standardFormat:HardwareTextFormat;
 		private var _standardScript:String;
 		private var _standardLanguage:String;
 		
@@ -30,6 +31,7 @@ package de.maxdidit.hardware.text
 		public function HardwareText(cache:HardwareCharacterCache) 
 		{
 			this._cache = cache;
+			this._typesetter = new Typesetter();
 		}
 		
 		///////////////////////
@@ -70,12 +72,12 @@ package de.maxdidit.hardware.text
 		
 		// standardFormat
 		
-		public function get standardFormat():HardwareFontFormat 
+		public function get standardFormat():HardwareTextFormat 
 		{
 			return _standardFormat;
 		}
 		
-		public function set standardFormat(value:HardwareFontFormat):void 
+		public function set standardFormat(value:HardwareTextFormat):void 
 		{
 			_standardFormat = value;
 		}
@@ -112,33 +114,36 @@ package de.maxdidit.hardware.text
 		private function parseText():void 
 		{
 			loseAllChildren();
-			var currentLine:HardwareLine = new HardwareLine();
-			currentLine.y = -_standardFormat.font.ascender;
-			addChild(currentLine);
 			
-			var words:Array = _text.split(/([\s\-])/);
+			_typesetter.assemble(_text, this, _standardFormat, _cache);
 			
-			const l:uint = words.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var currentWord:HardwareWord = new HardwareWord();
-				currentWord.initialize(words[i], _standardFormat, _cache, currentLine.numChildren == 0);
-				
-				if (_fixedWidth && currentLine.boundingBox.right + currentWord.boundingBox.right > _width || /\n/.test(words[i]))
-				{
+			//var currentLine:HardwareLine = new HardwareLine();
+			//currentLine.y = -_standardFormat.font.ascender;
+			//addChild(currentLine);
+			//
+			//var words:Array = _text.split(/([\s\-])/);
+			//
+			//const l:uint = words.length;
+			//for (var i:uint = 0; i < l; i++)
+			//{
+				//var currentWord:HardwareWord = new HardwareWord();
+				//currentWord.initialize(words[i], _standardFormat, _cache, currentLine.numChildren == 0);
+				//
+				//if (_fixedWidth && currentLine.boundingBox.right + currentWord.boundingBox.right > _width || /\n/.test(words[i]))
+				//{
 					// start new line
-					var previousLine:HardwareLine = currentLine;
-					currentLine = new HardwareLine();
-					
-					currentLine.y = -(_standardFormat.font.ascender - _standardFormat.font.descender) + previousLine.y;
-					
-					addChild(currentLine);
-				}
-				
-				currentLine.addWord(currentWord);
-			}
-			
-			calculateTransformations();
+					//var previousLine:HardwareLine = currentLine;
+					//currentLine = new HardwareLine();
+					//
+					//currentLine.y = -(_standardFormat.font.ascender - _standardFormat.font.descender) + previousLine.y;
+					//
+					//addChild(currentLine);
+				//}
+				//
+				//currentLine.addWord(currentWord);
+			//}
+			//
+			//calculateTransformations();
 		}
 		
 	}

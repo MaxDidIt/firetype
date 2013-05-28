@@ -58,29 +58,28 @@ package de.maxdidit.hardware.text
 		// Member Functions
 		///////////////////////
 		
-		public function getCachedCharacter(font:HardwareFont, subdivisions:uint, charCode:uint):HardwareCharacter
+		public function getCachedCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter
 		{
 			var cachedSubdivisionsForFont:Object = retrieveProperty(_characterCache, font.uniqueIdentifier);
 			var cachedCharactersForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
 			
 			var character:HardwareCharacter;
-			if (cachedCharactersForSubdivision.hasOwnProperty(String(charCode)))
+			if (cachedCharactersForSubdivision.hasOwnProperty(String(glyphID)))
 			{
-				character = cachedCharactersForSubdivision[String(charCode)];
+				character = cachedCharactersForSubdivision[String(glyphID)];
 			}
 			else
 			{
-				character = createHardwareCharacter(font, subdivisions, charCode);
-				cachedCharactersForSubdivision[String(charCode)] = character;
+				character = createHardwareCharacter(font, subdivisions, glyphID);
+				cachedCharactersForSubdivision[String(glyphID)] = character;
 			}
 			
 			return character;
 		}
 		
-		private function createHardwareCharacter(font:HardwareFont, subdivisions:uint, charCode:uint):HardwareCharacter 
+		private function createHardwareCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter 
 		{
-			var id:uint = font.getGlyphIndex(charCode);
-			var glyph:Glyph = font.retrieveGlyph(id);
+			var glyph:Glyph = font.retrieveGlyph(glyphID);
 			
 			if (!glyph.header.hasContour)
 			{

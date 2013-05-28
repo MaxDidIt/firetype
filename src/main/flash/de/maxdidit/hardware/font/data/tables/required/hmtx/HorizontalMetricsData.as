@@ -1,5 +1,8 @@
 package de.maxdidit.hardware.font.data.tables.required.hmtx 
 {
+	import de.maxdidit.hardware.text.HardwareCharacterInstance;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -78,6 +81,27 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 			}
 			
 			return 0;
+		}
+		
+		public function applyTable(characterInstances:LinkedList):void 
+		{
+			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+				
+			var glyphID:uint = currentCharacter.glyphID;
+			var leftSideBearing:int = getLeftSideBearing(glyphID);
+			var advanceWidth:uint = getAdvanceWidth(glyphID);
+			
+			var pp1:int;
+			if (currentCharacter.hardwareCharacter)
+			{
+				pp1 += currentCharacter.hardwareCharacter.boundingBox.left;
+			}
+			pp1 -= leftSideBearing;
+			
+			var pp2:int = pp1 + advanceWidth;
+			
+			currentCharacter.leftBearing += pp1;
+			currentCharacter.rightBearing += pp2;
 		}
 		
 	}

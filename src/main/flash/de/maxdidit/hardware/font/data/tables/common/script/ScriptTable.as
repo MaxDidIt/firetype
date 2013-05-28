@@ -18,6 +18,8 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		
 		private var _defaultLanguageSystemTable:LanguageSystemTable;
 		
+		private var _languageSystemMap:Object;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -59,6 +61,7 @@ package de.maxdidit.hardware.font.data.tables.common.script
 		public function set languageSystemRecords(value:Vector.<LanguageSystemRecord>):void 
 		{
 			_languageSystemRecords = value;
+			mapLanguageSystemRecords();
 		}
 		
 		public function get defaultLanguageSystemTable():LanguageSystemTable 
@@ -71,6 +74,35 @@ package de.maxdidit.hardware.font.data.tables.common.script
 			_defaultLanguageSystemTable = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		private function mapLanguageSystemRecords():void 
+		{
+			if (!_languageSystemMap)
+			{
+				_languageSystemMap = new Object();
+			}
+			
+			const l:uint = _languageSystemRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var languageSystemRecord:LanguageSystemRecord = _languageSystemRecords[i];
+				_languageSystemMap[languageSystemRecord.languageSystemTag] = languageSystemRecord;
+			}
+		}
+		
+		public function retrieveLanguageSystemTable(tag:String):LanguageSystemTable
+		{
+			if (!_languageSystemMap.hasOwnProperty(tag))
+			{
+				return _defaultLanguageSystemTable;
+			}
+			
+			var languageSystemRecord:LanguageSystemRecord = _languageSystemMap[tag] as LanguageSystemRecord;
+			return languageSystemRecord.languageSystemTable;
+		}
 	}
 
 }
