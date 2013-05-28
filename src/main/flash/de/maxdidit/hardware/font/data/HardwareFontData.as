@@ -90,6 +90,17 @@ package de.maxdidit.hardware.font.data
 			_tableMap[table.record.tag] = table;
 		}
 		
+		public function retrieveTableData(tag:String):* 
+		{
+			var table:Table = retrieveTable(tag);
+			if (!table)
+			{
+				return null;
+			}
+			
+			return table.data;
+		}
+		
 	}
 
 }

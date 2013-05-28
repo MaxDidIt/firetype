@@ -9,6 +9,7 @@ package de.maxdidit.hardware.font.data
 	public interface ITableMap 
 	{
 		function retrieveTable(tag:String):Table;
+		function retrieveTableData(tag:String):*;
 		function registerTable(table:Table):void;
 	}
 	
