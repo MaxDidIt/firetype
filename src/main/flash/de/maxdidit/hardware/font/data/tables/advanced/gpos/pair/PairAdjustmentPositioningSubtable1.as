@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
@@ -176,15 +177,11 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 			}
 			
 			// apply positioning values
-			currentCharacter.leftBearing += pairValueRecord.value1.xPlacement;
-			currentCharacter.y += pairValueRecord.value1.yPlacement;
+			var value1:ValueRecord = pairValueRecord.value1;
+			var value2:ValueRecord = pairValueRecord.value2;
 			
-			currentCharacter.rightBearing += pairValueRecord.value1.xAdvance;
-			
-			nextCharacter.leftBearing += pairValueRecord.value2.xPlacement;
-			nextCharacter.y += pairValueRecord.value2.yPlacement;
-			
-			nextCharacter.rightBearing += pairValueRecord.value2.xAdvance;
+			currentCharacter.applyPositionAdjustmentValue(value1);
+			nextCharacter.applyPositionAdjustmentValue(value2);
 		}
 	}
 

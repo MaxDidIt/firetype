@@ -6,6 +6,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstance;
 	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	/**
@@ -108,7 +109,18 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 		
 		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
 		{
-			throw new Error("Function not yet implemented");
+			//throw new Error("Function not yet implemented");
+			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			
+			var coverageIndex:int = _coverage.getCoverageIndex(currentCharacter.glyphID);
+			if (coverageIndex == -1)
+			{
+				return;
+			}
+			
+			var value:ValueRecord = _values[coverageIndex];
+			
+			currentCharacter.applyPositionAdjustmentValue(value);
 		}
 		
 	}

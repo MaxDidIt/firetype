@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.text 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -111,6 +112,12 @@ package de.maxdidit.hardware.text
 			{
 				cache.registerGlyphInstance(_children[i] as HardwareGlyphInstance, uniqueIdentifier, subdivisions, color);
 			}
+		}
+		
+		public function applyPositionAdjustmentValue(value:ValueRecord):void 
+		{
+			_rightBearing += value.xPlacement + value.xAdvance;
+			_leftBearing += -value.xPlacement;
 		}
 		
 		private function copyCharacterGlyphInstances():void 

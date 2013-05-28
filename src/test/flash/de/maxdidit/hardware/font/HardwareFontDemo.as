@@ -86,7 +86,7 @@ package de.maxdidit.hardware.font
 			context3d = (e.target as Stage3D).context3D;
 			
 			context3d.enableErrorChecking = true;
-			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 4, false);
+			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 8, false);
 			
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
 			
@@ -97,9 +97,9 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("TIMES.TTF");
 			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
-			
-			// Missing table implementations
 			hardwareParser.loadFont("newscycle-bold.ttf");
+			
+			// Buggy
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			viewProjectionMtx = new Matrix3D();

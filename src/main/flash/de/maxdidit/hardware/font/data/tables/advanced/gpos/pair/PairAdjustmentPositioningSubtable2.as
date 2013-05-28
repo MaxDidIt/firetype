@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.text.HardwareCharacterInstance;
@@ -213,15 +214,11 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 			var class2Record:Class2Record = _class1Records[class1].class2Records[class2];
 			
 			// apply positioning values
-			currentCharacter.leftBearing += class2Record.value1.xPlacement;
-			currentCharacter.y += class2Record.value1.yPlacement;
+			var value1:ValueRecord = class2Record.value1;
+			var value2:ValueRecord = class2Record.value2;
 			
-			currentCharacter.rightBearing += class2Record.value1.xAdvance;
-			
-			nextCharacter.leftBearing += class2Record.value2.xPlacement;
-			nextCharacter.y += class2Record.value2.yPlacement;
-			
-			nextCharacter.rightBearing += class2Record.value2.xAdvance;
+			currentCharacter.applyPositionAdjustmentValue(value1);
+			nextCharacter.applyPositionAdjustmentValue(value2);
 		}
 	}
 

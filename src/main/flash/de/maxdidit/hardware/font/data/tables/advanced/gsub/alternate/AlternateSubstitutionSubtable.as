@@ -94,7 +94,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		
 		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
 		{
-			throw new Error("Function not yet implemented");
+			//throw new Error("Function not yet implemented");
 		}
 		
 	}
