@@ -65,6 +65,27 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 			_rangeRecords = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable */
+		
+		public function getCoverageIndex(glyphIndex:uint):int 
+		{			
+			for (var i:uint = 0; i < _rangeCount; i++)
+			{
+				var record:RangeRecord = _rangeRecords[i];
+				if (record.start <= glyphIndex && record.end >= glyphIndex)
+				{
+					// return coverage index
+					return record.startCoverageIndex + glyphIndex - record.start;
+				}
+			}
+			
+			return -1;
+		}
+		
 	}
 
 }

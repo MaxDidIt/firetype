@@ -6,9 +6,7 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 	 */
 	public interface ICoverageTable 
 	{
-		
-		// TODO: Define common functionality for both ClassDefinitionTableData1 and ClassDefinitionTableData2 here.
-		
+		function getCoverageIndex(glyphIndex:uint):int;
 	}
 
 }
