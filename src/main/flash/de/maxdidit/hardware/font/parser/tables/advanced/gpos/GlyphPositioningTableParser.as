@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.data.ITableMap;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningLookupType;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupListTable;
@@ -10,6 +11,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.advanced.NotYetImplementedLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.FeatureListTableParser;
@@ -58,9 +60,14 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 		// Member Functions
 		///////////////////////
 		
+		override protected function instantiateResult():ScriptFeatureLookupTable
+		{
+			return new GlyphPositioningTableData();
+		}
+		
 		protected override function initSubtableParser():void 
 		{
-			var notYetImplementedParser:NotYetImplementedSubtableParser = new NotYetImplementedSubtableParser();
+			var notYetImplementedParser:NotYetImplementedLookupTableParser = new NotYetImplementedLookupTableParser();
 			
 			_subtableParserMap = new Object();
 			

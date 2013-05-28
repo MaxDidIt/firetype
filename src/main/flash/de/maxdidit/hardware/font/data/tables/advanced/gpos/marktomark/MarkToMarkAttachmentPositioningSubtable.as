@@ -1,8 +1,13 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.AnchorTable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkArray;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	
 	/**
 	 * ...
@@ -131,6 +136,45 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark
 			_mark2Array = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		{
+			var previousCharacter:HardwareCharacterInstanceListElement = characterInstances.currentElement.previous as HardwareCharacterInstanceListElement;
+			if (!previousCharacter)
+			{
+				return;
+			}
+			
+			var currentCharacter:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+			var markCoverageIndex:int = _mark1Coverage.getCoverageIndex(currentCharacter.hardwareCharacterInstance.glyphID);
+			if (markCoverageIndex == -1)
+			{
+				return;
+			}
+			
+			var baseMarkCoverageIndex:uint = _mark2Coverage.getCoverageIndex(previousCharacter.hardwareCharacterInstance.glyphID);
+			if (baseMarkCoverageIndex == -1)
+			{
+				return;
+			}
+			
+			var markRecord:MarkRecord = _mark1Array.markRecords[markCoverageIndex];
+			var markAnchor:AnchorTable = markRecord.markAnchor;
+			
+			var baseMarkRecord:Mark2Record = _mark2Array.mark2Records[baseMarkCoverageIndex];
+			var baseMarkAnchor:AnchorTable = baseMarkRecord.mark2Anchors[markRecord.markClass];
+			
+			var xOffset:int = markAnchor.xCoordinate - baseMarkAnchor.xCoordinate;
+			var yOffset:int = markAnchor.yCoordinate - baseMarkAnchor.yCoordinate;
+			
+			currentCharacter.hardwareCharacterInstance.x = previousCharacter.hardwareCharacterInstance.x + xOffset;
+			currentCharacter.hardwareCharacterInstance.y = previousCharacter.hardwareCharacterInstance.y + yOffset;
+		}
 	}
 
 }

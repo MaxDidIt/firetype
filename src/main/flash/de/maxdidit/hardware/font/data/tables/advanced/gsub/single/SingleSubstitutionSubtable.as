@@ -1,7 +1,10 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.single 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -81,6 +84,38 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.single
 		public function set substituteGlyphIDs(value:Vector.<uint>):void 
 		{
 			_substituteGlyphIDs = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
+		{
+			var currentElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+			
+			var glyphIndex:uint = currentElement.hardwareCharacterInstance.glyphID;
+			var coverageIndex:int = _coverage.getCoverageIndex(glyphIndex);
+			if (coverageIndex == -1)
+			{
+				// no substitution performed
+				return;
+			}
+			
+			var newGlyphIndex:uint;
+			if (substituteGlyphIDs)
+			{
+				newGlyphIndex = substituteGlyphIDs[coverageIndex];
+			}
+			else
+			{
+				newGlyphIndex = glyphIndex;
+			}
+			
+			newGlyphIndex += _deltaGlyphID;
+			currentElement.hardwareCharacterInstance.glyphID = newGlyphIndex;
 		}
 		
 	}

@@ -1,7 +1,10 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	
 	/**
 	 * ...
@@ -81,6 +84,17 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple
 		public function set sequences(value:Vector.<SequenceTable>):void 
 		{
 			_sequences = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		{
+			throw new Error("Function not yet implemented");
 		}
 		
 	}

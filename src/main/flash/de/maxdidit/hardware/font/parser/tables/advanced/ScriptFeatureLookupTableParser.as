@@ -1,8 +1,7 @@
 package de.maxdidit.hardware.font.parser.tables.advanced
 {
 	import de.maxdidit.hardware.font.data.ITableMap;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningLookupType;
-	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupListTable;
@@ -72,7 +71,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		{
 			data.position = record.offset;
 			
-			var result:GlyphPositioningTableData = new GlyphPositioningTableData();
+			var result:ScriptFeatureLookupTable = instantiateResult();
 			
 			var version:Number = _dataTypeParser.parseFixed(data);
 			result.version = version;
@@ -99,6 +98,11 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			lookupTableData.lookupTables = subTables;
 			
 			return result;
+		}
+		
+		protected function instantiateResult():ScriptFeatureLookupTable 
+		{
+			throw new Error("Extend this class and implement this function.")
 		}
 		
 		private function parseSubTables(data:ByteArray, lookupListOffset:uint, lookupOffsets:Vector.<uint>):Vector.<LookupTable>

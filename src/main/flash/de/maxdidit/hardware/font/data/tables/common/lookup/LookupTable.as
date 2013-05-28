@@ -1,5 +1,8 @@
 package de.maxdidit.hardware.font.data.tables.common.lookup 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
+	import de.maxdidit.list.LinkedList;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -102,6 +105,22 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 		public function set lookupType(value:uint):void 
 		{
 			_lookupType = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
+		{
+			for (var i:uint = 0; i < _subTableCount; i++)
+			{
+				var subTable:ILookupSubtable = _subTables[i];
+				if (subTable)
+				{
+					subTable.performLookup(characterInstances, parent);
+				}
+			}
 		}
 		
 	}

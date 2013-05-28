@@ -1,6 +1,10 @@
 package de.maxdidit.hardware.font
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.data.tables.advanced.gsub.GlyphSubstitutionTableData;
 	import de.maxdidit.hardware.font.data.tables.required.cmap.CharacterIndexMappingTableData;
 	import de.maxdidit.hardware.font.data.tables.required.hhea.HorizontalHeaderData;
 	import de.maxdidit.hardware.font.data.tables.required.hmtx.HorizontalMetricsData;
@@ -15,6 +19,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -121,16 +126,40 @@ package de.maxdidit.hardware.font
 			return glyphIndex;
 		}
 		
+		// deprecated
 		public function getGlyphAdvanceWidth(index:uint):uint
 		{
 			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
 			return horizontalMetricsData.getAdvanceWidth(index);
 		}
 		
+		// deprecated
 		public function getGlyphLeftSideBearing(index:uint):int
 		{
 			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
 			return horizontalMetricsData.getLeftSideBearing(index);
+		}
+		
+		public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String):void 
+		{
+			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
+			if (!gsubTableData)
+			{
+				return;
+			}
+			
+			gsubTableData.applyTable(characterInstances, scriptTag, languageTag);
+		}
+		
+		public function retrieveCharacterDefinitions(characterInstances:LinkedList):void 
+		{
+			var gdefTableData:GlyphDefinitionTableData = _data.retrieveTableData(TableNames.GLYPH_DEFINITION_DATA) as GlyphDefinitionTableData;
+			if (!gdefTableData)
+			{
+				return;
+			}
+			
+			gdefTableData.applyTable(characterInstances);
 		}
 	}
 

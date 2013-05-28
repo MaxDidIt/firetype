@@ -1,6 +1,7 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gsub 
+package de.maxdidit.hardware.font.data.tables.advanced.gsub
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -11,11 +12,11 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub
 		// Constructor
 		///////////////////////
 		
-		public function GlyphSubstitutionTableData() 
+		public function GlyphSubstitutionTableData()
 		{
-			
-		}
 		
+		}
+	
 	}
 
 }

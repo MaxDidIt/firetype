@@ -2,9 +2,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -95,6 +98,17 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 		public function set valueFormat(value:ValueFormat):void 
 		{
 			_valueFormat = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		{
+			throw new Error("Function not yet implemented");
 		}
 		
 	}

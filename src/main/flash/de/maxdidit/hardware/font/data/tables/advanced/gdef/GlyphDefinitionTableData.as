@@ -3,6 +3,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gdef
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -78,6 +80,24 @@ package de.maxdidit.hardware.font.data.tables.advanced.gdef
 		public function set ligatureCaretList(value:LigatureCaretListTableData):void 
 		{
 			_ligatureCaretList = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		public function applyTable(characterInstances:LinkedList):void 
+		{
+			characterInstances.gotoFirstElement();
+			
+			while (characterInstances.currentElement)
+			{
+				var currentElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+				var glyphClass:int = _glyphClassDefinitionTable.getGlyphClassByID(currentElement.hardwareCharacterInstance.glyphID);
+				currentElement.hardwareCharacterInstance.glyphClass = glyphClass;
+				
+				characterInstances.gotoNextElement();
+			}
 		}
 		
 	}

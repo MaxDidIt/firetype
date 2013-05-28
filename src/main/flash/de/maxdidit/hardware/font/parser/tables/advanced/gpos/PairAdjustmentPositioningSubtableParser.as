@@ -59,7 +59,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			}
 			else if (posFormat == 2)
 			{
-				// TODO: Implement pair adjustment format 2
+				throw new Error("Pair Positioning Adjustment Format 2 is not yet implemented.");
 			}
 			
 			return result;

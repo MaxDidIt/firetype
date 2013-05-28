@@ -1,16 +1,15 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate 
+package de.maxdidit.hardware.font.data.tables.advanced.gsub.context 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
+	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
-	import de.maxdidit.list.LinkedList;
-	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class AlternateSubstitutionSubtable implements ILookupSubtable 
+	public class ContextualSubstitutionTableFormat1 implements ILookupSubtable, IContextualSubstitutionTable
 	{
 		///////////////////////
 		// Member Fields
@@ -19,15 +18,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		private var _coverageOffset:uint;
 		private var _coverage:ICoverageTable;
 		
-		private var _alternateSetCount:uint;
-		private var _alternateSetOffsets:Vector.<uint>;
-		private var _alternateSets:Vector.<AlternateSetTable>;
+		private var _subruleSetCount:uint;
+		private var _subruleSetOffsets:Vector.<uint>;
+		private var _subruleSetTables:Vector.<SubRuleSetTable>;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function AlternateSubstitutionSubtable() 
+		public function ContextualSubstitutionTableFormat1() 
 		{
 			
 		}
@@ -46,7 +45,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 			_coverageOffset = value;
 		}
 		
-		public function get coverage():ICoverageTable
+		public function get coverage():ICoverageTable 
 		{
 			return _coverage;
 		}
@@ -56,34 +55,34 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 			_coverage = value;
 		}
 		
-		public function get alternateSetCount():uint 
+		public function get subruleSetCount():uint 
 		{
-			return _alternateSetCount;
+			return _subruleSetCount;
 		}
 		
-		public function set alternateSetCount(value:uint):void 
+		public function set subruleSetCount(value:uint):void 
 		{
-			_alternateSetCount = value;
+			_subruleSetCount = value;
 		}
 		
-		public function get alternateSetOffsets():Vector.<uint> 
+		public function get subruleSetOffsets():Vector.<uint> 
 		{
-			return _alternateSetOffsets;
+			return _subruleSetOffsets;
 		}
 		
-		public function set alternateSetOffsets(value:Vector.<uint>):void 
+		public function set subruleSetOffsets(value:Vector.<uint>):void 
 		{
-			_alternateSetOffsets = value;
+			_subruleSetOffsets = value;
 		}
 		
-		public function get alternateSets():Vector.<AlternateSetTable> 
+		public function get subruleSetTables():Vector.<SubRuleSetTable> 
 		{
-			return _alternateSets;
+			return _subruleSetTables;
 		}
 		
-		public function set alternateSets(value:Vector.<AlternateSetTable>):void 
+		public function set subruleSetTables(value:Vector.<SubRuleSetTable>):void 
 		{
-			_alternateSets = value;
+			_subruleSetTables = value;
 		}
 		
 		///////////////////////
@@ -92,7 +91,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
 		{
 			throw new Error("Function not yet implemented");
 		}

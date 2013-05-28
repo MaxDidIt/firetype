@@ -1,7 +1,10 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	
 	/**
 	 * ...
@@ -18,7 +21,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 		
 		private var _ligatureSetCount:uint;
 		private var _ligatureSetOffsets:Vector.<uint>;
-		private var _ligatureSets:Vector.<uint>;
+		private var _ligatureSets:Vector.<LigatureSetTable>;
 		
 		///////////////////////
 		// Constructor
@@ -73,14 +76,82 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 			_ligatureSetOffsets = value;
 		}
 		
-		public function get ligatureSets():Vector.<uint> 
+		public function get ligatureSets():Vector.<LigatureSetTable> 
 		{
 			return _ligatureSets;
 		}
 		
-		public function set ligatureSets(value:Vector.<uint>):void 
+		public function set ligatureSets(value:Vector.<LigatureSetTable>):void 
 		{
 			_ligatureSets = value;
+		}
+		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
+		{
+			var currentElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+			
+			var glyphIndex:uint = currentElement.hardwareCharacterInstance.glyphID;
+			var coverageIndex:int = _coverage.getCoverageIndex(glyphIndex);
+			if (coverageIndex == -1)
+			{
+				return;
+			}
+			
+			var ligatureSets:LigatureSetTable = _ligatureSets[coverageIndex];
+			var ligature:LigatureTable = findLigatureTableMatch(characterInstances, ligatureSets);
+			
+			if (!ligature)
+			{
+				return;
+			}
+			
+			// perform substitution
+			currentElement.hardwareCharacterInstance.glyphID = ligature.ligatureGlyphID;
+			
+			// remove ligature component glyphs.
+			const l:uint = ligature.componentCount - 1;
+			for (var i:uint = 0; i < l; i++)
+			{
+				characterInstances.removeElement(currentElement.next);
+			}
+		}
+		
+		private function findLigatureTableMatch(characterInstances:LinkedList, ligatureSet:LigatureSetTable):LigatureTable 
+		{
+			const l:uint = ligatureSet.ligatureCount;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var ligature:LigatureTable = ligatureSet.ligatures[i];
+				if (matchLigature(characterInstances, ligature))
+				{
+					return ligature;
+				}
+			}
+			
+			return null;
+		}
+		
+		private function matchLigature(characterInstances:LinkedList, ligature:LigatureTable):Boolean 
+		{
+			var characterElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+			
+			const l:uint = ligature.componentCount - 1;
+			for (var i:uint = 0; i < l; i++)
+			{
+				characterElement = characterElement.next as HardwareCharacterInstanceListElement;
+				if (ligature.componentGlyphIDs[i] != characterElement.hardwareCharacterInstance.glyphID)
+				{
+					return false;
+				}
+			}
+			
+			return true;
 		}
 		
 	}

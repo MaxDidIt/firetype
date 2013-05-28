@@ -1,9 +1,13 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
+	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstance;
+	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.list.LinkedList;
 	
 	/**
 	 * ...
@@ -131,6 +135,57 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 			_pairSetOffset = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		{
+			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			var coverageIndex:int = coverage.getCoverageIndex(currentCharacter.glyphID);
+			
+			if (coverageIndex == -1)
+			{
+				return;
+			}
+			
+			var nextCharacter:HardwareCharacterInstance = (characterInstances.currentElement.next as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			if (!nextCharacter)
+			{
+				return;
+			}
+			
+			var pairSet:PairSet = _pairSets[coverageIndex];
+			var pairValueRecord:PairValueRecord;
+			var pairFound:Boolean = false;
+			for (var i:uint = 0; i < pairSet.pairValueCount; i++)
+			{
+				pairValueRecord = pairSet.pairValueRecords[i];
+				if (pairValueRecord.secondGlyphID == nextCharacter.glyphID)
+				{
+					pairFound = true;
+					break;
+				}
+			}
+			
+			if (!pairFound)
+			{
+				return;
+			}
+			
+			// apply positioning values
+			currentCharacter.leftBearing += pairValueRecord.value1.xPlacement;
+			currentCharacter.y += pairValueRecord.value1.yPlacement;
+			
+			currentCharacter.rightBearing += pairValueRecord.value1.xAdvance;
+			
+			nextCharacter.leftBearing += pairValueRecord.value2.xPlacement;
+			nextCharacter.y += pairValueRecord.value2.yPlacement;
+			
+			nextCharacter.rightBearing += pairValueRecord.value2.xAdvance;
+		}
 	}
 
 }
