@@ -7,16 +7,8 @@ package de.maxdidit.list
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class CircularLinkedList 
+	public class CircularLinkedList extends LinkedList
 	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _firstElement:LinkedListElement;
-		private var _lastElement:LinkedListElement;
-		
-		private var _numElements:uint = 0;
 		
 		///////////////////////
 		// Constructor
@@ -28,89 +20,16 @@ package de.maxdidit.list
 		}
 		
 		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get firstElement():LinkedListElement 
-		{
-			return _firstElement;
-		}
-		
-		public function get lastElement():LinkedListElement 
-		{
-			return _lastElement;
-		}
-		
-		// numElements
-		
-		public function get numElements():uint
-		{
-			return _numElements;
-		}
-		
-		public function set numElements(value:uint):void 
-		{
-			_numElements = value;
-		}
-		
-		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		public function addElement(element:LinkedListElement):void
+		override public function addElement(element:LinkedListElement):void 
 		{
-			if (!_firstElement)
-			{
-				_firstElement = element;
-			}
+			super.addElement(element);
 			
-			if (!_lastElement)
-			{
-				_lastElement = element;
-			}
-			
-			_lastElement.next = element;
-			element.previous = _lastElement;
-			element.next = _firstElement;
-			
-			_lastElement = element;
-			_firstElement.previous = lastElement;
-			
-			_numElements++;
-		}
-		
-		public function removeElement(element:LinkedListElement):void 
-		{
-			if (element == _firstElement)
-			{
-				_firstElement = element.next;
-			}
-			
-			if (element == _lastElement)
-			{
-				_lastElement = element.previous;
-			}
-			
-			element.previous.next = element.next;
-			element.next.previous = element.previous;
-			
-			_numElements--;
-		}
-		
-		public function addElementAfter(element:LinkedListElement, afterElement:LinkedListElement):void 
-		{
-			if (afterElement == _lastElement)
-			{
-				_lastElement = afterElement;
-			}
-			
-			element.previous = afterElement;
-			element.next = afterElement.next;
-			
-			afterElement.next.previous = element;
-			afterElement.next = element;
-			
-			_numElements++;
+			// close the circle
+			_lastElement.next = _firstElement;
+			_firstElement.previous = _lastElement;
 		}
 		
 	}
