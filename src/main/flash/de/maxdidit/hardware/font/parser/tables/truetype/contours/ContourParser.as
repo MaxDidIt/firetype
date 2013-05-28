@@ -84,8 +84,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 			var startVertex:VertexListElement = getStartVertex(vertices);
 			if (!startVertex)
 			{
-				// TODO: Somehow handle contours with only off curve points
-				return null;
+				throw new Error("Unable to find start vertex in contour of glyph.");
 			}
 			
 			var thisVertex:VertexListElement = startVertex;
