@@ -65,6 +65,25 @@ package de.maxdidit.hardware.font.data.tables.common.classes
 			_classRangeRecords = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable */
+		
+		public function getGlyphClassByID(glyphID:uint):uint 
+		{
+			for (var i:uint = 0; i < _classRangeCount; i++)
+			{
+				var record:ClassRangeRecord = _classRangeRecords[i];
+				if (record.start >= glyphID && record.end <= glyphID)
+				{
+					return record.classValue;
+				}
+			}
+			
+			return 0;
+		}
 	}
 
 }

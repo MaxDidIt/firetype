@@ -78,6 +78,26 @@ package de.maxdidit.hardware.font.data.tables.common.classes
 			_classValues = value;
 		}
 		
+		///////////////////////
+		// Member Functions
+		///////////////////////
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable */
+		
+		public function getGlyphClassByID(glyphID:uint):uint 
+		{
+			if (glyphID < _startGlyphID)
+			{
+				return 0;
+			}
+			
+			if (glyphID - _startGlyphID >= _glyphCount)
+			{
+				return 0;
+			}
+			
+			return _classValues[glyphID - _startGlyphID];
+		}
 	}
 
 }
