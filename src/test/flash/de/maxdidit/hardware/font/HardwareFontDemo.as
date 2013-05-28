@@ -95,11 +95,11 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
 			//hardwareParser.loadFont("TIMES.TTF");
-			hardwareParser.loadFont("L_10646.TTF");
+			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
 			
 			// Missing table implementations
-			//hardwareParser.loadFont("newscycle-bold.ttf");
+			hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			viewProjectionMtx = new Matrix3D();

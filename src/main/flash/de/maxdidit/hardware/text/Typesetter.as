@@ -55,6 +55,8 @@ package de.maxdidit.hardware.text
 		
 		private function layout(hardwareText:HardwareText, characterInstances:LinkedList, font:HardwareFont, scriptTag:String, languageTag:String):void
 		{
+			// TODO: Clean up this mess, while keeping the code fast. Somehow. Avoid duplicate code.
+			
 			// positioning tables
 			var fontAscender:int = font.ascender;
 			var fontDescender:int = font.descender;
@@ -93,14 +95,15 @@ package de.maxdidit.hardware.text
 					// place old word
 					hardwareText.addChild(currentWord);
 					
+					xGlobal += xWord;
 					if (xGlobal > hardwareText.width)
 					{
 						// goto next line
 						xGlobal = currentWord.x = 0;
+						xGlobal += xWord;
 						y -= fontAscender - fontDescender;
 					}
 					currentWord.y = y;
-					xGlobal += xWord;
 					
 					// create new word
 					currentWord = new HardwareWord();

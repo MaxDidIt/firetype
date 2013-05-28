@@ -13,6 +13,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.NotYetImplementedLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
+	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.FeatureListTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.LookupListTableDataParser;
@@ -38,6 +39,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 		
 		private var _anchorTableParser:AnchorTableParser;
 		private var _markArrayTableParser:MarkArrayTableParser;
+		
+		private var _classDefinitionParser:ClassDefinitionTableParser;
 			
 		///////////////////////
 		// Constructor
@@ -52,6 +55,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			
 			_anchorTableParser = new AnchorTableParser(_dataTypeParser);
 			_markArrayTableParser = new MarkArrayTableParser(_dataTypeParser, _anchorTableParser);
+			
+			_classDefinitionParser = new ClassDefinitionTableParser(_dataTypeParser);
 			
 			initSubtableParser();
 		}
@@ -72,7 +77,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			_subtableParserMap = new Object();
 			
 			_subtableParserMap[String(GlyphPositioningLookupType.SINGLE_ADJUSTMENT)]			= new SingleAdjustmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _valueFormatParser, _valueRecordParser);
-			_subtableParserMap[String(GlyphPositioningLookupType.PAIR_ADJUSTMENT)]				= new PairAdjustmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _valueFormatParser, _valueRecordParser);
+			_subtableParserMap[String(GlyphPositioningLookupType.PAIR_ADJUSTMENT)]				= new PairAdjustmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _classDefinitionParser, _valueFormatParser, _valueRecordParser);
 			_subtableParserMap[String(GlyphPositioningLookupType.CURSIVE_ATTACHMENT)]			= new CursiveAttachmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _anchorTableParser);
 			_subtableParserMap[String(GlyphPositioningLookupType.MARK_TO_BASE_ATTACHMENT)]		= new MarkToBaseAttachmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _anchorTableParser, _markArrayTableParser);
 			_subtableParserMap[String(GlyphPositioningLookupType.MARK_TO_LIGATURE_ATTACHMENT)]	= new MarkToLigatureAttachmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _anchorTableParser, _markArrayTableParser);
