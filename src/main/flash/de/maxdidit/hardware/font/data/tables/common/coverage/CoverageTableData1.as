@@ -72,14 +72,37 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 		
 		public function getCoverageIndex(glyphIndex:uint):int 
 		{
-			for (var i:uint = 0; i < _glyphCount; i++)
+			var min:int = 0;
+			var max:int = _glyphCount - 1;
+			
+			while (max >= min)
 			{
-				if (_glyphIDs[i] == glyphIndex)
+				var mid:int = (min + max) >> 1;
+				
+				var textIndex:uint = _glyphIDs[mid];
+				
+				if (glyphIndex < textIndex)
 				{
-					// return coverage index
-					return i;
+					max = mid - 1;
+				}
+				else if (glyphIndex > textIndex)
+				{
+					min = mid + 1;
+				}
+				else
+				{
+					return mid;
 				}
 			}
+			
+			//for (var i:uint = 0; i < _glyphCount; i++)
+			//{
+				//if (_glyphIDs[i] == glyphIndex)
+				//{
+					// return coverage index
+					//return i;
+				//}
+			//}
 			
 			return -1;
 		}

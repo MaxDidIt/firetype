@@ -167,16 +167,16 @@ package de.maxdidit.hardware.text
 		
 		private function retrieveProperty(map:Object, key:String):Object
 		{
-			if (map.hasOwnProperty(key))
+			var result:Object = map[key];
+			
+			if (result)
 			{
-				return map[key];
+				return result;
 			}
-			else
-			{
-				var property:Object = new Object();
-				map[key] = property;
-				return property;
-			}
+			
+			result = new Object();
+			map[key] = result;
+			return result;
 		}
 		
 	}

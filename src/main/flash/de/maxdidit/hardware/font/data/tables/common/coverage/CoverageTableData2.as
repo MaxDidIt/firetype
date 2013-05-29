@@ -72,16 +72,39 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable */
 		
 		public function getCoverageIndex(glyphIndex:uint):int 
-		{			
-			for (var i:uint = 0; i < _rangeCount; i++)
+		{
+			var min:int = 0;
+			var max:int = _rangeCount - 1;
+			
+			while (max >= min)
 			{
-				var record:RangeRecord = _rangeRecords[i];
-				if (record.start <= glyphIndex && record.end >= glyphIndex)
+				var mid:int = (min + max) >> 1;
+				
+				var record:RangeRecord = _rangeRecords[mid];
+				
+				if (glyphIndex < record.start)
 				{
-					// return coverage index
-					return record.startCoverageIndex + glyphIndex - record.start;
+					max = mid - 1;
+				}
+				else if (glyphIndex > record.end)
+				{
+					min = mid + 1;
+				}
+				else
+				{
+					return mid;
 				}
 			}
+			
+			//for (var i:uint = 0; i < _rangeCount; i++)
+			//{
+				//var record:RangeRecord = _rangeRecords[i];
+				//if (record.start <= glyphIndex && record.end >= glyphIndex)
+				//{
+					// return coverage index
+					//return record.startCoverageIndex + glyphIndex - record.start;
+				//}
+			//}
 			
 			return -1;
 		}

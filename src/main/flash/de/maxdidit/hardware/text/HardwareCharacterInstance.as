@@ -1,12 +1,55 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
+	import de.maxdidit.list.LinkedList;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
 	public class HardwareCharacterInstance extends TransformedInstance
 	{
+		///////////////////////
+		// Static Variables
+		///////////////////////
+		
+		private static var _pool:LinkedList = new LinkedList();
+		
+		///////////////////////
+		// Static Functions
+		///////////////////////
+		
+		public static function getHardwareCharacterInstance(hardwareCharacter:HardwareCharacter):HardwareCharacterInstance
+		{
+			var instance:HardwareCharacterInstance;
+			
+			if (_pool.firstElement)
+			{
+				var element:HardwareCharacterInstanceListElement = _pool.firstElement as HardwareCharacterInstanceListElement;
+				instance = element.hardwareCharacterInstance;
+				instance.hardwareCharacter = hardwareCharacter;
+				
+				instance.leftBearing = 0;
+				instance.rightBearing = 0;
+				instance.x = 0;
+				instance.y = 0;
+				
+				_pool.removeElement(element);
+			}
+			else
+			{
+				instance = new HardwareCharacterInstance(hardwareCharacter);
+			}
+			
+			return instance;
+		}
+		
+		public static function returnHardwareCharacterInstance(instance:HardwareCharacterInstance):void
+		{
+			var element:HardwareCharacterInstanceListElement = new HardwareCharacterInstanceListElement(instance);
+			_pool.addElement(element);
+		}
+		
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -25,7 +68,7 @@ package de.maxdidit.hardware.text
 		// Constructor
 		///////////////////////
 		
-		public function HardwareCharacterInstance($hardwareCharacter:HardwareCharacter) 
+		public function HardwareCharacterInstance($hardwareCharacter:HardwareCharacter)
 		{
 			this._hardwareCharacter = $hardwareCharacter;
 			if ($hardwareCharacter)
@@ -40,14 +83,15 @@ package de.maxdidit.hardware.text
 		
 		// hardwareCharacter
 		
-		public function get hardwareCharacter():HardwareCharacter 
+		public function get hardwareCharacter():HardwareCharacter
 		{
 			return _hardwareCharacter;
 		}
 		
-		public function set hardwareCharacter(value:HardwareCharacter):void 
+		public function set hardwareCharacter(value:HardwareCharacter):void
 		{
 			_hardwareCharacter = value;
+			
 			copyCharacterGlyphInstances();
 		}
 		
@@ -56,47 +100,47 @@ package de.maxdidit.hardware.text
 			return _glyphID;
 		}
 		
-		public function set glyphID(value:uint):void 
+		public function set glyphID(value:uint):void
 		{
 			_glyphID = value;
 		}
 		
-		public function get glyphClass():uint 
+		public function get glyphClass():uint
 		{
 			return _glyphClass;
 		}
 		
-		public function set glyphClass(value:uint):void 
+		public function set glyphClass(value:uint):void
 		{
 			_glyphClass = value;
 		}
 		
-		public function get charCode():uint 
+		public function get charCode():uint
 		{
 			return _charCode;
 		}
 		
-		public function set charCode(value:uint):void 
+		public function set charCode(value:uint):void
 		{
 			_charCode = value;
 		}
 		
-		public function get leftBearing():int 
+		public function get leftBearing():int
 		{
 			return _leftBearing;
 		}
 		
-		public function set leftBearing(value:int):void 
+		public function set leftBearing(value:int):void
 		{
 			_leftBearing = value;
 		}
 		
-		public function get rightBearing():int 
+		public function get rightBearing():int
 		{
 			return _rightBearing;
 		}
 		
-		public function set rightBearing(value:int):void 
+		public function set rightBearing(value:int):void
 		{
 			_rightBearing = value;
 		}
@@ -105,7 +149,7 @@ package de.maxdidit.hardware.text
 		// Member Functions
 		///////////////////////
 		
-		public function registerGlyphInstances(uniqueIdentifier:String, subdivisions:uint, color:uint, cache:HardwareCharacterCache):void 
+		public function registerGlyphInstances(uniqueIdentifier:String, subdivisions:uint, color:uint, cache:HardwareCharacterCache):void
 		{
 			const l:uint = _children.length;
 			for (var i:uint = 0; i < l; i++)
@@ -114,15 +158,20 @@ package de.maxdidit.hardware.text
 			}
 		}
 		
-		public function applyPositionAdjustmentValue(value:ValueRecord):void 
+		public function applyPositionAdjustmentValue(value:ValueRecord):void
 		{
 			_rightBearing += value.xPlacement + value.xAdvance;
 			_leftBearing += -value.xPlacement;
 		}
 		
-		private function copyCharacterGlyphInstances():void 
+		private function copyCharacterGlyphInstances():void
 		{
 			loseAllChildren();
+			
+			if (!_hardwareCharacter)
+			{
+				return;
+			}
 			
 			var _instances:Vector.<HardwareGlyphInstance> = _hardwareCharacter.instances;
 			
@@ -132,7 +181,7 @@ package de.maxdidit.hardware.text
 				addChild(_instances[i].clone());
 			}
 		}
-		
+	
 	}
 
 }

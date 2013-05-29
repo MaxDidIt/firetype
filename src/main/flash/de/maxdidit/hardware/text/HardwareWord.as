@@ -95,6 +95,16 @@ package de.maxdidit.hardware.text
 			
 			_boundingBox.right = x;
 		}
+		
+		public function loseCharacters():void 
+		{
+			const l:uint = _children.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var instance:HardwareCharacterInstance = _children[i] as HardwareCharacterInstance;
+				HardwareCharacterInstance.returnHardwareCharacterInstance(instance);
+			}
+		}
 	
 	}
 

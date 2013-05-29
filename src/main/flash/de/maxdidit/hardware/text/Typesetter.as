@@ -274,7 +274,7 @@ package de.maxdidit.hardware.text
 				var charCode:Number = text.charCodeAt(i);
 				var glyphID:uint = font.getGlyphIndex(charCode);
 				
-				var hardwareCharacterInstance:HardwareCharacterInstance = new HardwareCharacterInstance(null);
+				var hardwareCharacterInstance:HardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
 				hardwareCharacterInstance.glyphID = glyphID;
 				hardwareCharacterInstance.charCode = charCode;
 				
