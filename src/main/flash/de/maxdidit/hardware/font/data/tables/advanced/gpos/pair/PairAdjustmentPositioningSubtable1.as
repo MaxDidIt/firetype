@@ -152,11 +152,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 				return;
 			}
 			
-			var nextCharacter:HardwareCharacterInstance = (characterInstances.currentElement.next as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			if (!nextCharacter)
+			var nextElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.next as HardwareCharacterInstanceListElement;
+			if (!nextElement)
 			{
 				return;
 			}
+			var nextCharacter:HardwareCharacterInstance = nextElement.hardwareCharacterInstance;
 			
 			var pairSet:PairSet = _pairSets[coverageIndex];
 			var pairValueRecord:PairValueRecord;
