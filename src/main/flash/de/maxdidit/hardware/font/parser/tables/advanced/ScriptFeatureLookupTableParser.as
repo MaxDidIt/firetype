@@ -125,7 +125,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			data.position = offset;
 			
 			var result:LookupTable = _lookupTableParser.parseLookupTable(data);
-			var parser:ISubTableParser = _subtableParserMap[String(result.lookupType)] as ISubTableParser;
+			var parser:ISubTableParser = getSubtableParser(String(result.lookupType));
 			
 			const l:uint = result.subTableOffsets.length;
 			var subTables:Vector.<ILookupSubtable> = new Vector.<ILookupSubtable>(l);
@@ -139,6 +139,11 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			result.subTables = subTables;
 			
 			return result;
+		}
+		
+		public function getSubtableParser(lookupType:String):ISubTableParser
+		{
+			return _subtableParserMap[lookupType] as ISubTableParser;
 		}
 		
 	}
