@@ -145,6 +145,26 @@ package de.maxdidit.hardware.text
 			_renderer.render(_instanceMap);
 		}
 		
+		public function clearInstanceCache():void 
+		{
+			deleteMap(_instanceMap);
+		}
+		
+		private function deleteMap(map:Object):void 
+		{
+			// TODO: ugly! 
+			if (map is HardwareGlyphInstance)
+			{
+				HardwareGlyphInstance.returnHardwareGlyphInstance(map as HardwareGlyphInstance);
+			}
+			
+			for (var index:String in map)
+			{
+				deleteMap(map[index]);
+				delete map[index];
+			}
+		}
+		
 		private function retrieveProperty(map:Object, key:String):Object
 		{
 			if (map.hasOwnProperty(key))

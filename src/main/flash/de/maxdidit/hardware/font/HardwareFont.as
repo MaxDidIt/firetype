@@ -41,6 +41,13 @@ package de.maxdidit.hardware.font
 		
 		private var _data:HardwareFontData;
 		
+		private var _ascender:int;
+		private var _descender:int;
+		
+		private var _fontFamily:String;
+		private var _fontSubFamily:String;
+		private var _uniqueIdentifier:String;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -69,37 +76,44 @@ package de.maxdidit.hardware.font
 		
 		public function get fontFamily():String
 		{
-			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
-			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
+			return _fontFamily;
 		}
 		
 		public function get fontSubFamily():String
 		{
-			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
-			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
+			return _fontSubFamily;
 		}
 		
 		public function get uniqueIdentifier():String
 		{
-			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
-			return namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
+			return _uniqueIdentifier
 		}
 		
 		public function get ascender():int
 		{
-			var horizontalHeaderData:HorizontalHeaderData = _data.retrieveTable(TableNames.HORIZONTAL_HEADER).data as HorizontalHeaderData;
-			return horizontalHeaderData.ascender;
+			return _ascender;
 		}
 		
 		public function get descender():int
 		{
-			var horizontalHeaderData:HorizontalHeaderData = _data.retrieveTable(TableNames.HORIZONTAL_HEADER).data as HorizontalHeaderData;
-			return horizontalHeaderData.descender;
+			return _descender;
 		}
 		
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		public function finalize():void
+		{
+			var horizontalHeaderData:HorizontalHeaderData = _data.retrieveTable(TableNames.HORIZONTAL_HEADER).data as HorizontalHeaderData;
+			_ascender = horizontalHeaderData.ascender;
+			_descender = horizontalHeaderData.descender;
+			
+			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
+			_fontFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
+			_fontSubFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
+			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
+		}
 		
 		public function retrieveGlyph(index:uint):Glyph
 		{

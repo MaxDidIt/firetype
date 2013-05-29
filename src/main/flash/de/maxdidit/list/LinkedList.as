@@ -119,8 +119,15 @@ package de.maxdidit.list
 				_lastElement = element.previous;
 			}
 			
-			element.previous.next = element.next;
-			element.next.previous = element.previous;
+			if(element.previous)
+			{
+				element.previous.next = element.next;
+			}
+			
+			if (element.next)
+			{
+				element.next.previous = element.previous;
+			}
 			
 			_numElements--;
 		}

@@ -57,6 +57,7 @@ package de.maxdidit.hardware.text
 		{
 			_text = value;
 			parseText();
+			calculateTransformations();
 		}
 		
 		public function get width():Number 
@@ -116,34 +117,6 @@ package de.maxdidit.hardware.text
 			loseAllChildren();
 			
 			_typesetter.assemble(_text, this, _standardFormat, _cache);
-			
-			//var currentLine:HardwareLine = new HardwareLine();
-			//currentLine.y = -_standardFormat.font.ascender;
-			//addChild(currentLine);
-			//
-			//var words:Array = _text.split(/([\s\-])/);
-			//
-			//const l:uint = words.length;
-			//for (var i:uint = 0; i < l; i++)
-			//{
-				//var currentWord:HardwareWord = new HardwareWord();
-				//currentWord.initialize(words[i], _standardFormat, _cache, currentLine.numChildren == 0);
-				//
-				//if (_fixedWidth && currentLine.boundingBox.right + currentWord.boundingBox.right > _width || /\n/.test(words[i]))
-				//{
-					// start new line
-					//var previousLine:HardwareLine = currentLine;
-					//currentLine = new HardwareLine();
-					//
-					//currentLine.y = -(_standardFormat.font.ascender - _standardFormat.font.descender) + previousLine.y;
-					//
-					//addChild(currentLine);
-				//}
-				//
-				//currentLine.addWord(currentWord);
-			//}
-			//
-			//calculateTransformations();
 		}
 		
 	}

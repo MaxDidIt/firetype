@@ -58,6 +58,7 @@ package de.maxdidit.hardware.font.parser
 			var hardwareFont:HardwareFont = new HardwareFont();
 			
 			hardwareFont.data = parseFontData(data);
+			hardwareFont.finalize();
 			
 			return hardwareFont;
 		}
