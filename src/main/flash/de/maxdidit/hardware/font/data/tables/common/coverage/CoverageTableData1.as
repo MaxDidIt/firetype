@@ -95,15 +95,6 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 				}
 			}
 			
-			//for (var i:uint = 0; i < _glyphCount; i++)
-			//{
-				//if (_glyphIDs[i] == glyphIndex)
-				//{
-					// return coverage index
-					//return i;
-				//}
-			//}
-			
 			return -1;
 		}
 	}

@@ -4,7 +4,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.text.HardwareCharacter;
-	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	/**
 	 * ...
 	 * @author Max Knoblich

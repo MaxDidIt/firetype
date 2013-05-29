@@ -5,7 +5,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.text.HardwareCharacter;
-	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import flash.utils.ByteArray;
 	/**
@@ -90,8 +90,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 			{
 				var currentComponent:CompositeGlyphComponent = _components[i];
 				
-				var index:uint = currentComponent.glyphIndex;
-				var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, index);
+				var glyphIndex:uint = currentComponent.glyphIndex;
+				var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, glyphIndex);
 				var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
 				
 				character.addGlyphInstance(glyphInstance);

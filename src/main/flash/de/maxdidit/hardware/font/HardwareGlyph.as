@@ -28,7 +28,8 @@ package de.maxdidit.hardware.font
 		
 		private var _numTriangles:uint;
 		
-		private var _index:uint;
+		private var _glyphIndex:uint;
+		private var _cacheSectionIndex:uint;
 		
 		// bounding box
 		
@@ -97,14 +98,24 @@ package de.maxdidit.hardware.font
 		
 		// index
 		
-		public function get index():uint 
+		public function get glyphIndex():uint 
 		{
-			return _index;
+			return _glyphIndex;
 		}
 		
-		public function set index(value:uint):void 
+		public function set glyphIndex(value:uint):void 
 		{
-			_index = value;
+			_glyphIndex = value;
+		}
+		
+		public function get cacheSectionIndex():uint 
+		{
+			return _cacheSectionIndex;
+		}
+		
+		public function set cacheSectionIndex(value:uint):void 
+		{
+			_cacheSectionIndex = value;
 		}
 	
 		///////////////////////

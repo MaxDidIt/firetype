@@ -1,5 +1,6 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text.cache 
 {
+	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
@@ -8,6 +9,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.text.renderer.IHardwareTextRenderer;
+	import de.maxdidit.hardware.text.renderer.IHardwareTextRendererFactory;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
@@ -27,31 +29,36 @@ package de.maxdidit.hardware.text
 		
 		private var _characterCache:Object = new Object();
 		private var _glyphCache:Object = new Object();
-		private var _instanceMap:Object = new Object();
-		private var _renderer:IHardwareTextRenderer;
+		
+		//private var _instanceMap:Object = new Object();
+		//private var _renderer:IHardwareTextRenderer;
+		
+		private var _rendererFactory:IHardwareTextRendererFactory;
+		private var _sections:Vector.<HardwareCharacterCacheSection>;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareCharacterCache(renderer:IHardwareTextRenderer) 
+		public function HardwareCharacterCache(rendererFactory:IHardwareTextRendererFactory) 
 		{
-			this._renderer = renderer;
+			_rendererFactory = rendererFactory;
 			
+			_sections = new Vector.<HardwareCharacterCacheSection>();
 		}
 		
 		///////////////////////
 		// Member Properties
 		///////////////////////
 		
-		public function get renderer():IHardwareTextRenderer 
+		public function get rendererFactory():IHardwareTextRendererFactory 
 		{
-			return _renderer;
+			return _rendererFactory;
 		}
 		
-		public function set renderer(value:IHardwareTextRenderer):void 
+		public function set rendererFactory(value:IHardwareTextRendererFactory):void 
 		{
-			_renderer = value;
+			_rendererFactory = value;
 		}
 		
 		///////////////////////
@@ -91,12 +98,12 @@ package de.maxdidit.hardware.text
 			return hardwareCharacter;
 		}
 		
-		public function getCachedGlyph(font:HardwareFont, subdivisions:uint, index:uint):HardwareGlyph
+		public function getCachedGlyph(font:HardwareFont, subdivisions:uint, glyphIndex:uint):HardwareGlyph
 		{
 			var cachedSubdivisionsForFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
 			var cachedGlyphsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
 			
-			var indexKey:String = String(index);
+			var indexKey:String = String(glyphIndex);
 			
 			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
 			if (cachedGlyphsForSubdivision.hasOwnProperty(indexKey))
@@ -105,12 +112,12 @@ package de.maxdidit.hardware.text
 			}
 			else
 			{
-				var glyph:Glyph = font.retrieveGlyph(index);
+				var glyph:Glyph = font.retrieveGlyph(glyphIndex);
 				var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
 				
 				// cache hardware glyph
-				hardwareGlyph = _renderer.addPathsToRenderer(paths);
-				hardwareGlyph.index = index;
+				hardwareGlyph = addPathsToSection(paths);
+				hardwareGlyph.glyphIndex = glyphIndex;
 				hardwareGlyph.boundingBox.setValues(glyph.header.xMin, glyph.header.yMin, glyph.header.xMax, glyph.header.yMax);
 				
 				cachedGlyphsForSubdivision[indexKey] = hardwareGlyph;
@@ -119,49 +126,56 @@ package de.maxdidit.hardware.text
 			return hardwareGlyph;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, color:uint):void 
+		private function addPathsToSection(paths:Vector.<Vector.<Vertex>>):HardwareGlyph 
 		{
-			var cachedSubdivisionsForFont:Object = retrieveProperty(_instanceMap, uniqueIdentifier);
-			var cachedColorsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
-			var cachedInstancesForColor:Object = retrieveProperty(cachedColorsForSubdivision, String(color));
+			var result:HardwareGlyph;
+			var section:HardwareCharacterCacheSection;
 			
-			var instances:Vector.<HardwareGlyphInstance>;
-			var indexKey:String = String(hardwareGlyphInstance.glyph.index);
-			if (cachedInstancesForColor.hasOwnProperty(indexKey))
+			const l:uint = _sections.length;
+			for (var i:uint = 0; i < l; i++)
 			{
-				instances = cachedInstancesForColor[indexKey] as Vector.<HardwareGlyphInstance>;
-			}
-			else
-			{
-				instances = new Vector.<HardwareGlyphInstance>();
-				cachedInstancesForColor[indexKey] = instances;
+				section = _sections[i];
+				
+				result = section.addPathsToSection(paths);
+				if (result)
+				{
+					result.cacheSectionIndex = i;
+					return result;
+				}
 			}
 			
-			instances.push(hardwareGlyphInstance);
+			section = new HardwareCharacterCacheSection(_rendererFactory.retrieveHardwareTextRenderer());
+			_sections.push(section);
+			
+			result = section.addPathsToSection(paths);
+			result.cacheSectionIndex = l;
+			
+			return result;
+		}
+		
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, color:uint):void 
+		{	
+			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.glyph.cacheSectionIndex];
+			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, color);
 		}
 		
 		public function render():void 
 		{
-			_renderer.render(_instanceMap);
+			const l:uint = _sections.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var section:HardwareCharacterCacheSection = _sections[i];
+				section.render();
+			}
 		}
 		
 		public function clearInstanceCache():void 
 		{
-			deleteMap(_instanceMap);
-		}
-		
-		private function deleteMap(map:Object):void 
-		{
-			// TODO: ugly! 
-			if (map is HardwareGlyphInstance)
+			const l:uint = _sections.length;
+			for (var i:uint = 0; i < l; i++)
 			{
-				HardwareGlyphInstance.returnHardwareGlyphInstance(map as HardwareGlyphInstance);
-			}
-			
-			for (var index:String in map)
-			{
-				deleteMap(map[index]);
-				delete map[index];
+				var section:HardwareCharacterCacheSection = _sections[i];
+				section.clear();
 			}
 		}
 		

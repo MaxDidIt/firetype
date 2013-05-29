@@ -8,6 +8,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.data.tables.Table;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.list.LinkedList;
 	import flash.text.engine.BreakOpportunity;
 	import flash.ui.Keyboard;

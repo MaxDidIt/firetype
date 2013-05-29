@@ -26,6 +26,8 @@ package de.maxdidit.hardware.text.renderer
 		private const DRAW_CALLS_PER_BATCH:uint = 128 / 4; // 128 is the maximum of vertex shader registers. A matrix requires 4 registers.
 		
 		private const FIELDS_PER_VERTEX:uint = 4;
+		private const MAX_VERTEXBUFFER_BYTES:uint = (256 << 9) << 9;
+		private const MAX_INDEXBUFFER_BYTES:uint = (128 << 9) << 9;
 		
 		///////////////////////
 		// Member Fields
@@ -81,8 +83,34 @@ package de.maxdidit.hardware.text.renderer
 		// Member Functions
 		///////////////////////
 		
+		private function fitsIntoVertexBuffer(paths:Vector.<Vector.<Vertex>>):Boolean
+		{
+			var numberOfVertices:uint = 0;
+			const l:uint = paths.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				numberOfVertices += paths[i].length;
+			}
+			
+			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfVertices) * FIELDS_PER_VERTEX * 8 * DRAW_CALLS_PER_BATCH;
+			return vertexBufferSizeInBytes <= MAX_VERTEXBUFFER_BYTES;
+		}
+		
+		private function fitsIntoIndexBuffer(numberOfNewIndices:uint):Boolean
+		{
+			var indexBufferSizeInBytes:uint = (_indexData.length + numberOfNewIndices) * 4 * DRAW_CALLS_PER_BATCH;
+			return indexBufferSizeInBytes <= MAX_INDEXBUFFER_BYTES;
+		}
+		
 		public function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph
 		{
+			// test if vertices would fit
+			if (!fitsIntoVertexBuffer(paths))
+			{
+				return null;
+			}
+			
+			// triangulate paths
 			var vertexOffset:uint = _vertexData.length / FIELDS_PER_VERTEX;
 			var indexOffset:uint = _indexData.length;
 			
@@ -98,6 +126,11 @@ package de.maxdidit.hardware.text.renderer
 				numTriangles += _triangulator.triangulatePath(path, indices, localIndexOffset + vertexOffset);
 				
 				localIndexOffset += path.length;
+			}
+			
+			if (!fitsIntoIndexBuffer(indices.length))
+			{
+				return null;
 			}
 			
 			addToIndexData(indices, localIndexOffset);

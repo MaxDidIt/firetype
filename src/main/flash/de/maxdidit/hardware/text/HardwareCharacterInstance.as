@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.list.LinkedList;
 	
 	/**

@@ -2,6 +2,7 @@ package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -57,7 +58,8 @@ package de.maxdidit.hardware.text
 		{
 			_text = value;
 			
-			_cache.clearInstanceCache(); // gotta watch 
+			loseAllChildren();
+			_cache.clearInstanceCache(); // TODO: this would cause trouble if the cache is shared by several texts.
 			parseText();
 			calculateTransformations();
 		}

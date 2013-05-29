@@ -18,7 +18,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.hardware.text.HardwareCharacter;
-	import de.maxdidit.hardware.text.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
