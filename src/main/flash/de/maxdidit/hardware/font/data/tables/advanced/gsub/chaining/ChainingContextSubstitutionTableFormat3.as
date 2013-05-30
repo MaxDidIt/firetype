@@ -12,7 +12,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ChainingContextSubstitutionTableFormat3 implements ILookupSubtable, IChainingContextualSubstitutionTable
+	public class ChainingContextSubstitutionTableFormat3 implements IChainingContextualSubstitutionTable
 	{
 		///////////////////////
 		// Member Fields

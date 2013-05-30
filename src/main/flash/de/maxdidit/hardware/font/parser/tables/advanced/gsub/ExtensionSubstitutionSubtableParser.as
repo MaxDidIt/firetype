@@ -46,7 +46,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			var extensionLookupType:uint = _dataTypeParser.parseUnsignedShort(data);
 			result.extensionLookupType = extensionLookupType;
 			
-			var extensionOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+			var extensionOffset:uint = _dataTypeParser.parseUnsignedLong(data);
 			result.extensionOffset = extensionOffset;
 			
 			var subtableParser:ISubTableParser = _glyphSubstitutionTableParser.getSubtableParser(String(extensionLookupType));
