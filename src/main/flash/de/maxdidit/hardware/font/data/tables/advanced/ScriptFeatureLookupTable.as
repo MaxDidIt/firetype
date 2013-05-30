@@ -126,12 +126,12 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			
 			var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
 			
-			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable.featureIndices);
+			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable);
 			
 			applyFeatures(characterInstances, features);
 		}
 		
-		public function retrieveFeatures(scriptTag:String, languageTag:String):Vector.<FeatureRecord>
+		public function retrieveFeatures(scriptTag:String, languageTag:String, useAllFeatures:Boolean = false):Vector.<FeatureRecord>
 		{
 			var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
 			if (!scriptTable)
@@ -141,14 +141,14 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			
 			var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
 			
-			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable.featureIndices);
+			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, useAllFeatures);
 			
 			return features;
 		}
 		
-		public function retrieveFeatureLookupTables(scriptTag:String, languageTag:String):Vector.<LookupTable>
+		public function retrieveFeatureLookupTables(scriptTag:String, languageTag:String, useAllFeatures:Boolean = false):Vector.<LookupTable>
 		{
-			var features:Vector.<FeatureRecord> = retrieveFeatures(scriptTag, languageTag);
+			var features:Vector.<FeatureRecord> = retrieveFeatures(scriptTag, languageTag, useAllFeatures);
 			if (!features)
 			{
 				return null;

@@ -91,7 +91,7 @@ package de.maxdidit.hardware.text
 			if (gpos)
 			{
 				gposData = gpos.data as GlyphPositioningTableData;
-				gposLookupTables = gposData.retrieveFeatureLookupTables(scriptTag, languageTag)
+				gposLookupTables = gposData.retrieveFeatureLookupTables(scriptTag, languageTag, true)
 			}
 			
 			var kern:Table = font.data.retrieveTable(TableNames.KERNING);

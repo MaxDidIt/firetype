@@ -184,37 +184,68 @@ package de.maxdidit.hardware.font.data.tables.required.cmap.sub
 		public function getGlyphIndex(charCode:Number):int
 		{
 			// search endcode
-			const l:uint = _endCount.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var endCount:uint = _endCount[i];
-				if (endCount >= charCode)
-				{
-					break;
-				}
-			}
+			//const l:uint = _endCount.length;
+			//for (var segmentIndex:uint = 0; segmentIndex < l; segmentIndex++)
+			//{
+				//var endCount:uint = _endCount[segmentIndex];
+				//if (endCount >= charCode)
+				//{
+					//break;
+				//}
+			//}
 			
-			if (!(_startCount[i] <= charCode))
+			//if (!(_startCount[segmentIndex] <= charCode))
+			//{
+				//return 0;
+			//}
+			
+			var segmentIndex:int = getSegmentIndex(charCode);
+			if (segmentIndex == -1)
 			{
 				return 0;
 			}
 			
 			var glyphID:int;
-			if (_idRangeOffset[i] == 0)
+			if (_idRangeOffset[segmentIndex] == 0)
 			{
-				glyphID = charCode + _idDelta[i]
+				glyphID = charCode + _idDelta[segmentIndex]
 				return glyphID;
 			}
 			
-			// TODO: This part has not been tested yet.
-			var rangeIndex:uint = charCode - _startCount[i];
-			var idIndex:uint = _segmentStartIndex[i] + rangeIndex;
+			var rangeIndex:uint = charCode - _startCount[segmentIndex];
+			var idIndex:uint = _segmentStartIndex[segmentIndex] + rangeIndex;
 			if (idIndex != 0)
 			{
-				idIndex += _idDelta[i];
+				idIndex += _idDelta[segmentIndex];
 			}
 			
 			return _glyphIdArray[idIndex];
+		}
+		
+		private function getSegmentIndex(glyphIndex:int):int 
+		{
+			var min:int = 0;
+			var max:int = (_segCountX2 >> 1) - 1;
+			
+			while (max >= min)
+			{
+				var mid:int = (min + max) >> 1;
+				
+				if (glyphIndex < _startCount[mid])
+				{
+					max = mid - 1;
+				}
+				else if (glyphIndex > _endCount[mid])
+				{
+					min = mid + 1;
+				}
+				else
+				{
+					return mid;
+				}
+			}
+			
+			return -1;
 		}
 	}
 

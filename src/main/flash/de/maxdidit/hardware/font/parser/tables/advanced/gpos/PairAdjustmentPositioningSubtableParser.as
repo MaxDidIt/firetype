@@ -14,6 +14,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
+	import de.maxdidit.hardware.font.parser.tables.common.DeviceTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import flash.utils.ByteArray;
 	/**
@@ -238,7 +239,20 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			var pairValueRecords:Vector.<PairValueRecord> = parsePairValueRecords(data, pairValueCount, valueFormat1, valueFormat2);
 			result.pairValueRecords = pairValueRecords;
 			
+			parsePairValueRecordDeviceTables(data, pairValueRecords, offset);
+			
 			return result;
+		}
+		
+		private function parsePairValueRecordDeviceTables(data:ByteArray, pairValueRecords:Vector.<PairValueRecord>, offset:uint):void 
+		{
+			const l:uint = pairValueRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var record:PairValueRecord = pairValueRecords[i];
+				_valueRecordParser.parseDeviceTables(data, record.value1, offset);
+				_valueRecordParser.parseDeviceTables(data, record.value2, offset);
+			}
 		}
 		
 		private function parsePairValueRecords(data:ByteArray, pairValueCount:uint, valueFormat1:ValueFormat, valueFormat2:ValueFormat):Vector.<PairValueRecord>

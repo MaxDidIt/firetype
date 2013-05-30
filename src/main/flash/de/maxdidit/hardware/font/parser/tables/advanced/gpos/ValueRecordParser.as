@@ -1,8 +1,11 @@
 package de.maxdidit.hardware.font.parser.tables.advanced.gpos 
 {
+	import de.maxdidit.hardware.font.data.tables.advanced.gpos.pair.PairValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueFormat;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
+	import de.maxdidit.hardware.font.data.tables.common.device.DeviceTableData;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.common.DeviceTableParser;
 	import flash.utils.ByteArray;
 	/**
 	 * ...
@@ -15,14 +18,16 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 		///////////////////////
 		
 		private var _dataTypeParser:DataTypeParser;
+		private var _deviceTableParser:DeviceTableParser;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function ValueRecordParser($dataTypeParser:DataTypeParser) 
+		public function ValueRecordParser($dataTypeParser:DataTypeParser, $deviceTableParser:DeviceTableParser) 
 		{
 			this._dataTypeParser = $dataTypeParser;
+			this._deviceTableParser = $deviceTableParser;
 		}
 		
 		///////////////////////
@@ -74,6 +79,33 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			}
 			
 			return result;
+		}
+		
+		public function parseDeviceTables(data:ByteArray, record:ValueRecord, offset:uint):void 
+		{
+			if (record.xPlacementDeviceOffset > 0)
+			{
+				var deviceTable:DeviceTableData = _deviceTableParser.parseTable(data, offset + record.xPlacementDeviceOffset);
+				record.xPlacementDeviceTable = deviceTable;
+			}
+			
+			if (record.yPlacementDeviceOffset > 0)
+			{
+				deviceTable = _deviceTableParser.parseTable(data, offset + record.yPlacementDeviceOffset);
+				record.yPlacementDeviceTable = deviceTable;
+			}
+			
+			if (record.xAdvanceDeviceOffset > 0)
+			{
+				deviceTable = _deviceTableParser.parseTable(data, offset + record.xAdvanceDeviceOffset);
+				record.xAdvanceDeviceTable = deviceTable;
+			}
+			
+			if (record.yAdvanceDeviceOffset > 0)
+			{
+				deviceTable = _deviceTableParser.parseTable(data, offset + record.yAdvanceDeviceOffset);
+				record.yAdvanceDeviceTable = deviceTable;
+			}
 		}
 		
 	}

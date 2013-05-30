@@ -58,7 +58,6 @@ package de.maxdidit.hardware.text
 		{
 			_text = value;
 			
-			loseAllChildren();
 			_cache.clearInstanceCache(); // TODO: this would cause trouble if the cache is shared by several texts.
 			parseText();
 			calculateTransformations();

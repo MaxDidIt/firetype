@@ -16,6 +16,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser;
+	import de.maxdidit.hardware.font.parser.tables.common.DeviceTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.FeatureListTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.LookupListTableDataParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ScriptListTableParser;
@@ -42,6 +43,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 		private var _markArrayTableParser:MarkArrayTableParser;
 		
 		private var _classDefinitionParser:ClassDefinitionTableParser;
+		private var _deviceTableParser:DeviceTableParser;
 			
 		///////////////////////
 		// Constructor
@@ -51,8 +53,10 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 		{
 			super($dataTypeParser);
 			
+			_deviceTableParser = new DeviceTableParser(_dataTypeParser);
+			
 			_valueFormatParser = new ValueFormatParser();
-			_valueRecordParser = new ValueRecordParser(_dataTypeParser);
+			_valueRecordParser = new ValueRecordParser(_dataTypeParser, _deviceTableParser);
 			
 			_anchorTableParser = new AnchorTableParser(_dataTypeParser);
 			_markArrayTableParser = new MarkArrayTableParser(_dataTypeParser, _anchorTableParser);

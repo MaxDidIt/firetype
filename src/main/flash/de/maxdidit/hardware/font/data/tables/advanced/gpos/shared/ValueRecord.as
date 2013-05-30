@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gpos.shared 
 {
+	import de.maxdidit.hardware.font.data.tables.common.device.DeviceTableData;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -21,6 +22,11 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.shared
 		
 		private var _xAdvanceDeviceOffset:uint = 0;
 		private var _yAdvanceDeviceOffset:uint = 0;
+		
+		private var _xPlacementDeviceTable:DeviceTableData;
+		private var _yPlacementDeviceTable:DeviceTableData;
+		private var _xAdvanceDeviceTable:DeviceTableData;
+		private var _yAdvanceDeviceTable:DeviceTableData;
 		
 		///////////////////////
 		// Constructor
@@ -113,6 +119,46 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.shared
 		public function set yAdvanceDeviceOffset(value:uint):void 
 		{
 			_yAdvanceDeviceOffset = value;
+		}
+		
+		public function get xPlacementDeviceTable():DeviceTableData 
+		{
+			return _xPlacementDeviceTable;
+		}
+		
+		public function set xPlacementDeviceTable(value:DeviceTableData):void 
+		{
+			_xPlacementDeviceTable = value;
+		}
+		
+		public function get yPlacementDeviceTable():DeviceTableData 
+		{
+			return _yPlacementDeviceTable;
+		}
+		
+		public function set yPlacementDeviceTable(value:DeviceTableData):void 
+		{
+			_yPlacementDeviceTable = value;
+		}
+		
+		public function get xAdvanceDeviceTable():DeviceTableData 
+		{
+			return _xAdvanceDeviceTable;
+		}
+		
+		public function set xAdvanceDeviceTable(value:DeviceTableData):void 
+		{
+			_xAdvanceDeviceTable = value;
+		}
+		
+		public function get yAdvanceDeviceTable():DeviceTableData 
+		{
+			return _yAdvanceDeviceTable;
+		}
+		
+		public function set yAdvanceDeviceTable(value:DeviceTableData):void 
+		{
+			_yAdvanceDeviceTable = value;
 		}
 		
 	}

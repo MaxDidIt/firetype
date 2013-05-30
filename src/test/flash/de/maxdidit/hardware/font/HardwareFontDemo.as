@@ -92,7 +92,7 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			//hardwareParser.loadFont("arial.ttf");
+			hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("ariali.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
@@ -103,10 +103,10 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("newscycle-regular.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("WBV4.TTF");
-			hardwareParser.loadFont("CAMBRIAB.TTF");
+			//hardwareParser.loadFont("CAMBRIAB.TTF");
+			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
-			//hardwareParser.loadFont("CONSOLA.TTF");
 			//hardwareParser.loadFont("TLPSMB.TTF");
 			//hardwareParser.loadFont("HDZB_5.TTF");
 			
@@ -158,7 +158,7 @@ package de.maxdidit.hardware.font
 			hardwareText.standardScript = ScriptTag.LATIN;
 			hardwareText.standardLanguage = LanguageTag.ENGLISH;
 			
-			hardwareText.text = "Hold the left mouse button and drag the text up and down.\n\n" 
+			hardwareText.text = "font Hold the left mouse button and drag the text up and down.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{
