@@ -54,8 +54,8 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			var sequenceOffsets:Vector.<uint> = new Vector.<uint>(sequenceCount);
 			for (var i:uint = 0; i < sequenceCount; i++)
 			{
-				var offset:uint = _dataTypeParser.parseUnsignedShort(data);
-				sequenceOffsets[i] = offset;
+				var sequenceOffset:uint = _dataTypeParser.parseUnsignedShort(data);
+				sequenceOffsets[i] = sequenceOffset;
 			}
 			result.sequenceOffsets = sequenceOffsets;
 			

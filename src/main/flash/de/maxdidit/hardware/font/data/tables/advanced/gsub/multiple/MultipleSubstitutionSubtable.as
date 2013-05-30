@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
+	import de.maxdidit.hardware.text.HardwareCharacterInstance;
 	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	
@@ -94,7 +95,28 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple
 		
 		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
 		{
-			throw new Error("Function not yet implemented");
+			var currentInstance:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			var coverageIndex:int = _coverage.getCoverageIndex(currentInstance.glyphID);
+			if (coverageIndex == -1)
+			{
+				return;
+			}
+			
+			var sequence:SequenceTable = _sequences[coverageIndex];
+			currentInstance.glyphID = sequence.substituteGlyphIDs[0];
+			
+			for (var i:uint = 1; i < sequence.glyphCount; i++)
+			{
+				var glyphID:uint = sequence.substituteGlyphIDs[i];
+				
+				currentInstance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
+				currentInstance.glyphID = glyphID;
+				
+				var newElement:HardwareCharacterInstanceListElement = new HardwareCharacterInstanceListElement(currentInstance);
+				characterInstances.addElementAfter(newElement, characterInstances.currentElement);
+				
+				characterInstances.gotoNextElement();
+			}
 		}
 		
 	}
