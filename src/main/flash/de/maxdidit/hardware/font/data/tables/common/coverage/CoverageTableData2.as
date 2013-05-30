@@ -92,7 +92,7 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 				}
 				else
 				{
-					return mid;
+					return record.startCoverageIndex + glyphIndex - record.start;
 				}
 			}
 			

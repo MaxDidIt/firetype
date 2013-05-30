@@ -158,7 +158,7 @@ package de.maxdidit.hardware.font
 			hardwareText.standardScript = ScriptTag.LATIN;
 			hardwareText.standardLanguage = LanguageTag.ENGLISH;
 			
-			hardwareText.text = "font Hold the left mouse button and drag the text up and down.\n\n" 
+			hardwareText.text = "fo fB Hold the left mouse button and drag the text up and down.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{
