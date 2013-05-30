@@ -1,8 +1,9 @@
-package de.maxdidit.hardware.font.parser.tables.advanced.gsub 
+package de.maxdidit.hardware.font.parser.tables.advanced 
 {
-	import de.maxdidit.hardware.font.data.tables.advanced.gsub.extension.ExtensionSubstitutionSubtable;
+	import de.maxdidit.hardware.font.data.tables.advanced.ExtensionSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import flash.utils.ByteArray;
 	
@@ -10,23 +11,23 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ExtensionSubstitutionSubtableParser implements ISubTableParser 
+	public class ExtensionSubtableParser implements ISubTableParser 
 	{
 		///////////////////////
 		// Member Fields
 		///////////////////////
 		
 		private var _dataTypeParser:DataTypeParser;
-		private var _glyphSubstitutionTableParser:GlyphSubstitutionTableParser;
+		private var _scriptFeatureLookupTableParser:ScriptFeatureLookupTableParser;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function ExtensionSubstitutionSubtableParser($dataTypeParser:DataTypeParser, $glyphSubstitutionTableParser:GlyphSubstitutionTableParser) 
+		public function ExtensionSubtableParser($dataTypeParser:DataTypeParser, $scriptFeatureLookupTableParser:ScriptFeatureLookupTableParser) 
 		{
 			this._dataTypeParser = $dataTypeParser;
-			this._glyphSubstitutionTableParser = $glyphSubstitutionTableParser;
+			this._scriptFeatureLookupTableParser = $scriptFeatureLookupTableParser;
 		}
 		
 		///////////////////////
@@ -39,7 +40,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 		{
 			data.position = offset;
 			
-			var result:ExtensionSubstitutionSubtable = new ExtensionSubstitutionSubtable();
+			var result:ExtensionSubtable = new ExtensionSubtable();
 			
 			var substitutionFormat:uint = _dataTypeParser.parseUnsignedShort(data);
 			
@@ -49,7 +50,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			var extensionOffset:uint = _dataTypeParser.parseUnsignedLong(data);
 			result.extensionOffset = extensionOffset;
 			
-			var subtableParser:ISubTableParser = _glyphSubstitutionTableParser.getSubtableParser(String(extensionLookupType));
+			var subtableParser:ISubTableParser = _scriptFeatureLookupTableParser.getSubtableParser(String(extensionLookupType));
 			var extensionTable:ILookupSubtable = subtableParser.parseTable(data, offset + extensionOffset);
 			result.extensionSubtable = extensionTable;
 			

@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables.advanced.gsub.extension 
+package de.maxdidit.hardware.font.data.tables.advanced 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
@@ -8,7 +8,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.extension
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ExtensionSubstitutionSubtable implements ILookupSubtable 
+	public class ExtensionSubtable implements ILookupSubtable 
 	{
 		///////////////////////
 		// Member Fields
@@ -22,7 +22,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.extension
 		// Constructor
 		///////////////////////
 		
-		public function ExtensionSubstitutionSubtable() 
+		public function ExtensionSubtable() 
 		{
 			
 		}

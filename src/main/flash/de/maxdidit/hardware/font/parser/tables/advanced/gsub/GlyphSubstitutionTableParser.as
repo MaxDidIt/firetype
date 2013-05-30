@@ -6,6 +6,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.advanced.ExtensionSubtableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.NotYetImplementedLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.ITableParser;
@@ -48,7 +49,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 			_subtableParserMap[String(GlyphSubstitutionLookupType.LIGATURE_SUBSTITUTION)]				= new LigatureSubstitutionSubtableParser(_dataTypeParser, _coverageTableParser);
 			_subtableParserMap[String(GlyphSubstitutionLookupType.CONTEXTUAL_SUBSTITUTION)]				= new ContextualSubstitutionTableSubtableParser(_dataTypeParser, _coverageTableParser);
 			_subtableParserMap[String(GlyphSubstitutionLookupType.CHAINING_CONTEXTUAL_SUBSTITUTION)]	= new ChaningContextualSubstitutionSubtableParser(_dataTypeParser, _coverageTableParser);
-			_subtableParserMap[String(GlyphSubstitutionLookupType.EXTENSION_SUBSTITUTION)]				= new ExtensionSubstitutionSubtableParser(_dataTypeParser, this);
+			_subtableParserMap[String(GlyphSubstitutionLookupType.EXTENSION_SUBSTITUTION)]				= new ExtensionSubtableParser(_dataTypeParser, this);
 		}
 		
 	}

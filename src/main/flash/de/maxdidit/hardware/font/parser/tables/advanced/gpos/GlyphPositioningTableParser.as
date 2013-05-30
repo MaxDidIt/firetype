@@ -11,6 +11,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.TableRecord;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
+	import de.maxdidit.hardware.font.parser.tables.advanced.ExtensionSubtableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.NotYetImplementedLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.advanced.ScriptFeatureLookupTableParser;
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser;
@@ -84,7 +85,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			_subtableParserMap[String(GlyphPositioningLookupType.MARK_TO_MARK_ATTACHMENT)]		= new MarkToMarkAttachmentPositioningSubtableParser(_dataTypeParser, _coverageTableParser, _anchorTableParser, _markArrayTableParser);
 			_subtableParserMap[String(GlyphPositioningLookupType.CONTEXT_POSITIONING)]			= notYetImplementedParser;
 			_subtableParserMap[String(GlyphPositioningLookupType.CHAINED_CONTEXT_POSITIONING)]	= notYetImplementedParser;
-			_subtableParserMap[String(GlyphPositioningLookupType.EXTENSION_POSITIONING)]		= notYetImplementedParser;
+			_subtableParserMap[String(GlyphPositioningLookupType.EXTENSION_POSITIONING)]		= new ExtensionSubtableParser(_dataTypeParser, this);
 		}
 		
 	}
