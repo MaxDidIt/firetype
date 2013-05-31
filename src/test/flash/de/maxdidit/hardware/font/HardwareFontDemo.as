@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.HardwareFontData;
+	import de.maxdidit.hardware.font.data.tables.common.features.FeatureTag;
 	import de.maxdidit.hardware.font.data.tables.common.language.LanguageTag;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTag;
 	import de.maxdidit.hardware.font.events.FontEvent;
@@ -8,7 +9,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.HardwareText;
-	import de.maxdidit.hardware.text.HardwareTextFormat;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRenderer;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRendererFactory;
 	import de.maxdidit.hardware.text.renderer.SingleGlyphRenderer;
@@ -92,7 +93,7 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
 			
 			hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			hardwareParser.loadFont("arial.ttf");
+			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("ariali.ttf");
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
@@ -103,7 +104,7 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("newscycle-regular.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("WBV4.TTF");
-			//hardwareParser.loadFont("CAMBRIAB.TTF");
+			hardwareParser.loadFont("CAMBRIAB.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
@@ -147,6 +148,7 @@ package de.maxdidit.hardware.font
 			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = e.font;
 			hardwareFontFormat.subdivisions = 2;
+			//hardwareFontFormat.features.addFeature(FeatureTag);
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			
@@ -158,7 +160,7 @@ package de.maxdidit.hardware.font
 			hardwareText.standardScript = ScriptTag.LATIN;
 			hardwareText.standardLanguage = LanguageTag.ENGLISH;
 			
-			hardwareText.text = "fo fB Hold the left mouse button and drag the text up and down.\n\n" 
+			hardwareText.text = "Hold the left mouse button and drag the text up and down.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{

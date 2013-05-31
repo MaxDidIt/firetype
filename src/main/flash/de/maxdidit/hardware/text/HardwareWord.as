@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.math.AxisAlignedBoundingBox;
 	

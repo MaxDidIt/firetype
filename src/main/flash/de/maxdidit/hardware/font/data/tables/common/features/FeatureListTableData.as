@@ -1,6 +1,8 @@
-package de.maxdidit.hardware.font.data.tables.common.features 
+package de.maxdidit.hardware.font.data.tables.common.features
 {
 	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemTable;
+	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -18,9 +20,9 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		// Constructor
 		///////////////////////
 		
-		public function FeatureListTableData() 
+		public function FeatureListTableData()
 		{
-			
+		
 		}
 		
 		///////////////////////
@@ -29,24 +31,24 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		
 		// featureCount
 		
-		public function get featureCount():uint 
+		public function get featureCount():uint
 		{
 			return _featureCount;
 		}
 		
-		public function set featureCount(value:uint):void 
+		public function set featureCount(value:uint):void
 		{
 			_featureCount = value;
 		}
 		
 		// featureRecords
 		
-		public function get featureRecords():Vector.<FeatureRecord> 
+		public function get featureRecords():Vector.<FeatureRecord>
 		{
 			return _featureRecords;
 		}
 		
-		public function set featureRecords(value:Vector.<FeatureRecord>):void 
+		public function set featureRecords(value:Vector.<FeatureRecord>):void
 		{
 			_featureRecords = value;
 		}
@@ -55,32 +57,41 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		// Member Functions
 		///////////////////////
 		
-		public function retrieveFeatures(languageSystemTable:LanguageSystemTable, useAllFeatures:Boolean = false):Vector.<FeatureRecord>
+		public function retrieveFeatures(languageSystemTable:LanguageSystemTable, activatedFeatures:HardwareFontFeatures):Vector.<FeatureRecord>
 		{
 			var result:Vector.<FeatureRecord> = new Vector.<FeatureRecord>();
 			
-			if (!useAllFeatures)
-			{
-				if (languageSystemTable.requiredFeatureIndex != 0xFFFF)
-				{
-					result.push(_featureRecords[languageSystemTable.requiredFeatureIndex]);
-				}
-				
-				return result;
-			}
+			var requiredFeature:Boolean = languageSystemTable.requiredFeatureIndex != 0xFFFF;
+			var requiredFeatureNeedsToBeAdded:Boolean = !requiredFeature;
 			
+			// add activated features
 			const l:uint = languageSystemTable.featureIndices.length;
-			result.length = l;
-			
 			for (var i:uint = 0; i < l; i++)
 			{
 				var index:uint = languageSystemTable.featureIndices[i];
-				result[i] = _featureRecords[index];
+				var feature:FeatureRecord = _featureRecords[index];
+				
+				if (requiredFeature && index == languageSystemTable.requiredFeatureIndex)
+				{
+					requiredFeatureNeedsToBeAdded = false;
+					result.push(feature);
+				}
+				else if (activatedFeatures.hasFeatureTag(feature.featureTag))
+				{
+					result.push(feature);
+				}
 			}
+			
+			if (requiredFeature && requiredFeatureNeedsToBeAdded)
+			{
+				result.push(_featureRecords[languageSystemTable.requiredFeatureIndex]);
+			}
+			
+			// TODO: Bring features into correct order.
 			
 			return result;
 		}
-		
+	
 	}
 
 }

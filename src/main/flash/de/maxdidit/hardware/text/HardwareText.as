@@ -3,6 +3,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	/**
 	 * ...
 	 * @author Max Knoblich

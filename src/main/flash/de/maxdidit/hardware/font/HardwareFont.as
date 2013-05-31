@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.HardwareFontData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gsub.GlyphSubstitutionTableData;
@@ -154,7 +155,7 @@ package de.maxdidit.hardware.font
 			return horizontalMetricsData.getLeftSideBearing(index);
 		}
 		
-		public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String):void 
+		public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures ):void 
 		{
 			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
 			if (!gsubTableData)
@@ -162,7 +163,7 @@ package de.maxdidit.hardware.font
 				return;
 			}
 			
-			gsubTableData.applyTable(characterInstances, scriptTag, languageTag);
+			gsubTableData.applyTable(characterInstances, scriptTag, languageTag, activatedFeatures);
 		}
 		
 		public function retrieveCharacterDefinitions(characterInstances:LinkedList):void 

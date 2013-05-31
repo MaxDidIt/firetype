@@ -7,6 +7,7 @@ package de.maxdidit.hardware.font.data.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTable;
+	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	/**
@@ -116,7 +117,7 @@ package de.maxdidit.hardware.font.data.tables.advanced
 		// Member Functions
 		///////////////////////
 		
-		public function applyTable(characterInstances:LinkedList, scriptTag:String, languageTag:String):void
+		public function applyTable(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):void
 		{
 			var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
 			if (!scriptTable)
@@ -126,12 +127,12 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			
 			var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
 			
-			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable);
+			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, activatedFeatures);
 			
 			applyFeatures(characterInstances, features);
 		}
 		
-		public function retrieveFeatures(scriptTag:String, languageTag:String, useAllFeatures:Boolean = false):Vector.<FeatureRecord>
+		public function retrieveFeatures(scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):Vector.<FeatureRecord>
 		{
 			var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
 			if (!scriptTable)
@@ -141,14 +142,14 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			
 			var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
 			
-			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, useAllFeatures);
+			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, activatedFeatures);
 			
 			return features;
 		}
 		
-		public function retrieveFeatureLookupTables(scriptTag:String, languageTag:String, useAllFeatures:Boolean = false):Vector.<LookupTable>
+		public function retrieveFeatureLookupTables(scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):Vector.<LookupTable>
 		{
-			var features:Vector.<FeatureRecord> = retrieveFeatures(scriptTag, languageTag, useAllFeatures);
+			var features:Vector.<FeatureRecord> = retrieveFeatures(scriptTag, languageTag, activatedFeatures);
 			if (!features)
 			{
 				return null;

@@ -9,6 +9,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.list.LinkedList;
 	import flash.text.engine.BreakOpportunity;
 	import flash.ui.Keyboard;
@@ -52,11 +53,11 @@ package de.maxdidit.hardware.text
 			var characterInstances:LinkedList = initializeCharacterInstances(text, font);
 			
 			font.retrieveCharacterDefinitions(characterInstances);
-			font.performCharacterSubstitutions(characterInstances, scriptTag, languageTag);
+			font.performCharacterSubstitutions(characterInstances, scriptTag, languageTag, standardTextFormat.features);
 			collectGlyphs(characterInstances, hardwareText, font, subdivision, cache);
 			
 			// layouting
-			layout(hardwareText, characterInstances, font, scriptTag, languageTag);
+			layout(hardwareText, characterInstances, standardTextFormat, scriptTag, languageTag);
 			
 			trace("assembling time: " + (getTimer() - startTime));
 		}
@@ -76,11 +77,10 @@ package de.maxdidit.hardware.text
 			return false;
 		}
 		
-		private function layout(hardwareText:HardwareText, characterInstances:LinkedList, font:HardwareFont, scriptTag:String, languageTag:String):void
+		private function layout(hardwareText:HardwareText, characterInstances:LinkedList, textFormat:HardwareTextFormat, scriptTag:String, languageTag:String):void
 		{
-			// TODO: Clean up this mess, while keeping the code fast. Somehow. Avoid duplicate code.
-			
 			// positioning tables
+			var font:HardwareFont = textFormat.font;
 			var fontAscender:int = font.ascender;
 			var fontDescender:int = font.descender;
 			var hmtxData:HorizontalMetricsData = font.data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
@@ -91,7 +91,7 @@ package de.maxdidit.hardware.text
 			if (gpos)
 			{
 				gposData = gpos.data as GlyphPositioningTableData;
-				gposLookupTables = gposData.retrieveFeatureLookupTables(scriptTag, languageTag, true)
+				gposLookupTables = gposData.retrieveFeatureLookupTables(scriptTag, languageTag, textFormat.features)
 			}
 			
 			var kern:Table = font.data.retrieveTable(TableNames.KERNING);
