@@ -36,6 +36,7 @@ package de.maxdidit.hardware.text.format
 			
 			// default features
 			_features.addFeature(FeatureTag.KERNING);
+			_features.addFeature(FeatureTag.GLYPH_COMPOSITION_DECOMPOSITION);
 		}
 		
 		///////////////////////

@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.HardwareFontData;
@@ -141,20 +142,6 @@ package de.maxdidit.hardware.font
 			return glyphIndex;
 		}
 		
-		// deprecated
-		public function getGlyphAdvanceWidth(index:uint):uint
-		{
-			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
-			return horizontalMetricsData.getAdvanceWidth(index);
-		}
-		
-		// deprecated
-		public function getGlyphLeftSideBearing(index:uint):int
-		{
-			var horizontalMetricsData:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
-			return horizontalMetricsData.getLeftSideBearing(index);
-		}
-		
 		public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures ):void 
 		{
 			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
@@ -175,6 +162,26 @@ package de.maxdidit.hardware.font
 			}
 			
 			gdefTableData.applyTable(characterInstances);
+		}
+		
+		public function getAdvancedFeatures(standardScript:String, standardLanguage:String):Vector.<FeatureRecord> 
+		{
+			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
+			var gposTableData:GlyphPositioningTableData = _data.retrieveTableData(TableNames.GLYPH_POSITIONING_DATA) as GlyphPositioningTableData;
+			
+			var result:Vector.<FeatureRecord> = new Vector.<FeatureRecord>();
+			
+			if (gsubTableData)
+			{
+				result = gsubTableData.retrieveFeatures(standardScript, standardLanguage).concat(result);
+			}
+			
+			if (gposTableData)
+			{
+				result = gposTableData.retrieveFeatures(standardScript, standardLanguage).concat(result);
+			}
+			
+			return result;
 		}
 	}
 

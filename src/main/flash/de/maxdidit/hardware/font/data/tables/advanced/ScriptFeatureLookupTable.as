@@ -132,7 +132,7 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			applyFeatures(characterInstances, features);
 		}
 		
-		public function retrieveFeatures(scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):Vector.<FeatureRecord>
+		public function retrieveFeatures(scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures = null):Vector.<FeatureRecord>
 		{
 			var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
 			if (!scriptTable)

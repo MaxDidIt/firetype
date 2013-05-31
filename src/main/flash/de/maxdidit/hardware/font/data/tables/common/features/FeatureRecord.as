@@ -10,7 +10,7 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		// Member Fields
 		///////////////////////
 		
-		private var _featureTag:String;
+		private var _featureTag:FeatureTag;
 		private var _featureOffset:uint;
 		private var _featureTable:FeatureTable;
 	
@@ -29,12 +29,12 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		
 		// featureTag
 		
-		public function get featureTag():String 
+		public function get featureTag():FeatureTag 
 		{
 			return _featureTag;
 		}
 		
-		public function set featureTag(value:String):void 
+		public function set featureTag(value:FeatureTag):void 
 		{
 			_featureTag = value;
 		}

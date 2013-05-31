@@ -1,6 +1,8 @@
 package de.maxdidit.hardware.text.cache 
 {
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
@@ -30,11 +32,10 @@ package de.maxdidit.hardware.text.cache
 		private var _characterCache:Object = new Object();
 		private var _glyphCache:Object = new Object();
 		
-		//private var _instanceMap:Object = new Object();
-		//private var _renderer:IHardwareTextRenderer;
-		
 		private var _rendererFactory:IHardwareTextRendererFactory;
 		private var _sections:Vector.<HardwareCharacterCacheSection>;
+		
+		private var _clientTexts:Vector.<HardwareText>;
 		
 		///////////////////////
 		// Constructor
@@ -45,6 +46,8 @@ package de.maxdidit.hardware.text.cache
 			_rendererFactory = rendererFactory;
 			
 			_sections = new Vector.<HardwareCharacterCacheSection>();
+			
+			_clientTexts = new Vector.<HardwareText>();
 		}
 		
 		///////////////////////
@@ -161,8 +164,14 @@ package de.maxdidit.hardware.text.cache
 		
 		public function render():void 
 		{
+			const cl:uint = _clientTexts.length;
+			for (var i:uint = 0; i < cl; i++)
+			{
+				_clientTexts[i].update();
+			}
+			
 			const l:uint = _sections.length;
-			for (var i:uint = 0; i < l; i++)
+			for (i = 0; i < l; i++)
 			{
 				var section:HardwareCharacterCacheSection = _sections[i];
 				section.render();
@@ -177,6 +186,22 @@ package de.maxdidit.hardware.text.cache
 				var section:HardwareCharacterCacheSection = _sections[i];
 				section.clear();
 			}
+		}
+		
+		public function addClient(hardwareText:HardwareText):void 
+		{
+			_clientTexts.push(hardwareText);
+		}
+		
+		public function removeClient(hardwareText:HardwareText):void
+		{
+			var index:int = _clientTexts.indexOf(hardwareText);
+			if (index == -1)
+			{
+				return;
+			}
+			
+			_clientTexts.splice(index, 1);
 		}
 		
 		private function retrieveProperty(map:Object, key:String):Object

@@ -57,7 +57,7 @@ package de.maxdidit.hardware.font.data.tables.common.features
 		// Member Functions
 		///////////////////////
 		
-		public function retrieveFeatures(languageSystemTable:LanguageSystemTable, activatedFeatures:HardwareFontFeatures):Vector.<FeatureRecord>
+		public function retrieveFeatures(languageSystemTable:LanguageSystemTable, activatedFeatures:HardwareFontFeatures = null):Vector.<FeatureRecord>
 		{
 			var result:Vector.<FeatureRecord> = new Vector.<FeatureRecord>();
 			
@@ -76,7 +76,7 @@ package de.maxdidit.hardware.font.data.tables.common.features
 					requiredFeatureNeedsToBeAdded = false;
 					result.push(feature);
 				}
-				else if (activatedFeatures.hasFeatureTag(feature.featureTag))
+				else if (!activatedFeatures || activatedFeatures.hasFeature(feature.featureTag))
 				{
 					result.push(feature);
 				}
@@ -90,8 +90,7 @@ package de.maxdidit.hardware.font.data.tables.common.features
 			// TODO: Bring features into correct order.
 			
 			return result;
-		}
-	
+		}	
 	}
 
 }

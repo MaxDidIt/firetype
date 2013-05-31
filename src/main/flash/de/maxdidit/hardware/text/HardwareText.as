@@ -26,6 +26,8 @@ package de.maxdidit.hardware.text
 		private var _standardScript:String;
 		private var _standardLanguage:String;
 		
+		private var _textDirty:Boolean;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -33,6 +35,8 @@ package de.maxdidit.hardware.text
 		public function HardwareText(cache:HardwareCharacterCache) 
 		{
 			this._cache = cache;
+			this._cache.addClient(this);
+			
 			this._typesetter = new Typesetter();
 		}
 		
@@ -47,7 +51,20 @@ package de.maxdidit.hardware.text
 		
 		public function set cache(value:HardwareCharacterCache):void 
 		{
-			_cache = value;
+			if (_cache != value)
+			{
+				if (_cache)
+				{
+					_cache.removeClient(this);
+				}
+				
+				_cache = value;
+				
+				if (_cache)
+				{
+					_cache.addClient(this);
+				}
+			}
 		}
 		
 		public function get text():String
@@ -57,11 +74,11 @@ package de.maxdidit.hardware.text
 		
 		public function set text(value:String):void
 		{
-			_text = value;
-			
-			_cache.clearInstanceCache(); // TODO: this would cause trouble if the cache is shared by several texts.
-			parseText();
-			calculateTransformations();
+			if (_text != value)
+			{
+				_text = value;
+				_textDirty = true;
+			}
 		}
 		
 		public function get width():Number 
@@ -134,6 +151,17 @@ package de.maxdidit.hardware.text
 			}
 			
 			super.loseAllChildren();
+		}
+		
+		public function update():void 
+		{
+			if (_textDirty)
+			{
+				_cache.clearInstanceCache(); // TODO: will cause problems if multiple texts use the same cache.
+				parseText();
+				calculateTransformations();
+				_textDirty = false;
+			}
 		}
 		
 	}

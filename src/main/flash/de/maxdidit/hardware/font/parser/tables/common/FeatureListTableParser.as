@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.parser.tables.common
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureTable;
+	import de.maxdidit.hardware.font.data.tables.common.features.FeatureTag;
 	import de.maxdidit.hardware.font.parser.DataTypeParser;
 	import de.maxdidit.hardware.font.parser.tables.ISubTableParser;
 	import flash.utils.ByteArray;
@@ -100,7 +101,10 @@ package de.maxdidit.hardware.font.parser.tables.common
 		{
 			var record:FeatureRecord = new FeatureRecord();
 			
-			record.featureTag = _dataTypeParser.parseTag(data);
+			var featureTag:String = _dataTypeParser.parseTag(data);
+			var feature:FeatureTag = FeatureTag.getFeatureTag(featureTag);
+			
+			record.featureTag = feature;
 			record.featureOffset = _dataTypeParser.parseUnsignedShort(data);
 			
 			return record;
