@@ -170,7 +170,7 @@ package de.maxdidit.hardware.text
 					applyTableData(characterInstances, hmtxData, gposData, gposLookupTables, kernData);
 				}
 				
-				x += characterInstance.rightBearing;
+				x += characterInstance.advanceWidth;
 				
 				// iterate to next character
 				characterInstances.gotoNextElement();
@@ -204,9 +204,10 @@ package de.maxdidit.hardware.text
 			{
 				// apply table data
 				applyTableData(characterInstances, hmtxData, gposData, gposLookupTables, kernData);
-				
-				characterInstance.x += x + characterInstance.leftBearing;
-				x += characterInstance.rightBearing;
+
+				// This is confusing: the spacing between letters seems correct if I ignore the left side bearing.
+				characterInstance.x += x //- characterInstance.leftSideBearing;
+				x += characterInstance.advanceWidth;
 				
 				result.addChild(characterInstance);
 				
@@ -238,9 +239,7 @@ package de.maxdidit.hardware.text
 					var lookupTable:LookupTable = gposLookupTables[i];
 					lookupTable.performLookup(characterInstances, gposData);
 				}
-			}
-			
-			if (kernData)
+			} else if (kernData)
 			{
 				//TODO: apply kerning
 			}

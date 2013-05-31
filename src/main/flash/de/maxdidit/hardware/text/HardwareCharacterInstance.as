@@ -30,8 +30,8 @@ package de.maxdidit.hardware.text
 				instance = element.hardwareCharacterInstance;
 				instance.hardwareCharacter = hardwareCharacter;
 				
-				instance.leftBearing = 0;
-				instance.rightBearing = 0;
+				instance.leftSideBearing = 0;
+				instance.advanceWidth = 0;
 				instance.x = 0;
 				instance.y = 0;
 				
@@ -62,8 +62,8 @@ package de.maxdidit.hardware.text
 		private var _glyphID:uint;
 		private var _glyphClass:uint;
 		
-		private var _leftBearing:int = 0;
-		private var _rightBearing:int = 0;
+		private var _leftSideBearing:int = 0;
+		private var _advanceWidth:int = 0;
 		
 		///////////////////////
 		// Constructor
@@ -126,24 +126,24 @@ package de.maxdidit.hardware.text
 			_charCode = value;
 		}
 		
-		public function get leftBearing():int
+		public function get leftSideBearing():int
 		{
-			return _leftBearing;
+			return _leftSideBearing;
 		}
 		
-		public function set leftBearing(value:int):void
+		public function set leftSideBearing(value:int):void
 		{
-			_leftBearing = value;
+			_leftSideBearing = value;
 		}
 		
-		public function get rightBearing():int
+		public function get advanceWidth():int
 		{
-			return _rightBearing;
+			return _advanceWidth;
 		}
 		
-		public function set rightBearing(value:int):void
+		public function set advanceWidth(value:int):void
 		{
-			_rightBearing = value;
+			_advanceWidth = value;
 		}
 		
 		///////////////////////
@@ -161,8 +161,8 @@ package de.maxdidit.hardware.text
 		
 		public function applyPositionAdjustmentValue(value:ValueRecord):void
 		{
-			_rightBearing += value.xPlacement + value.xAdvance;
-			_leftBearing += -value.xPlacement;
+			_advanceWidth += value.xAdvance;
+			x += value.xPlacement;
 		}
 		
 		private function copyCharacterGlyphInstances():void

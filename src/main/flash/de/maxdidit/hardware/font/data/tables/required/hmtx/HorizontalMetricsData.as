@@ -91,17 +91,8 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 			var leftSideBearing:int = getLeftSideBearing(glyphID);
 			var advanceWidth:uint = getAdvanceWidth(glyphID);
 			
-			var pp1:int;
-			if (currentCharacter.hardwareCharacter)
-			{
-				pp1 += currentCharacter.hardwareCharacter.boundingBox.left;
-			}
-			pp1 -= leftSideBearing;
-			
-			var pp2:int = pp1 + advanceWidth;
-			
-			currentCharacter.leftBearing += pp1;
-			currentCharacter.rightBearing += pp2;
+			currentCharacter.leftSideBearing = leftSideBearing;
+			currentCharacter.advanceWidth = advanceWidth;
 		}
 		
 	}
