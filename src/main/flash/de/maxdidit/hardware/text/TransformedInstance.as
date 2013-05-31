@@ -18,6 +18,9 @@ package de.maxdidit.hardware.text
 		private var _scaleX:Number = 1;
 		private var _scaleY:Number = 1;
 		
+		private var _shearX:Number = 0;
+		private var _shearY:Number = 0;
+		
 		protected var _children:Vector.<TransformedInstance>;
 		
 		private var _isDirty:Boolean = true;
@@ -128,6 +131,38 @@ package de.maxdidit.hardware.text
 			}
 		}
 		
+		// shearX
+		
+		public function get shearX():Number 
+		{
+			return _shearX;
+		}
+		
+		public function set shearX(value:Number):void 
+		{
+			if (_shearX != value)
+			{
+				_shearX = value;
+				_isDirty = true;
+			}
+		}
+		
+		// shearY
+		
+		public function get shearY():Number 
+		{
+			return _shearY;
+		}
+		
+		public function set shearY(value:Number):void 
+		{
+			if (_shearY != value)
+			{
+				_shearY = value;
+				_isDirty = true;
+			}
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -148,6 +183,9 @@ package de.maxdidit.hardware.text
 			if (_isDirty)
 			{
 				_rawLocalData[0] = _scaleX;
+				_rawLocalData[1] = _shearX;
+				
+				_rawLocalData[4] = _shearY;
 				_rawLocalData[5] = _scaleY;
 				
 				_rawLocalData[12] = _x;

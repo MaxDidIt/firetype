@@ -94,6 +94,22 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 				var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, glyphIndex);
 				var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
 				
+				if (currentComponent.flags.argumentsAreXYValues)
+				{
+					glyphInstance.x += currentComponent.argument1;
+					glyphInstance.y += currentComponent.argument2;
+				}
+				else
+				{
+					throw new Error("Matching of points in composite glyphs not yet implemented.");
+				}
+				
+				glyphInstance.scaleX = currentComponent.mtxA;
+				glyphInstance.shearX = currentComponent.mtxB;
+				
+				glyphInstance.shearY = currentComponent.mtxC;
+				glyphInstance.scaleY = currentComponent.mtxD;
+				
 				character.addGlyphInstance(glyphInstance);
 			}
 			

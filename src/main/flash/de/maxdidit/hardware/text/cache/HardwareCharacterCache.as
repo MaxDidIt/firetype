@@ -119,9 +119,17 @@ package de.maxdidit.hardware.text.cache
 				var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
 				
 				// cache hardware glyph
-				hardwareGlyph = addPathsToSection(paths);
+				if (paths)
+				{
+					hardwareGlyph = addPathsToSection(paths);
+				}
+				else
+				{
+					hardwareGlyph = new HardwareGlyph();
+				}
+				
 				hardwareGlyph.glyphIndex = glyphIndex;
-				hardwareGlyph.boundingBox.setValues(glyph.header.xMin, glyph.header.yMin, glyph.header.xMax, glyph.header.yMax);
+				//hardwareGlyph.boundingBox.setValues(glyph.header.xMin, glyph.header.yMin, glyph.header.xMax, glyph.header.yMax);
 				
 				cachedGlyphsForSubdivision[indexKey] = hardwareGlyph;
 			}
