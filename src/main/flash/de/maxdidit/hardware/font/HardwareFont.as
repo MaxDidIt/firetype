@@ -173,12 +173,20 @@ package de.maxdidit.hardware.font
 			
 			if (gsubTableData)
 			{
-				result = gsubTableData.retrieveFeatures(standardScript, standardLanguage).concat(result);
+				var features:Vector.<FeatureRecord> = gsubTableData.retrieveFeatures(standardScript, standardLanguage);
+				if (features)
+				{
+					result = features.concat(result);
+				}
 			}
 			
 			if (gposTableData)
 			{
-				result = gposTableData.retrieveFeatures(standardScript, standardLanguage).concat(result);
+				features = gposTableData.retrieveFeatures(standardScript, standardLanguage);
+				if (features)
+				{
+					result = features.concat(result);
+				}
 			}
 			
 			return result;

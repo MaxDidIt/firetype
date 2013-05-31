@@ -97,13 +97,13 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("ariali.ttf");
 			//hardwareParser.loadFont("impact.ttf");
-			//hardwareParser.loadFont("DAUNPENH.TTF");
+			hardwareParser.loadFont("DAUNPENH.TTF");
 			//hardwareParser.loadFont("TIMES.TTF");
 			//hardwareParser.loadFont("TIMESI.TTF");
 			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
 			//hardwareParser.loadFont("newscycle-regular.ttf");
-			hardwareParser.loadFont("newscycle-bold.ttf");
+			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("WBV4.TTF");
 			//hardwareParser.loadFont("CAMBRIAB.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
