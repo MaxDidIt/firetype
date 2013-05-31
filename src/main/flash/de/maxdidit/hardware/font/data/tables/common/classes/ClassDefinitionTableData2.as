@@ -71,12 +71,26 @@ package de.maxdidit.hardware.font.data.tables.common.classes
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable */
 		
-		public function getGlyphClassByID(glyphID:uint):uint 
-		{
-			for (var i:uint = 0; i < _classRangeCount; i++)
+		public function getGlyphClassByID(glyphIndex:uint):uint 
+		{			
+			var min:int = 0;
+			var max:int = _classRangeCount - 1;
+			
+			while (max >= min)
 			{
-				var record:ClassRangeRecord = _classRangeRecords[i];
-				if (record.start >= glyphID && record.end <= glyphID)
+				var mid:int = (min + max) >> 1;
+				
+				var record:ClassRangeRecord = _classRangeRecords[mid];
+				
+				if (glyphIndex < record.start)
+				{
+					max = mid - 1;
+				}
+				else if (glyphIndex > record.end)
+				{
+					min = mid + 1;
+				}
+				else
 				{
 					return record.classValue;
 				}
