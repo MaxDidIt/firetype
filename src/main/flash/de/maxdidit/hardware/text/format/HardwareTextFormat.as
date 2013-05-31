@@ -24,6 +24,8 @@ package de.maxdidit.hardware.text.format
 		private var _scriptTag:String = ScriptTag.LATIN;
 		private var _languageTag:String = LanguageTag.ENGLISH;
 		
+		private var _script:String;
+		private var _language:String;
 		private var _features:HardwareFontFeatures;
 		
 		///////////////////////
@@ -120,6 +122,26 @@ package de.maxdidit.hardware.text.format
 		public function get features():HardwareFontFeatures 
 		{
 			return _features;
+		}
+		
+		public function get script():String 
+		{
+			return _script;
+		}
+		
+		public function set script(value:String):void 
+		{
+			_script = value;
+		}
+		
+		public function get language():String 
+		{
+			return _language;
+		}
+		
+		public function set language(value:String):void 
+		{
+			_language = value;
 		}
 	
 		///////////////////////

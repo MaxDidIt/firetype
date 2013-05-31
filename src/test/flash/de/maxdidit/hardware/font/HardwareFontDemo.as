@@ -97,7 +97,7 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("arial.ttf");
 			//hardwareParser.loadFont("ariali.ttf");
 			//hardwareParser.loadFont("impact.ttf");
-			hardwareParser.loadFont("DAUNPENH.TTF");
+			//hardwareParser.loadFont("DAUNPENH.TTF");
 			//hardwareParser.loadFont("TIMES.TTF");
 			//hardwareParser.loadFont("TIMESI.TTF");
 			//hardwareParser.loadFont("L_10646.TTF");
@@ -105,7 +105,7 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("newscycle-regular.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("WBV4.TTF");
-			//hardwareParser.loadFont("CAMBRIAB.TTF");
+			hardwareParser.loadFont("CAMBRIAB.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
@@ -149,11 +149,15 @@ package de.maxdidit.hardware.font
 			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = e.font;
 			hardwareFontFormat.subdivisions = 2;
+			
+			hardwareFontFormat.script = ScriptTag.LATIN;
+			hardwareFontFormat.language = LanguageTag.ENGLISH;
+			
 			//hardwareFontFormat.features.removeFeatureByReference(FeatureTag.KERNING);
-			//hardwareFontFormat.features.addFeature(FeatureTag.SMALL_CAPITALS);
+			hardwareFontFormat.features.addFeature(FeatureTag.SMALL_CAPITALS);
 			hardwareFontFormat.features.addFeature(FeatureTag.STANDARD_LIGATURES);
 			//hardwareFontFormat.features.addFeature(FeatureTag.NUMERATORS);
-			//hardwareFontFormat.features.addFeature(FeatureTag.FRACTIONS);
+			hardwareFontFormat.features.addFeature(FeatureTag.FRACTIONS);
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			
@@ -162,8 +166,6 @@ package de.maxdidit.hardware.font
 			hardwareText.width = 40000;
 			
 			hardwareText.standardFormat = hardwareFontFormat;
-			hardwareText.standardScript = ScriptTag.LATIN;
-			hardwareText.standardLanguage = LanguageTag.ENGLISH;
 			
 			hardwareText.text = "Hold the left mouse button and drag the text up and down.\n\n" 
 			
@@ -179,8 +181,8 @@ package de.maxdidit.hardware.font
 				hardwareText.text += "This text is displayed using the font " + e.font.fontFamily + " " + e.font.fontSubFamily + ".\n\n";
 			}
 			
-			hardwareText.text += "The font implements the following features for the script '" + hardwareText.standardScript + "' and the language '" + hardwareText.standardLanguage + "':\n\n";
-			var features:Vector.<FeatureRecord> = e.font.getAdvancedFeatures(hardwareText.standardScript, hardwareText.standardLanguage);
+			hardwareText.text += "The font implements the following features for the script '" + hardwareFontFormat.script + "' and the language '" + hardwareFontFormat.language + "':\n\n";
+			var features:Vector.<FeatureRecord> = e.font.getAdvancedFeatures(hardwareFontFormat.script, hardwareFontFormat.language);
 			const l:uint = features.length;
 			for (var i:uint = 0; i < l; i++)
 			{

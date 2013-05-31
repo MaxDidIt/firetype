@@ -23,8 +23,6 @@ package de.maxdidit.hardware.text
 		private var _height:Number;
 		
 		private var _standardFormat:HardwareTextFormat;
-		private var _standardScript:String;
-		private var _standardLanguage:String;
 		
 		private var _textDirty:Boolean;
 		
@@ -102,26 +100,6 @@ package de.maxdidit.hardware.text
 		public function set standardFormat(value:HardwareTextFormat):void 
 		{
 			_standardFormat = value;
-		}
-		
-		public function get standardScript():String 
-		{
-			return _standardScript;
-		}
-		
-		public function set standardScript(value:String):void 
-		{
-			_standardScript = value;
-		}
-		
-		public function get standardLanguage():String 
-		{
-			return _standardLanguage;
-		}
-		
-		public function set standardLanguage(value:String):void 
-		{
-			_standardLanguage = value;
 		}
 		
 		///////////////////////
