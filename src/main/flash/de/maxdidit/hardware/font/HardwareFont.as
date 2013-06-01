@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
+	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
 	import de.maxdidit.hardware.font.data.tables.required.hmtx.LongHorizontalMetric;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
@@ -119,6 +120,41 @@ package de.maxdidit.hardware.font
 			
 			// resolve dependencies between tables/compile font values
 			applyHorizontalMetrics();
+			applyGlyphClassDefinitions();
+		}
+		
+		private function applyGlyphClassDefinitions():void 
+		{
+			var glyphs:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
+			if (!glyphs)
+			{
+				return;
+			}
+			var glyphTableData:GlyphTableData = glyphs.data as GlyphTableData;
+			
+			var glyphDefinitionTable:Table = _data.retrieveTable(TableNames.GLYPH_DEFINITION_DATA);
+			if (!glyphDefinitionTable)
+			{
+				return;
+			}
+			
+			var glyphDefinitionData:GlyphDefinitionTableData = glyphDefinitionTable.data as GlyphDefinitionTableData;
+			if (!glyphDefinitionData.glyphClassDefinitionTable)
+			{
+				return;
+			}
+			
+			var glyphClassDefinitionTable:IClassDefinitionTable = glyphDefinitionData.glyphClassDefinitionTable;
+			
+			// This is the brute force approach: go through ALL glyphs and assign them a glyph class.
+			// It would be more efficient if this operation was performed only for the glyphs actually stored in the class definition table.
+			// However, the coverage is stored in the class definition table depending on the implementation, making a general approach difficult.
+			const l:uint = glyphTableData.glyphs.length; 
+			for (var i:uint = 0; i < l; i++)
+			{
+				var glyphClass:uint = glyphClassDefinitionTable.getGlyphClassByID(i);
+				glyphTableData.retrieveGlyph(i).glyphClass = glyphClass;
+			}
 		}
 		
 		private function applyHorizontalMetrics():void
@@ -198,17 +234,6 @@ package de.maxdidit.hardware.font
 			}
 			
 			gsubTableData.applyTable(characterInstances, scriptTag, languageTag, activatedFeatures);
-		}
-		
-		public function retrieveCharacterDefinitions(characterInstances:LinkedList):void 
-		{
-			var gdefTableData:GlyphDefinitionTableData = _data.retrieveTableData(TableNames.GLYPH_DEFINITION_DATA) as GlyphDefinitionTableData;
-			if (!gdefTableData)
-			{
-				return;
-			}
-			
-			gdefTableData.applyTable(characterInstances);
 		}
 		
 		public function getAdvancedFeatures(standardScript:String, standardLanguage:String):Vector.<FeatureRecord> 

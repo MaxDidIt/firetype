@@ -86,20 +86,6 @@ package de.maxdidit.hardware.font.data.tables.advanced.gdef
 		// Member Functions
 		///////////////////////
 		
-		public function applyTable(characterInstances:LinkedList):void 
-		{
-			characterInstances.gotoFirstElement();
-			
-			while (characterInstances.currentElement)
-			{
-				var currentElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
-				var glyphClass:int = _glyphClassDefinitionTable.getGlyphClassByID(currentElement.hardwareCharacterInstance.glyphID);
-				currentElement.hardwareCharacterInstance.glyphClass = glyphClass;
-				
-				characterInstances.gotoNextElement();
-			}
-		}
-		
 	}
 
 }

@@ -60,7 +60,6 @@ package de.maxdidit.hardware.text
 		private var _charCode:uint;
 		
 		private var _glyphID:uint;
-		private var _glyphClass:uint;
 		
 		private var _advanceWidthAdjustment:int = 0;
 		
@@ -106,16 +105,6 @@ package de.maxdidit.hardware.text
 		public function set glyphID(value:uint):void
 		{
 			_glyphID = value;
-		}
-		
-		public function get glyphClass():uint
-		{
-			return _glyphClass;
-		}
-		
-		public function set glyphClass(value:uint):void
-		{
-			_glyphClass = value;
 		}
 		
 		public function get charCode():uint

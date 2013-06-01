@@ -20,6 +20,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		private var _advancedWidth:uint;
 		private var _leftSideBearing:int;
 		
+		private var _glyphClass:uint;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -64,18 +66,28 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			_leftSideBearing = value;
 		}
 		
+		public function get glyphClass():uint 
+		{
+			return _glyphClass;
+		}
+		
+		public function set glyphClass(value:uint):void 
+		{
+			_glyphClass = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
 		{
-			throw new Error("Can't execute retrieveShape for Glyph. Extend the glyph class and implement this function.");
+			throw new Error("Can't execute retrieveShape for Glyph. Extend the Glyph class and implement this function.");
 		}
 		
 		public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter
 		{
-			throw new Error("Can't execute retrieveHardwareCharacter for Glyph. Extend the glyph class and implement this function.");
+			throw new Error("Can't execute retrieveHardwareCharacter for Glyph. Extend the Glyph class and implement this function.");
 		}
 		
 	}

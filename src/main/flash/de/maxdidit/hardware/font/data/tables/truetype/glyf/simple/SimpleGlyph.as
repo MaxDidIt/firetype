@@ -155,6 +155,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 			
 			var character:HardwareCharacter = new HardwareCharacter();
 			character.addGlyphInstance(glyphInstance);
+			character.glyph = this;
 			
 			return character;
 		}

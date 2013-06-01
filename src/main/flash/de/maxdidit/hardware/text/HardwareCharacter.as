@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.text 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.math.AxisAlignedBoundingBox;
 	/**
 	 * ...
@@ -13,7 +14,7 @@ package de.maxdidit.hardware.text
 		
 		private var _instances:Vector.<HardwareGlyphInstance>;
 		
-		private var _useMetricsOfIndex:uint = 0;
+		private var _glyph:Glyph;
 		
 		///////////////////////
 		// Constructor
@@ -33,19 +34,14 @@ package de.maxdidit.hardware.text
 			return _instances;
 		}
 		
-		public function get useMetricsOfIndex():uint 
+		public function get glyph():Glyph 
 		{
-			return _useMetricsOfIndex;
+			return _glyph;
 		}
 		
-		public function set useMetricsOfIndex(value:uint):void 
+		public function set glyph(value:Glyph):void 
 		{
-			_useMetricsOfIndex = value;
-		}
-		
-		public function get useMetricsOfGlyph():HardwareGlyphInstance
-		{
-			return _instances[_useMetricsOfIndex];
+			_glyph = value;
 		}
 		
 		///////////////////////

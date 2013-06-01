@@ -23,6 +23,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		private var _numInstructions:uint;
 		private var _instructions:ByteArray;
 		
+		private var _indexForMetrics:uint;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -46,6 +48,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		public function set components(value:Vector.<CompositeGlyphComponent>):void 
 		{
 			_components = value;
+			findIndexForMetrics();
 		}
 		
 		// numInstructions
@@ -76,6 +79,21 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		// Member Functions
 		///////////////////////
 		
+		private function findIndexForMetrics():void 
+		{
+			const l:uint = _components.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				if (_components[i].flags.useMyMetrics)
+				{
+					_indexForMetrics = i;
+					return;
+				}
+			}
+			
+			_indexForMetrics = 0;
+		}
+		
 		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
 		{
 			return null;
@@ -104,10 +122,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 					throw new Error("Matching of points in composite glyphs not yet implemented.");
 				}
 				
-				if (currentComponent.flags.useMyMetrics)
-				{
-					character.useMetricsOfIndex = i;
-				}
+				character.glyph = this;
 				
 				glyphInstance.scaleX = currentComponent.mtxA;
 				glyphInstance.shearX = currentComponent.mtxB;

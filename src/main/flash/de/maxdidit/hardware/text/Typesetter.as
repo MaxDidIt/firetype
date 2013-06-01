@@ -58,7 +58,6 @@ package de.maxdidit.hardware.text
 			
 			var characterInstances:LinkedList = initializeCharacterInstances(text, font);
 			
-			font.retrieveCharacterDefinitions(characterInstances);
 			font.performCharacterSubstitutions(characterInstances, scriptTag, languageTag, standardTextFormat.features);
 			collectGlyphs(characterInstances, hardwareText, standardTextFormat, subdivision, cache);
 			
@@ -179,7 +178,7 @@ package de.maxdidit.hardware.text
 				// TODO: This if should not be necessary in the future; even whitespace should have a hardwareCharacter, just without geometry.
 				if (characterInstance.hardwareCharacter)
 				{
-					x += characterInstance.hardwareCharacter.useMetricsOfGlyph.hardwareGlyph.glyph.advancedWidth;
+					x += characterInstance.hardwareCharacter.glyph.advancedWidth;
 				}
 				else
 				{
@@ -247,7 +246,7 @@ package de.maxdidit.hardware.text
 				
 				// This is confusing: the spacing between letters seems correct if I ignore the left side bearing.
 				characterInstance.x += x; //- characterInstance.leftSideBearing;
-				x += characterInstance.hardwareCharacter.useMetricsOfGlyph.hardwareGlyph.glyph.advancedWidth + characterInstance.advanceWidthAdjustment;
+				x += characterInstance.hardwareCharacter.glyph.advancedWidth + characterInstance.advanceWidthAdjustment;
 				
 				result.addChild(characterInstance);
 				
