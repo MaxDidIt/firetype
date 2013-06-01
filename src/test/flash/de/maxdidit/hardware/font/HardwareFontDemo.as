@@ -9,6 +9,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.parser.OpenTypeParser;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRenderer;
@@ -99,13 +100,13 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
 			//hardwareParser.loadFont("TIMES.TTF");
-			//hardwareParser.loadFont("TIMESI.TTF");
+			hardwareParser.loadFont("TIMESI.TTF");
 			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
 			//hardwareParser.loadFont("newscycle-regular.ttf");
 			//hardwareParser.loadFont("newscycle-bold.ttf");
 			//hardwareParser.loadFont("WBV4.TTF");
-			hardwareParser.loadFont("CAMBRIAB.TTF");
+			//hardwareParser.loadFont("CAMBRIAB.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
@@ -148,18 +149,33 @@ package de.maxdidit.hardware.font
 		{
 			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = e.font;
-			hardwareFontFormat.subdivisions = 2;
+			hardwareFontFormat.subdivisions = 1;
+			hardwareFontFormat.color = 0xFF333333;
 			
 			hardwareFontFormat.script = ScriptTag.LATIN;
 			hardwareFontFormat.language = LanguageTag.ENGLISH;
 			
+			hardwareFontFormat.id = "standardFont";
+			
 			//hardwareFontFormat.features.removeFeatureByReference(FeatureTag.KERNING);
-			hardwareFontFormat.features.addFeature(FeatureTag.SMALL_CAPITALS);
+			//hardwareFontFormat.features.addFeature(FeatureTag.SMALL_CAPITALS);
 			hardwareFontFormat.features.addFeature(FeatureTag.STANDARD_LIGATURES);
 			//hardwareFontFormat.features.addFeature(FeatureTag.NUMERATORS);
-			hardwareFontFormat.features.addFeature(FeatureTag.FRACTIONS);
+			//hardwareFontFormat.features.addFeature(FeatureTag.FRACTIONS);
+			
+			var redFontFormat:HardwareTextFormat= new HardwareTextFormat();
+			redFontFormat.font = e.font;
+			redFontFormat.subdivisions = 1;
+			redFontFormat.color = 0xFFFF0000;
+			
+			redFontFormat.script = ScriptTag.LATIN;
+			redFontFormat.language = LanguageTag.ENGLISH;
+			
+			redFontFormat.id = "red";
 			
 			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
+			cache.textFormatMap.addTextFormat(hardwareFontFormat);
+			cache.textFormatMap.addTextFormat(redFontFormat);
 			
 			hardwareText = new HardwareText(cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
@@ -167,18 +183,18 @@ package de.maxdidit.hardware.font
 			
 			hardwareText.standardFormat = hardwareFontFormat;
 			
-			hardwareText.text = "Hold the left mouse button and drag the text up and down.\n\n" 
+			hardwareText.text = "Hold the <format id=\"red\">left mouse button</format> and drag the text up and down.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{
 				hardwareText.text += "This text uses the font \"News Cycle\",\nCopyright ©2010-2011, Nathan Willis (nwillis@glyphography.com),\n\n" +
 									"This Font Software is licensed under the SIL Open Font License, Version 1.1.\n" +
 									"This license is available with a FAQ at:\n" +
-									"http://scripts.sil.org/OFL\n\n"
+									"http://scripts.sil.org/OFL\n\n";
 			}
 			else
 			{
-				hardwareText.text += "This text is displayed using the font " + e.font.fontFamily + " " + e.font.fontSubFamily + ".\n\n";
+				hardwareText.text += "This text is displayed using the font <format id=\"red\">" + e.font.fontFamily + " " + e.font.fontSubFamily + "</format>.\n\n";
 			}
 			
 			hardwareText.text += "The font implements the following features for the script '" + hardwareFontFormat.script + "' and the language '" + hardwareFontFormat.language + "':\n\n";
@@ -208,6 +224,8 @@ package de.maxdidit.hardware.font
 				hardwareText.y = textClickY - (stage.mouseY - mouseClickY) * 10;
 				hardwareText.calculateTransformations(viewProjectionMtx);
 			}
+			
+			//hardwareText.standardFormat.color = 0xFF000000 + Math.random() * 0xFFFFFF;
 			
 			context3d.clear(1, 1, 1);
 			cache.render();

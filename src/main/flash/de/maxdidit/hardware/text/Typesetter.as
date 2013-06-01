@@ -10,6 +10,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
+	import de.maxdidit.hardware.text.format.HardwareTextFormatListElement;
 	import de.maxdidit.list.LinkedList;
 	import flash.text.engine.BreakOpportunity;
 	import flash.ui.Keyboard;
@@ -27,6 +28,11 @@ package de.maxdidit.hardware.text
 		
 		public static const CHAR_CODE_SPACE:uint = Keyboard.SPACE;
 		public static const CHAR_CODE_NEWLINE:uint = "\n".charCodeAt(0);
+		public static const CHAR_CODE_OPEN_ANGLE_BRACKET:uint = "<".charCodeAt(0);
+		public static const CHAR_CODE_CLOSED_ANGLE_BRACKET:uint = ">".charCodeAt(0);
+		
+		public static const TAG_FORMAT:String = "format";
+		public static const TAG_FORMAT_CLOSE:String = "/format";
 		
 		///////////////////////
 		// Constructor
@@ -54,7 +60,7 @@ package de.maxdidit.hardware.text
 			
 			font.retrieveCharacterDefinitions(characterInstances);
 			font.performCharacterSubstitutions(characterInstances, scriptTag, languageTag, standardTextFormat.features);
-			collectGlyphs(characterInstances, hardwareText, font, subdivision, cache);
+			collectGlyphs(characterInstances, hardwareText, standardTextFormat, subdivision, cache);
 			
 			// layouting
 			layout(hardwareText, characterInstances, standardTextFormat, scriptTag, languageTag);
@@ -202,6 +208,30 @@ package de.maxdidit.hardware.text
 			
 			while (characterElement && !triggersNewWord(charCode))
 			{
+				if (characterInstance.formatID && characterInstance.formatID != "")
+				{
+					characterInstances.gotoNextElement();
+					characterElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+					if (characterElement)
+					{
+						characterInstance = characterElement.hardwareCharacterInstance;
+						charCode = characterInstance.charCode;
+					}
+					continue;
+				}
+				
+				if (characterInstance.formatClosed)
+				{
+					characterInstances.gotoNextElement();
+					characterElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
+					if (characterElement)
+					{
+						characterInstance = characterElement.hardwareCharacterInstance;
+						charCode = characterInstance.charCode;
+					}
+					continue;
+				}
+				
 				// apply table data
 				applyTableData(characterInstances, hmtxData, gposData, gposLookupTables, kernData);
 				
@@ -246,20 +276,53 @@ package de.maxdidit.hardware.text
 			}
 		}
 		
-		private function collectGlyphs(characterInstances:LinkedList, hardwareText:HardwareText, font:HardwareFont, subdivisons:uint, cache:HardwareCharacterCache):void
+		private function collectGlyphs(characterInstances:LinkedList, hardwareText:HardwareText, standardTextFormat:HardwareTextFormat, subdivisons:uint, cache:HardwareCharacterCache):void
 		{
+			//var font:HardwareFont = standardTextFormat.font;
+			
+			var formatStack:LinkedList = new LinkedList();
+			formatStack.addElement(new HardwareTextFormatListElement(standardTextFormat));
+			
 			characterInstances.gotoFirstElement();
 			
 			while (characterInstances.currentElement)
 			{
+				var currentTextFormat:HardwareTextFormat = (formatStack.lastElement as HardwareTextFormatListElement).hardwareTextFormat;
+				
 				var characterInstance:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-				var character:HardwareCharacter = cache.getCachedCharacter(font, subdivisons, characterInstance.glyphID);
+				
+				// check if there is a font switch
+				if (characterInstance.formatID && characterInstance.formatID != "")
+				{
+					if (!cache.textFormatMap.hasTextFormatId(characterInstance.formatID))
+					{
+						throw new Error("There is no text format with the ID \"" + characterInstance.formatID + "\" registered in the character cache. Please register the respective text format with the character cache.");
+					}
+					
+					var textFormat:HardwareTextFormat = cache.textFormatMap.getTextFormatById(characterInstance.formatID);
+					formatStack.addElement(new HardwareTextFormatListElement(textFormat));
+					
+					characterInstances.gotoNextElement();
+					continue;
+				}
+				
+				// check if a font has been switched back
+				if (characterInstance.formatClosed)
+				{
+					formatStack.removeElement(formatStack.lastElement);
+					
+					characterInstances.gotoNextElement();
+					continue;
+				}
+				
+				// add character to cache
+				var character:HardwareCharacter = cache.getCachedCharacter(currentTextFormat.font, subdivisons, characterInstance.glyphID);
 				if (character)
 				{
 					characterInstance.hardwareCharacter = character;
 				}
 				
-				characterInstance.registerGlyphInstances(font.uniqueIdentifier, subdivisons, 0x0, cache);
+				characterInstance.registerGlyphInstances(currentTextFormat.font.uniqueIdentifier, subdivisons, currentTextFormat, cache);
 				
 				characterInstances.gotoNextElement();
 			}
@@ -273,9 +336,30 @@ package de.maxdidit.hardware.text
 			for (var i:uint = 0; i < l; i++)
 			{
 				var charCode:Number = text.charCodeAt(i);
+				var hardwareCharacterInstance:HardwareCharacterInstance;
+				
+				// check if this is the start of a tag
+				if (charCode == CHAR_CODE_OPEN_ANGLE_BRACKET)
+				{
+					// check which tag this is.
+					var closingIndex:uint = text.indexOf(">", i);
+					if (closingIndex != -1)
+					{
+						var tagContent:String = text.substring(i + 1, closingIndex);
+						hardwareCharacterInstance = parseTagContent(tagContent);
+						
+						if (hardwareCharacterInstance)
+						{
+							characterInstances.addElement(new HardwareCharacterInstanceListElement(hardwareCharacterInstance));
+							i = closingIndex;
+							continue;
+						}
+					}
+				}
+				
 				var glyphID:uint = font.getGlyphIndex(charCode);
 				
-				var hardwareCharacterInstance:HardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
+				hardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
 				hardwareCharacterInstance.glyphID = glyphID;
 				hardwareCharacterInstance.charCode = charCode;
 				
@@ -284,6 +368,56 @@ package de.maxdidit.hardware.text
 			}
 			
 			return characterInstances;
+		}
+		
+		private function parseTagContent(tagContent:String):HardwareCharacterInstance
+		{
+			var tagElements:Array = tagContent.split(/ +/);
+			const l:uint = tagElements.length;
+			if (l < 1)
+			{
+				return null;
+			}
+			
+			var tagName:String = tagElements[0].toLowerCase();
+			switch (tagName)
+			{
+				// Parse the format tag.
+				case TAG_FORMAT: 
+					if (l < 2)
+					{
+						return null;
+					}
+					
+					var parameter:String = tagElements[1];
+					var parameterElements:Array = parameter.split("=");
+					
+					if (parameterElements.length < 2)
+					{
+						return null;
+					}
+					
+					if (parameterElements[0] != "id")
+					{
+						return null;
+					}
+					
+					var id:String = (parameterElements[1] as String);
+					id = id.replace(/[(\\")']/g, "");
+					
+					var instance:HardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
+					instance.formatID = id;
+					
+					return instance;
+				
+				case TAG_FORMAT_CLOSE: 
+					instance = HardwareCharacterInstance.getHardwareCharacterInstance(null);
+					instance.formatClosed = true;
+					;
+					return instance;
+			}
+			
+			return null;
 		}
 	
 	}

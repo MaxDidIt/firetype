@@ -2,6 +2,7 @@ package de.maxdidit.hardware.text.cache
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareGlyph;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.renderer.IHardwareTextRenderer;
 	/**
@@ -44,22 +45,22 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, color:uint):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
 		{
 			var cachedSubdivisionsForFont:Object = retrieveProperty(_instanceMap, uniqueIdentifier);
-			var cachedColorsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
-			var cachedInstancesForColor:Object = retrieveProperty(cachedColorsForSubdivision, String(color));
+			var cachedFormatsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
+			var cachedInstancesForFormat:Object = retrieveProperty(cachedFormatsForSubdivision, textFormat.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;
 			var indexKey:String = String(hardwareGlyphInstance.glyph.glyphIndex);
-			if (cachedInstancesForColor.hasOwnProperty(indexKey))
+			if (cachedInstancesForFormat.hasOwnProperty(indexKey))
 			{
-				instances = cachedInstancesForColor[indexKey] as Vector.<HardwareGlyphInstance>;
+				instances = cachedInstancesForFormat[indexKey] as Vector.<HardwareGlyphInstance>;
 			}
 			else
 			{
 				instances = new Vector.<HardwareGlyphInstance>();
-				cachedInstancesForColor[indexKey] = instances;
+				cachedInstancesForFormat[indexKey] = instances;
 			}
 			
 			instances.push(hardwareGlyphInstance);
@@ -70,9 +71,9 @@ package de.maxdidit.hardware.text.cache
 			return _renderer.addPathsToRenderer(paths);
 		}
 		
-		public function render():void 
+		public function render(textFormatMap:HardwareTextFormatMap):void 
 		{
-			_renderer.render(_instanceMap);
+			_renderer.render(_instanceMap, textFormatMap);
 		}
 		
 		public function clear():void 

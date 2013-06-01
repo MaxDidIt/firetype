@@ -2,6 +2,7 @@ package de.maxdidit.hardware.text.renderer
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareGlyph;
+	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
 	
 	/**
 	 * ...
@@ -10,7 +11,7 @@ package de.maxdidit.hardware.text.renderer
 	public interface IHardwareTextRenderer 
 	{
 		function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph;
-		function render(instanceMap:Object):void;
+		function render(instanceMap:Object, textFormatMap:HardwareTextFormatMap):void;
 	}
 	
 }

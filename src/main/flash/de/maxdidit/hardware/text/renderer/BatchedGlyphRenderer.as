@@ -3,6 +3,8 @@ package de.maxdidit.hardware.text.renderer
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
+	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
@@ -183,7 +185,7 @@ package de.maxdidit.hardware.text.renderer
 			}
 		}
 		
-		public function render(instanceMap:Object):void
+		public function render(instanceMap:Object, textFormatMap:HardwareTextFormatMap):void
 		{
 			if (_buffersDirty)
 			{
@@ -198,7 +200,6 @@ package de.maxdidit.hardware.text.renderer
 			
 			_context3d.setProgram(programPair);
 			
-			//_context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 0, viewProjectionMtx, true );
 			var color:Vector.<Number> = new Vector.<Number>();
 			color.push(0, 0, 0, 1);
 			_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, color, 1);
@@ -209,9 +210,19 @@ package de.maxdidit.hardware.text.renderer
 			{
 				for each (var subdivisions:Object in fonts)
 				{
-					for each (var colors:Object in subdivisions)
+					for (var formatId:String in subdivisions)
 					{
-						for each (var instances:Vector.<HardwareGlyphInstance>in colors)
+						var format:Object = subdivisions[formatId];
+						
+						if (!textFormatMap.hasTextFormatId(formatId))
+						{
+							throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
+						}
+						
+						var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
+						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
+						
+						for each (var instances:Vector.<HardwareGlyphInstance> in format)
 						{
 							var l:uint = instances.length;
 							var i:uint = 0;

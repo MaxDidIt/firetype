@@ -18,7 +18,10 @@ package de.maxdidit.hardware.text.format
 		private var _font:HardwareFont;
 		
 		private var _scale:Number = 1;
+		
 		private var _color:uint = 0x0;
+		private var _colorVector:Vector.<Number>;
+		
 		private var _subdivisions:uint = 1;
 		
 		private var _scriptTag:String = ScriptTag.LATIN;
@@ -28,12 +31,16 @@ package de.maxdidit.hardware.text.format
 		private var _language:String;
 		private var _features:HardwareFontFeatures;
 		
+		private var _id:String;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
 		public function HardwareTextFormat()
 		{
+			_colorVector = new Vector.<Number>(4);
+			
 			_features = new HardwareFontFeatures();
 			
 			// default features
@@ -79,6 +86,16 @@ package de.maxdidit.hardware.text.format
 		public function set color(value:uint):void
 		{
 			_color = value;
+			
+			var alpha:uint = (_color >> 24) & 0xFF;
+			var red:uint = (_color >> 16) & 0xFF;
+			var green:uint = (_color >> 8) & 0xFF;
+			var blue:uint = _color & 0xFF;
+			
+			_colorVector[0] = Number(red) / 255;
+			_colorVector[1] = Number(green) / 255;
+			_colorVector[2] = Number(blue) / 255;
+			_colorVector[3] = Number(alpha) / 255;
 		}
 		
 		// subdivisions
@@ -142,6 +159,21 @@ package de.maxdidit.hardware.text.format
 		public function set language(value:String):void 
 		{
 			_language = value;
+		}
+		
+		public function get id():String 
+		{
+			return _id;
+		}
+		
+		public function set id(value:String):void 
+		{
+			_id = value;
+		}
+		
+		public function get colorVector():Vector.<Number> 
+		{
+			return _colorVector;
 		}
 	
 		///////////////////////

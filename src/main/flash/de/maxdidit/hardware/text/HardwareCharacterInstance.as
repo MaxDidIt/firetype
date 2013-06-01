@@ -2,6 +2,7 @@ package de.maxdidit.hardware.text
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.list.LinkedList;
 	
 	/**
@@ -64,6 +65,9 @@ package de.maxdidit.hardware.text
 		
 		private var _leftSideBearing:int = 0;
 		private var _advanceWidth:int = 0;
+		
+		private var _formatID:String;
+		private var _formatClosed:Boolean = false;
 		
 		///////////////////////
 		// Constructor
@@ -146,16 +150,36 @@ package de.maxdidit.hardware.text
 			_advanceWidth = value;
 		}
 		
+		public function get formatID():String 
+		{
+			return _formatID;
+		}
+		
+		public function set formatID(value:String):void 
+		{
+			_formatID = value;
+		}
+		
+		public function get formatClosed():Boolean 
+		{
+			return _formatClosed;
+		}
+		
+		public function set formatClosed(value:Boolean):void 
+		{
+			_formatClosed = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		public function registerGlyphInstances(uniqueIdentifier:String, subdivisions:uint, color:uint, cache:HardwareCharacterCache):void
+		public function registerGlyphInstances(uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat, cache:HardwareCharacterCache):void
 		{
 			const l:uint = _children.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				cache.registerGlyphInstance(_children[i] as HardwareGlyphInstance, uniqueIdentifier, subdivisions, color);
+				cache.registerGlyphInstance(_children[i] as HardwareGlyphInstance, uniqueIdentifier, subdivisions, textFormat);
 			}
 		}
 		

@@ -37,6 +37,8 @@ package de.maxdidit.hardware.text.cache
 		
 		private var _clientTexts:Vector.<HardwareText>;
 		
+		private var _textFormatMap:HardwareTextFormatMap;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -48,6 +50,8 @@ package de.maxdidit.hardware.text.cache
 			_sections = new Vector.<HardwareCharacterCacheSection>();
 			
 			_clientTexts = new Vector.<HardwareText>();
+			
+			_textFormatMap = new HardwareTextFormatMap();
 		}
 		
 		///////////////////////
@@ -62,6 +66,11 @@ package de.maxdidit.hardware.text.cache
 		public function set rendererFactory(value:IHardwareTextRendererFactory):void 
 		{
 			_rendererFactory = value;
+		}
+		
+		public function get textFormatMap():HardwareTextFormatMap 
+		{
+			return _textFormatMap;
 		}
 		
 		///////////////////////
@@ -164,10 +173,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, color:uint):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
 		{	
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.glyph.cacheSectionIndex];
-			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, color);
+			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, textFormat);
 		}
 		
 		public function render():void 
@@ -182,7 +191,7 @@ package de.maxdidit.hardware.text.cache
 			for (i = 0; i < l; i++)
 			{
 				var section:HardwareCharacterCacheSection = _sections[i];
-				section.render();
+				section.render(_textFormatMap);
 			}
 		}
 		
