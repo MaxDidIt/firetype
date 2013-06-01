@@ -178,7 +178,7 @@ package de.maxdidit.hardware.text
 				// TODO: This if should not be necessary in the future; even whitespace should have a hardwareCharacter, just without geometry.
 				if (characterInstance.hardwareCharacter)
 				{
-					x += characterInstance.hardwareCharacter.glyph.advancedWidth;
+					x += characterInstance.hardwareCharacter.glyph.advanceWidth;
 				}
 				else
 				{
@@ -246,7 +246,7 @@ package de.maxdidit.hardware.text
 				
 				// This is confusing: the spacing between letters seems correct if I ignore the left side bearing.
 				characterInstance.x += x; //- characterInstance.leftSideBearing;
-				x += characterInstance.hardwareCharacter.glyph.advancedWidth + characterInstance.advanceWidthAdjustment;
+				x += characterInstance.hardwareCharacter.glyph.advanceWidth + characterInstance.advanceWidthAdjustment;
 				
 				result.addChild(characterInstance);
 				

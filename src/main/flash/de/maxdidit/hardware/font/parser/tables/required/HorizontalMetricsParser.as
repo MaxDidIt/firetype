@@ -64,7 +64,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 			{
 				var longHorizontalMetric:LongHorizontalMetric = new LongHorizontalMetric();
 				
-				longHorizontalMetric.advancedWidth = _dataTypeParser.parseUnsignedShort(data);
+				longHorizontalMetric.advanceWidth = _dataTypeParser.parseUnsignedShort(data);
 				longHorizontalMetric.leftSideBearing = _dataTypeParser.parseShort(data);
 				
 				result[i] = longHorizontalMetric;

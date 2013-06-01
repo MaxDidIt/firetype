@@ -121,24 +121,38 @@ package de.maxdidit.hardware.font
 			// resolve dependencies between tables/compile font values
 			applyHorizontalMetrics();
 			applyGlyphClassDefinitions();
+			resolveDependencies();
+		}
+		
+		private function resolveDependencies():void 
+		{
+			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+			if (!glyphTableData)
+			{
+				return
+			}
+			
+			const l:uint = glyphTableData.glyphs.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				glyphTableData.retrieveGlyph(i).resolveDependencies(glyphTableData);
+			}
 		}
 		
 		private function applyGlyphClassDefinitions():void 
 		{
-			var glyphs:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
-			if (!glyphs)
+			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+			if (!glyphTableData)
 			{
-				return;
-			}
-			var glyphTableData:GlyphTableData = glyphs.data as GlyphTableData;
-			
-			var glyphDefinitionTable:Table = _data.retrieveTable(TableNames.GLYPH_DEFINITION_DATA);
-			if (!glyphDefinitionTable)
-			{
-				return;
+				return
 			}
 			
-			var glyphDefinitionData:GlyphDefinitionTableData = glyphDefinitionTable.data as GlyphDefinitionTableData;
+			var glyphDefinitionData:GlyphDefinitionTableData = _data.retrieveTableData(TableNames.GLYPH_DEFINITION_DATA) as GlyphDefinitionTableData;
+			if (!glyphDefinitionData)
+			{
+				return
+			}
+			
 			if (!glyphDefinitionData.glyphClassDefinitionTable)
 			{
 				return;
@@ -159,14 +173,13 @@ package de.maxdidit.hardware.font
 		
 		private function applyHorizontalMetrics():void
 		{
-			var horizontalMetrics:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
+			var horizontalMetrics:HorizontalMetricsData = _data.retrieveTableData(TableNames.HORIZONTAL_METRICS) as HorizontalMetricsData;
 			
-			var glyphs:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
-			if (!glyphs)
+			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+			if (!glyphTableData)
 			{
-				return;
+				return
 			}
-			var glyphTableData:GlyphTableData = glyphs.data as GlyphTableData;
 			
 			var longHorizontalMetrics:Vector.<LongHorizontalMetric> = horizontalMetrics.longHorizontalMetrics;
 			const l:uint = longHorizontalMetrics.length;
@@ -178,10 +191,10 @@ package de.maxdidit.hardware.font
 				
 				var longHorizontalMetric:LongHorizontalMetric = longHorizontalMetrics[i];
 				
-				var advancedWidth:uint = longHorizontalMetric.advancedWidth;
+				var advanceWidth:uint = longHorizontalMetric.advanceWidth;
 				var leftSideBearing:int = longHorizontalMetric.leftSideBearing;
 				
-				glyph.advancedWidth = advancedWidth;
+				glyph.advanceWidth = advanceWidth;
 				glyph.leftSideBearing = leftSideBearing;
 			}
 			
@@ -195,7 +208,7 @@ package de.maxdidit.hardware.font
 				
 				leftSideBearing = leftSideBearings[i];
 				
-				glyph.advancedWidth = advancedWidth;
+				glyph.advanceWidth = advanceWidth;
 				glyph.leftSideBearing = leftSideBearing;
 			}
 		}

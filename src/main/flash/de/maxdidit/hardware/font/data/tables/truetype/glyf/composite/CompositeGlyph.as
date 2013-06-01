@@ -2,6 +2,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.text.HardwareCharacter;
@@ -23,7 +24,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		private var _numInstructions:uint;
 		private var _instructions:ByteArray;
 		
-		private var _indexForMetrics:uint;
+		private var _indexForMetrics:int;
+		private var _dependencies:Vector.<Glyph>;
 		
 		///////////////////////
 		// Constructor
@@ -31,7 +33,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		
 		public function CompositeGlyph() 
 		{
-			
+			_dependencies = new Vector.<Glyph>();
 		}
 		
 		///////////////////////
@@ -48,7 +50,6 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		public function set components(value:Vector.<CompositeGlyphComponent>):void 
 		{
 			_components = value;
-			findIndexForMetrics();
 		}
 		
 		// numInstructions
@@ -75,23 +76,47 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 			_instructions = value;
 		}
 		
+		override public function get leftSideBearing():int 
+		{
+			if (_indexForMetrics == -1 || _indexForMetrics >= _dependencies.length)
+			{
+				return super.leftSideBearing;
+			}
+			
+			return _dependencies[_indexForMetrics].leftSideBearing;
+		}
+		
+		override public function get advanceWidth():uint 
+		{
+			if (_indexForMetrics == -1 || _indexForMetrics >= _dependencies.length)
+			{
+				return super.advanceWidth;
+			}
+			
+			return _dependencies[_indexForMetrics].advanceWidth;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		private function findIndexForMetrics():void 
+		override public function resolveDependencies(glyphTableData:GlyphTableData):void 
 		{
 			const l:uint = _components.length;
+			
+			_dependencies.length = l;
+			_indexForMetrics = -1;
+			
 			for (var i:uint = 0; i < l; i++)
 			{
-				if (_components[i].flags.useMyMetrics)
+				var component:CompositeGlyphComponent = _components[i];
+				_dependencies[i] = glyphTableData.retrieveGlyph(component.glyphIndex);
+				
+				if (component.flags.useMyMetrics)
 				{
 					_indexForMetrics = i;
-					return;
 				}
 			}
-			
-			_indexForMetrics = 0;
 		}
 		
 		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 

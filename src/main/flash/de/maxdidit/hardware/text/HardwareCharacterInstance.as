@@ -58,7 +58,6 @@ package de.maxdidit.hardware.text
 		private var _hardwareCharacter:HardwareCharacter;
 		
 		private var _charCode:uint;
-		
 		private var _glyphID:uint;
 		
 		private var _advanceWidthAdjustment:int = 0;

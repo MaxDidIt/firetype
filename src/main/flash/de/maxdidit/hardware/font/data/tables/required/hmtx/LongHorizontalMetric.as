@@ -10,7 +10,7 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 		// Member Fields
 		///////////////////////
 		
-		private var _advancedWidth:uint;
+		private var _advanceWidth:uint;
 		private var _leftSideBearing:int;
 		
 		///////////////////////
@@ -26,14 +26,14 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 		// Member Properties
 		///////////////////////
 		
-		public function get advancedWidth():uint 
+		public function get advanceWidth():uint 
 		{
-			return _advancedWidth;
+			return _advanceWidth;
 		}
 		
-		public function set advancedWidth(value:uint):void 
+		public function set advanceWidth(value:uint):void 
 		{
-			_advancedWidth = value;
+			_advanceWidth = value;
 		}
 		
 		public function get leftSideBearing():int 

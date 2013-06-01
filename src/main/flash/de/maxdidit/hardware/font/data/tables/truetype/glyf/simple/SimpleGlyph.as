@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Contour;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;

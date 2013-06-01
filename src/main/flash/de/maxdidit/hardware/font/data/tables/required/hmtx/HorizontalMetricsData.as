@@ -72,12 +72,12 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 		{
 			if (index < _longHorizontalMetrics.length)
 			{
-				return _longHorizontalMetrics[index].advancedWidth;
+				return _longHorizontalMetrics[index].advanceWidth;
 			}
 			
 			if (_longHorizontalMetrics.length > 0)
 			{
-				return _longHorizontalMetrics[_longHorizontalMetrics.length - 1].advancedWidth;
+				return _longHorizontalMetrics[_longHorizontalMetrics.length - 1].advanceWidth;
 			}
 			
 			return 0;

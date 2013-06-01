@@ -17,10 +17,10 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		
 		private var _header:GlyphHeader;
 		
-		private var _advancedWidth:uint;
-		private var _leftSideBearing:int;
-		
 		private var _glyphClass:uint;
+		
+		private var _advanceWidth:uint;
+		private var _leftSideBearing:int;
 		
 		///////////////////////
 		// Constructor
@@ -46,14 +46,14 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			_header = value;
 		}
 		
-		public function get advancedWidth():uint 
+		public function get advanceWidth():uint 
 		{
-			return _advancedWidth;
+			return _advanceWidth;
 		}
 		
-		public function set advancedWidth(value:uint):void 
+		public function set advanceWidth(value:uint):void 
 		{
-			_advancedWidth = value;
+			_advanceWidth = value;
 		}
 		
 		public function get leftSideBearing():int 
@@ -79,6 +79,11 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		public function resolveDependencies(glyphTableData:GlyphTableData):void
+		{
+			// This glyph doesn't have any dependencies, everything is awesome;
+		}
 		
 		public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
 		{
