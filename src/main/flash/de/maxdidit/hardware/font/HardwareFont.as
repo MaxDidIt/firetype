@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
+	import de.maxdidit.hardware.font.data.tables.required.hmtx.LongHorizontalMetric;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.HardwareFontData;
@@ -115,6 +116,52 @@ package de.maxdidit.hardware.font
 			_fontFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
 			_fontSubFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
 			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
+			
+			// resolve dependencies between tables/compile font values
+			applyHorizontalMetrics();
+		}
+		
+		private function applyHorizontalMetrics():void
+		{
+			var horizontalMetrics:HorizontalMetricsData = _data.retrieveTable(TableNames.HORIZONTAL_METRICS).data as HorizontalMetricsData;
+			
+			var glyphs:Table = _data.retrieveTable(TableNames.GLYPH_DATA);
+			if (!glyphs)
+			{
+				return;
+			}
+			var glyphTableData:GlyphTableData = glyphs.data as GlyphTableData;
+			
+			var longHorizontalMetrics:Vector.<LongHorizontalMetric> = horizontalMetrics.longHorizontalMetrics;
+			const l:uint = longHorizontalMetrics.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var glyphIndex:uint = i;
+				var glyph:Glyph = glyphTableData.retrieveGlyph(glyphIndex);
+				
+				var longHorizontalMetric:LongHorizontalMetric = longHorizontalMetrics[i];
+				
+				var advancedWidth:uint = longHorizontalMetric.advancedWidth;
+				var leftSideBearing:int = longHorizontalMetric.leftSideBearing;
+				
+				glyph.advancedWidth = advancedWidth;
+				glyph.leftSideBearing = leftSideBearing;
+			}
+			
+			var leftSideBearings:Vector.<int> = horizontalMetrics.leftSideBearings;
+			const ll:uint = leftSideBearings.length;
+			
+			for (i = 0; i < ll; i++)
+			{
+				glyphIndex = i + l;
+				glyph = glyphTableData.retrieveGlyph(glyphIndex);
+				
+				leftSideBearing = leftSideBearings[i];
+				
+				glyph.advancedWidth = advancedWidth;
+				glyph.leftSideBearing = leftSideBearing;
+			}
 		}
 		
 		public function retrieveGlyph(index:uint):Glyph

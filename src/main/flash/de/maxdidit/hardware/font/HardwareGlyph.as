@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.list.CircularLinkedList;
 	import de.maxdidit.list.elements.UnsignedIntegerListElement;
@@ -29,6 +30,8 @@ package de.maxdidit.hardware.font
 		private var _numTriangles:uint;
 		
 		private var _glyphIndex:uint;
+		private var _glyph:Glyph;
+		
 		private var _cacheSectionIndex:uint;
 		
 		// bounding box
@@ -116,6 +119,18 @@ package de.maxdidit.hardware.font
 		public function set cacheSectionIndex(value:uint):void 
 		{
 			_cacheSectionIndex = value;
+		}
+		
+		// glyph
+		
+		public function get glyph():Glyph 
+		{
+			return _glyph;
+		}
+		
+		public function set glyph(value:Glyph):void 
+		{
+			_glyph = value;
 		}
 	
 		///////////////////////

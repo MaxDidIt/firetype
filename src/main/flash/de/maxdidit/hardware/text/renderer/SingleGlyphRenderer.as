@@ -195,7 +195,7 @@ package de.maxdidit.hardware.text.renderer
 								var currentInstance:HardwareGlyphInstance = instances[i];
 								
 								_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
-								_context3d.drawTriangles(_indexBuffer, currentInstance.glyph.indexOffset, currentInstance.glyph.numTriangles);
+								_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
 							}
 						}
 					}

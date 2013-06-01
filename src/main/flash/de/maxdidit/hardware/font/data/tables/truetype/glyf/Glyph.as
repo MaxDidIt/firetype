@@ -17,6 +17,9 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		
 		private var _header:GlyphHeader;
 		
+		private var _advancedWidth:uint;
+		private var _leftSideBearing:int;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -39,6 +42,26 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set header(value:GlyphHeader):void 
 		{
 			_header = value;
+		}
+		
+		public function get advancedWidth():uint 
+		{
+			return _advancedWidth;
+		}
+		
+		public function set advancedWidth(value:uint):void 
+		{
+			_advancedWidth = value;
+		}
+		
+		public function get leftSideBearing():int 
+		{
+			return _leftSideBearing;
+		}
+		
+		public function set leftSideBearing(value:int):void 
+		{
+			_leftSideBearing = value;
 		}
 		
 		///////////////////////

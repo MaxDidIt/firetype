@@ -138,6 +138,7 @@ package de.maxdidit.hardware.text.cache
 				}
 				
 				hardwareGlyph.glyphIndex = glyphIndex;
+				hardwareGlyph.glyph = glyph;
 				//hardwareGlyph.boundingBox.setValues(glyph.header.xMin, glyph.header.yMin, glyph.header.xMax, glyph.header.yMax);
 				
 				cachedGlyphsForSubdivision[indexKey] = hardwareGlyph;
@@ -175,7 +176,7 @@ package de.maxdidit.hardware.text.cache
 		
 		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
 		{	
-			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.glyph.cacheSectionIndex];
+			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
 			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, textFormat);
 		}
 		

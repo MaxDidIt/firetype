@@ -176,7 +176,17 @@ package de.maxdidit.hardware.text
 					applyTableData(characterInstances, hmtxData, gposData, gposLookupTables, kernData);
 				}
 				
-				x += characterInstance.advanceWidth;
+				// TODO: This if should not be necessary in the future; even whitespace should have a hardwareCharacter, just without geometry.
+				if (characterInstance.hardwareCharacter)
+				{
+					x += characterInstance.hardwareCharacter.useMetricsOfGlyph.hardwareGlyph.glyph.advancedWidth;
+				}
+				else
+				{
+					// WORKAROUND, remove ASAP.
+					x += 550;
+				}
+				x += characterInstance.advanceWidthAdjustment;
 				
 				// iterate to next character
 				characterInstances.gotoNextElement();
@@ -237,7 +247,7 @@ package de.maxdidit.hardware.text
 				
 				// This is confusing: the spacing between letters seems correct if I ignore the left side bearing.
 				characterInstance.x += x; //- characterInstance.leftSideBearing;
-				x += characterInstance.advanceWidth;
+				x += characterInstance.hardwareCharacter.useMetricsOfGlyph.hardwareGlyph.glyph.advancedWidth + characterInstance.advanceWidthAdjustment;
 				
 				result.addChild(characterInstance);
 				
@@ -258,9 +268,7 @@ package de.maxdidit.hardware.text
 		
 		private function applyTableData(characterInstances:LinkedList, hmtxData:HorizontalMetricsData, gposData:GlyphPositioningTableData, gposLookupTables:Vector.<LookupTable>, kernData:KerningTableData):void
 		{
-			//apply tables
-			hmtxData.applyTable(characterInstances);
-			
+			//apply tables			
 			if (gposLookupTables)
 			{
 				const l:uint = gposLookupTables.length;

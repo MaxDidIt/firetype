@@ -26,7 +26,7 @@ package de.maxdidit.hardware.text
 			{
 				var element:HardwareGlyphInstanceListElement = _pool.firstElement as HardwareGlyphInstanceListElement;
 				instance = element.hardwareGlyphInstance;
-				instance.glyph = glyph;
+				instance.hardwareGlyph = glyph;
 				
 				_pool.removeElement(element);
 			}
@@ -48,7 +48,7 @@ package de.maxdidit.hardware.text
 		// Member Fields
 		///////////////////////
 		
-		private var _glyph:HardwareGlyph;
+		private var _hardwareGlyph:HardwareGlyph;
 		
 		///////////////////////
 		// Constructor
@@ -56,7 +56,7 @@ package de.maxdidit.hardware.text
 		
 		public function HardwareGlyphInstance($glyph:HardwareGlyph) 
 		{
-			_glyph = $glyph;
+			_hardwareGlyph = $glyph;
 		}
 		
 		///////////////////////
@@ -65,14 +65,14 @@ package de.maxdidit.hardware.text
 		
 		// glyph
 		
-		public function get glyph():HardwareGlyph 
+		public function get hardwareGlyph():HardwareGlyph 
 		{
-			return _glyph;
+			return _hardwareGlyph;
 		}
 		
-		public function set glyph(value:HardwareGlyph):void 
+		public function set hardwareGlyph(value:HardwareGlyph):void 
 		{
-			_glyph = value;
+			_hardwareGlyph = value;
 		}
 		
 		///////////////////////
@@ -81,7 +81,7 @@ package de.maxdidit.hardware.text
 		
 		override public function clone():TransformedInstance 
 		{
-			var result:HardwareGlyphInstance = getHardwareGlyphInstance(_glyph);
+			var result:HardwareGlyphInstance = getHardwareGlyphInstance(_hardwareGlyph);
 			
 			result.x = this.x;
 			result.y = this.y;

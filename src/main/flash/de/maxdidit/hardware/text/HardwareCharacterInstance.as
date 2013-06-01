@@ -31,8 +31,7 @@ package de.maxdidit.hardware.text
 				instance = element.hardwareCharacterInstance;
 				instance.hardwareCharacter = hardwareCharacter;
 				
-				instance.leftSideBearing = 0;
-				instance.advanceWidth = 0;
+				instance.advanceWidthAdjustment = 0;
 				instance.x = 0;
 				instance.y = 0;
 				
@@ -63,8 +62,7 @@ package de.maxdidit.hardware.text
 		private var _glyphID:uint;
 		private var _glyphClass:uint;
 		
-		private var _leftSideBearing:int = 0;
-		private var _advanceWidth:int = 0;
+		private var _advanceWidthAdjustment:int = 0;
 		
 		private var _formatID:String;
 		private var _formatClosed:Boolean = false;
@@ -130,24 +128,14 @@ package de.maxdidit.hardware.text
 			_charCode = value;
 		}
 		
-		public function get leftSideBearing():int
+		public function get advanceWidthAdjustment():int
 		{
-			return _leftSideBearing;
+			return _advanceWidthAdjustment;
 		}
 		
-		public function set leftSideBearing(value:int):void
+		public function set advanceWidthAdjustment(value:int):void
 		{
-			_leftSideBearing = value;
-		}
-		
-		public function get advanceWidth():int
-		{
-			return _advanceWidth;
-		}
-		
-		public function set advanceWidth(value:int):void
-		{
-			_advanceWidth = value;
+			_advanceWidthAdjustment = value;
 		}
 		
 		public function get formatID():String 
@@ -185,7 +173,7 @@ package de.maxdidit.hardware.text
 		
 		public function applyPositionAdjustmentValue(value:ValueRecord):void
 		{
-			_advanceWidth += value.xAdvance;
+			_advanceWidthAdjustment += value.xAdvance;
 			x += value.xPlacement;
 		}
 		

@@ -238,7 +238,7 @@ package de.maxdidit.hardware.text.renderer
 								
 								if (b == DRAW_CALLS_PER_BATCH || i == l)
 								{
-									_context3d.drawTriangles(_indexBuffer, currentInstance.glyph.indexOffset, currentInstance.glyph.numTriangles * b);
+									_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
 									b = 0;
 								}
 							}

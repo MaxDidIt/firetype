@@ -83,18 +83,6 @@ package de.maxdidit.hardware.font.data.tables.required.hmtx
 			return 0;
 		}
 		
-		public function applyTable(characterInstances:LinkedList):void 
-		{
-			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-				
-			var glyphID:uint = currentCharacter.glyphID;
-			var leftSideBearing:int = getLeftSideBearing(glyphID);
-			var advanceWidth:uint = getAdvanceWidth(glyphID);
-			
-			currentCharacter.leftSideBearing = leftSideBearing;
-			currentCharacter.advanceWidth = advanceWidth;
-		}
-		
 	}
 
 }

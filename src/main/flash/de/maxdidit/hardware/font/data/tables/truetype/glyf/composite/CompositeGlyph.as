@@ -104,6 +104,11 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 					throw new Error("Matching of points in composite glyphs not yet implemented.");
 				}
 				
+				if (currentComponent.flags.useMyMetrics)
+				{
+					character.useMetricsOfIndex = i;
+				}
+				
 				glyphInstance.scaleX = currentComponent.mtxA;
 				glyphInstance.shearX = currentComponent.mtxB;
 				

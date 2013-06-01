@@ -13,9 +13,7 @@ package de.maxdidit.hardware.text
 		
 		private var _instances:Vector.<HardwareGlyphInstance>;
 		
-		// bounding box
-		
-		private var _boundingBox:AxisAlignedBoundingBox;
+		private var _useMetricsOfIndex:uint = 0;
 		
 		///////////////////////
 		// Constructor
@@ -24,7 +22,6 @@ package de.maxdidit.hardware.text
 		public function HardwareCharacter() 
 		{
 			_instances = new Vector.<HardwareGlyphInstance>();
-			_boundingBox = new AxisAlignedBoundingBox();
 		}
 		
 		///////////////////////
@@ -36,6 +33,21 @@ package de.maxdidit.hardware.text
 			return _instances;
 		}
 		
+		public function get useMetricsOfIndex():uint 
+		{
+			return _useMetricsOfIndex;
+		}
+		
+		public function set useMetricsOfIndex(value:uint):void 
+		{
+			_useMetricsOfIndex = value;
+		}
+		
+		public function get useMetricsOfGlyph():HardwareGlyphInstance
+		{
+			return _instances[_useMetricsOfIndex];
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -43,19 +55,6 @@ package de.maxdidit.hardware.text
 		public function addGlyphInstance(glyphInstance:HardwareGlyphInstance):void 
 		{
 			_instances.push(glyphInstance);
-			
-			// expand bounding box, if necessary
-			_boundingBox.expand(glyphInstance.glyph.boundingBox);
-		}
-		
-		public function get boundingBox():AxisAlignedBoundingBox 
-		{
-			return _boundingBox;
-		}
-		
-		public function set boundingBox(value:AxisAlignedBoundingBox):void 
-		{
-			_boundingBox = value;
 		}
 		
 	}
