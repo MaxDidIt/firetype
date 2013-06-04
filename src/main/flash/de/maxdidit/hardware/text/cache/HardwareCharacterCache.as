@@ -77,75 +77,75 @@ package de.maxdidit.hardware.text.cache
 		// Member Functions
 		///////////////////////
 		
-		public function getCachedCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter
-		{
-			var cachedSubdivisionsForFont:Object = retrieveProperty(_characterCache, font.uniqueIdentifier);
-			var cachedCharactersForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
-			
-			var character:HardwareCharacter;
-			if (cachedCharactersForSubdivision.hasOwnProperty(String(glyphID)))
-			{
-				character = cachedCharactersForSubdivision[String(glyphID)];
-			}
-			else
-			{
-				character = createHardwareCharacter(font, subdivisions, glyphID);
-				cachedCharactersForSubdivision[String(glyphID)] = character;
-			}
-			
-			return character;
-		}
+		//public function getCachedCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter
+		//{
+			//var cachedSubdivisionsForFont:Object = retrieveProperty(_characterCache, font.uniqueIdentifier);
+			//var cachedCharactersForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
+			//
+			//var character:HardwareCharacter;
+			//if (cachedCharactersForSubdivision.hasOwnProperty(String(glyphID)))
+			//{
+				//character = cachedCharactersForSubdivision[String(glyphID)];
+			//}
+			//else
+			//{
+				//character = createHardwareCharacter(font, subdivisions, glyphID);
+				//cachedCharactersForSubdivision[String(glyphID)] = character;
+			//}
+			//
+			//return character;
+		//}
 		
-		private function createHardwareCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter 
-		{
-			var glyph:Glyph = font.retrieveGlyph(glyphID);
-			
-			if (!glyph.header.hasContour)
-			{
-				return null;
-			}
-			
-			var hardwareCharacter:HardwareCharacter = glyph.retrieveHardwareCharacter(font, subdivisions, this);
-			
-			return hardwareCharacter;
-		}
+		//private function createHardwareCharacter(font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareCharacter 
+		//{
+			//var glyph:Glyph = font.retrieveGlyph(glyphID);
+			//
+			//if (!glyph.header.hasContour)
+			//{
+				//return null;
+			//}
+			//
+			//var hardwareCharacter:HardwareCharacter = glyph.retrieveHardwareCharacter(font, subdivisions, this);
+			//
+			//return hardwareCharacter;
+		//}
 		
-		public function getCachedGlyph(font:HardwareFont, subdivisions:uint, glyphIndex:uint):HardwareGlyph
-		{
-			var cachedSubdivisionsForFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
-			var cachedGlyphsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
-			
-			var indexKey:String = String(glyphIndex);
-			
-			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
-			if (cachedGlyphsForSubdivision.hasOwnProperty(indexKey))
-			{
-				hardwareGlyph = cachedGlyphsForSubdivision[indexKey] as HardwareGlyph;
-			}
-			else
-			{
-				var glyph:Glyph = font.retrieveGlyph(glyphIndex);
-				var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
-				
+		//public function getCachedGlyph(font:HardwareFont, subdivisions:uint, glyphIndex:uint):HardwareGlyph
+		//{
+			//var cachedSubdivisionsForFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
+			//var cachedGlyphsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
+			//
+			//var indexKey:String = String(glyphIndex);
+			//
+			//var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
+			//if (cachedGlyphsForSubdivision.hasOwnProperty(indexKey))
+			//{
+				//hardwareGlyph = cachedGlyphsForSubdivision[indexKey] as HardwareGlyph;
+			//}
+			//else
+			//{
+				//var glyph:Glyph = font.retrieveGlyph(glyphIndex);
+				//var paths:Vector.<Vector.<Vertex>> = glyph.retrievePaths(subdivisions);
+				//
 				// cache hardware glyph
-				if (paths)
-				{
-					hardwareGlyph = addPathsToSection(paths);
-				}
-				else
-				{
-					hardwareGlyph = new HardwareGlyph();
-				}
-				
-				hardwareGlyph.glyphIndex = glyphIndex;
-				hardwareGlyph.glyph = glyph;
+				//if (paths)
+				//{
+					//hardwareGlyph = addPathsToSection(paths);
+				//}
+				//else
+				//{
+					//hardwareGlyph = new HardwareGlyph();
+				//}
+				//
+				//hardwareGlyph.glyphIndex = glyphIndex;
+				//hardwareGlyph.glyph = glyph;
 				//hardwareGlyph.boundingBox.setValues(glyph.header.xMin, glyph.header.yMin, glyph.header.xMax, glyph.header.yMax);
-				
-				cachedGlyphsForSubdivision[indexKey] = hardwareGlyph;
-			}
-			
-			return hardwareGlyph;
-		}
+				//
+				//cachedGlyphsForSubdivision[indexKey] = hardwareGlyph;
+			//}
+			//
+			//return hardwareGlyph;
+		//}
 		
 		private function addPathsToSection(paths:Vector.<Vector.<Vertex>>):HardwareGlyph 
 		{
@@ -175,7 +175,7 @@ package de.maxdidit.hardware.text.cache
 		}
 		
 		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
-		{	
+		{
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
 			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, textFormat);
 		}
@@ -220,6 +220,65 @@ package de.maxdidit.hardware.text.cache
 			}
 			
 			_clientTexts.splice(index, 1);
+		}
+		
+		public function getCachedHardwareGlyph(font:HardwareFont, subdivisions:uint, index:uint):HardwareGlyph 
+		{
+			if (!_glyphCache.hasOwnProperty(font.uniqueIdentifier))
+			{
+				return null;
+			}
+			
+			var subdivisionsForFont:Object = _glyphCache[font.uniqueIdentifier];
+			if (!subdivisionsForFont.hasOwnProperty(String(subdivisions)))
+			{
+				return null;
+			}
+			
+			var glyphsForSubdivision:Object = subdivisionsForFont[String(subdivisions)];
+			if (!glyphsForSubdivision.hasOwnProperty(String(index)))
+			{
+				return null;
+			}
+			
+			var hardwareGlyph:HardwareGlyph = glyphsForSubdivision[String(index)];
+			return hardwareGlyph;
+		}
+		
+		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareGlyph 
+		{
+			const l:uint = _sections.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var glyph:HardwareGlyph = _sections[i].addPathsToSection(paths);
+				if (glyph)
+				{
+					// cache glyph
+					glyph.cacheSectionIndex = i;
+					addHardwareGlyphToCache(glyph, font, subdivisions, glyphID);
+					return glyph;
+				}
+			}
+			
+			// glyph did not fit in any existing section, create new section
+			var section:HardwareCharacterCacheSection = new HardwareCharacterCacheSection(_rendererFactory.retrieveHardwareTextRenderer());
+			
+			glyph = section.addPathsToSection(paths);
+			glyph.cacheSectionIndex = _sections.length;
+			addHardwareGlyphToCache(glyph, font, subdivisions, glyphID);
+			
+			_sections.push(section);
+			
+			return glyph;
+		}
+		
+		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, subdivisions:uint, glyphID:uint):void 
+		{
+			var subdivisionsInFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
+			var glyphsInSubdivisions:Object = retrieveProperty(subdivisionsInFont, String(subdivisions));
+			
+			glyphsInSubdivisions[String(glyphID)] = glyph;
 		}
 		
 		private function retrieveProperty(map:Object, key:String):Object

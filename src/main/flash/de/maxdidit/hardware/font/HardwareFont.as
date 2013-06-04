@@ -4,6 +4,8 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	import de.maxdidit.hardware.font.data.tables.required.hmtx.LongHorizontalMetric;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.list.LinkedList;
@@ -23,7 +25,6 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -121,15 +122,63 @@ package de.maxdidit.hardware.font
 			// resolve dependencies between tables/compile font values
 			applyHorizontalMetrics();
 			applyGlyphClassDefinitions();
-			resolveDependencies();
+			resolveComponentDependencies();
+			resolveSubstitutionDependencies();
+			resolvePositioningDependencies();
 		}
 		
-		private function resolveDependencies():void 
+		private function resolveSubstitutionDependencies():void 
+		{
+			var glyphSubstitutionTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
+			if (!glyphSubstitutionTableData)
+			{
+				return;
+			}
+			
+			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+			if (!glyphTableData)
+			{
+				return;
+			}
+			
+			var lookupTables:Vector.<LookupTable> = glyphSubstitutionTableData.lookupListTable.lookupTables;
+			const ll:uint = lookupTables.length;
+			
+			for (var j:uint = 0; j < ll; j++)
+			{
+				lookupTables[j].resolveDependencies(glyphSubstitutionTableData, this);
+			}
+		}
+		
+		private function resolvePositioningDependencies():void 
+		{
+			var glyphPositioningTableData:GlyphPositioningTableData = _data.retrieveTableData(TableNames.GLYPH_POSITIONING_DATA) as GlyphPositioningTableData;
+			if (!glyphPositioningTableData)
+			{
+				return;
+			}
+			
+			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+			if (!glyphTableData)
+			{
+				return;
+			}
+			
+			var lookupTables:Vector.<LookupTable> = glyphPositioningTableData.lookupListTable.lookupTables;
+			const ll:uint = lookupTables.length;
+			
+			for (var j:uint = 0; j < ll; j++)
+			{
+				lookupTables[j].resolveDependencies(glyphPositioningTableData, this);
+			}
+		}
+		
+		private function resolveComponentDependencies():void 
 		{
 			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
 			if (!glyphTableData)
 			{
-				return
+				return;
 			}
 			
 			const l:uint = glyphTableData.glyphs.length;
@@ -144,13 +193,13 @@ package de.maxdidit.hardware.font
 			var glyphTableData:GlyphTableData = _data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
 			if (!glyphTableData)
 			{
-				return
+				return;
 			}
 			
 			var glyphDefinitionData:GlyphDefinitionTableData = _data.retrieveTableData(TableNames.GLYPH_DEFINITION_DATA) as GlyphDefinitionTableData;
 			if (!glyphDefinitionData)
 			{
-				return
+				return;
 			}
 			
 			if (!glyphDefinitionData.glyphClassDefinitionTable)
@@ -167,7 +216,9 @@ package de.maxdidit.hardware.font
 			for (var i:uint = 0; i < l; i++)
 			{
 				var glyphClass:uint = glyphClassDefinitionTable.getGlyphClassByID(i);
-				glyphTableData.retrieveGlyph(i).glyphClass = glyphClass;
+				var glyph:Glyph = glyphTableData.retrieveGlyph(i);
+				glyph.glyphClass = glyphClass;
+				glyph.index = i;
 			}
 		}
 		
@@ -238,16 +289,16 @@ package de.maxdidit.hardware.font
 			return glyphIndex;
 		}
 		
-		public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures ):void 
-		{
-			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
-			if (!gsubTableData)
-			{
-				return;
-			}
-			
-			gsubTableData.applyTable(characterInstances, scriptTag, languageTag, activatedFeatures);
-		}
+		//public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures ):void 
+		//{
+			//var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
+			//if (!gsubTableData)
+			//{
+				//return;
+			//}
+			//
+			//gsubTableData.applyTable(characterInstances, scriptTag, languageTag, activatedFeatures);
+		//}
 		
 		public function getAdvancedFeatures(standardScript:String, standardLanguage:String):Vector.<FeatureRecord> 
 		{

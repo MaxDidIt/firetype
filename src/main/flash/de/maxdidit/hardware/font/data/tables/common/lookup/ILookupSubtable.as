@@ -1,15 +1,20 @@
 package de.maxdidit.hardware.font.data.tables.common.lookup 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.list.LinkedList;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
 	public interface ILookupSubtable 
 	{
-		function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void;
+		function get parent():LookupTable;
+		function set parent(value:LookupTable):void;
+		
+		//function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void;
+		function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void
 	}
 
 }

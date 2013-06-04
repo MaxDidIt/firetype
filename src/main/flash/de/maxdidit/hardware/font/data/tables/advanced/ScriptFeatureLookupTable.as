@@ -8,7 +8,6 @@ package de.maxdidit.hardware.font.data.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTable;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
@@ -117,20 +116,20 @@ package de.maxdidit.hardware.font.data.tables.advanced
 		// Member Functions
 		///////////////////////
 		
-		public function applyTable(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):void
-		{
-			var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
-			if (!scriptTable)
-			{
-				return;
-			}
-			
-			var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
-			
-			var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, activatedFeatures);
-			
-			applyFeatures(characterInstances, features);
-		}
+		//public function applyTable(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures):void
+		//{
+			//var scriptTable:ScriptTable = scriptListTable.retrieveScriptTable(scriptTag);
+			//if (!scriptTable)
+			//{
+				//return;
+			//}
+			//
+			//var languageSystemTable:LanguageSystemTable = scriptTable.retrieveLanguageSystemTable(languageTag)
+			//
+			//var features:Vector.<FeatureRecord> = featureListTable.retrieveFeatures(languageSystemTable, activatedFeatures);
+			//
+			//applyFeatures(characterInstances, features);
+		//}
 		
 		public function retrieveFeatures(scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures = null):Vector.<FeatureRecord>
 		{
@@ -166,38 +165,38 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			return lookupTables;
 		}
 		
-		private function applyFeatures(characterInstances:LinkedList, features:Vector.<FeatureRecord>):void 
-		{
-			const l:uint = features.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var feature:FeatureRecord = features[i];
-				applyFeature(characterInstances, feature);
-			}
-		}
+		//private function applyFeatures(characterInstances:LinkedList, features:Vector.<FeatureRecord>):void 
+		//{
+			//const l:uint = features.length;
+			//for (var i:uint = 0; i < l; i++)
+			//{
+				//var feature:FeatureRecord = features[i];
+				//applyFeature(characterInstances, feature);
+			//}
+		//}
 		
-		private function applyFeature(characterInstances:LinkedList, feature:FeatureRecord):void 
-		{
-			var lookupTables:Vector.<LookupTable> = lookupListTable.retrieveLookupTables(feature.featureTable.lookupListIndices);
-			
-			characterInstances.gotoFirstElement();
-			
-			while (characterInstances.currentElement)
-			{
-				performLookups(characterInstances, lookupTables);
-				characterInstances.gotoNextElement();
-			}
-		}
+		//private function applyFeature(characterInstances:LinkedList, feature:FeatureRecord):void 
+		//{
+			//var lookupTables:Vector.<LookupTable> = lookupListTable.retrieveLookupTables(feature.featureTable.lookupListIndices);
+			//
+			//characterInstances.gotoFirstElement();
+			//
+			//while (characterInstances.currentElement)
+			//{
+				//performLookups(characterInstances, lookupTables);
+				//characterInstances.gotoNextElement();
+			//}
+		//}
 		
-		private function performLookups(characterInstances:LinkedList, lookupTables:Vector.<LookupTable>):void 
-		{
-			const l:uint = lookupTables.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var lookupTable:LookupTable = lookupTables[i];
-				lookupTable.performLookup(characterInstances, this);
-			}
-		}
+		//private function performLookups(characterInstances:LinkedList, lookupTables:Vector.<LookupTable>):void 
+		//{
+			//const l:uint = lookupTables.length;
+			//for (var i:uint = 0; i < l; i++)
+			//{
+				//var lookupTable:LookupTable = lookupTables[i];
+				//lookupTable.performLookup(characterInstances, this);
+			//}
+		//}
 	}
 
 }

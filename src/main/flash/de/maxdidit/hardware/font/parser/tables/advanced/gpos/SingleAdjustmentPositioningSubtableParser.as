@@ -68,17 +68,19 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gpos
 			if (posFormat == 1)
 			{
 				valueCount = 1;
+				values.length = valueCount;
 				
 				value = _valueRecordParser.parseValueRecord(data, valueFormat);
-				values.push(value);
+				values[0] = value;
 			}
 			else if (posFormat == 2)
 			{
 				valueCount = _dataTypeParser.parseUnsignedShort(data);
+				values.length = valueCount;
 				for (var i:uint = 0; i < valueCount; i++)
 				{
 					value = _valueRecordParser.parseValueRecord(data, valueFormat);
-					values.push(value);
+					values[i] = value;
 				}
 			}
 			

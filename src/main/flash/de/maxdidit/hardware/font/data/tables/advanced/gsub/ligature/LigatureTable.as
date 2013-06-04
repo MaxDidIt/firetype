@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -14,6 +15,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 		
 		private var _componentCount:uint;
 		private var _componentGlyphIDs:Vector.<uint>;
+		
+		private var _ligatureGlyph:Glyph;
 		
 		///////////////////////
 		// Constructor
@@ -56,6 +59,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 		public function set componentGlyphIDs(value:Vector.<uint>):void 
 		{
 			_componentGlyphIDs = value;
+		}
+		
+		public function get ligatureGlyph():Glyph 
+		{
+			return _ligatureGlyph;
+		}
+		
+		public function set ligatureGlyph(value:Glyph):void 
+		{
+			_ligatureGlyph = value;
 		}
 		
 	}

@@ -23,7 +23,7 @@ package de.maxdidit.list
 		// Member Functions
 		///////////////////////
 		
-		override public function addElement(element:LinkedListElement):void 
+		override public function addElement(element:ILinkedListElement):void 
 		{
 			super.addElement(element);
 			

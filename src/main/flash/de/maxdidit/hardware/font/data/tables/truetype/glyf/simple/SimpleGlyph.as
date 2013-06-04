@@ -148,20 +148,27 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		// Member Functions
 		///////////////////////
 		
-		override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter 
+		//override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter 
+		//{
+			//var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, this.header.index);
+			//
+			//var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
+			//
+			//var character:HardwareCharacter = new HardwareCharacter();
+			//character.addGlyphInstance(glyphInstance);
+			//character.glyph = this;
+			//
+			//return character;
+		//}
+		
+		override public function retrieveGlyphInstances(instances:Vector.<HardwareGlyphInstance>):void
 		{
-			var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, this.header.index);
-			
-			var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
-			
-			var character:HardwareCharacter = new HardwareCharacter();
-			character.addGlyphInstance(glyphInstance);
-			character.glyph = this;
-			
-			return character;
+			var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(null);
+			glyphInstance.glyph = this;
+			instances.push(glyphInstance);
 		}
 		
-		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
+		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>>
 		{
 			const l:uint = _contours.length;
 			var shapes:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>(l);

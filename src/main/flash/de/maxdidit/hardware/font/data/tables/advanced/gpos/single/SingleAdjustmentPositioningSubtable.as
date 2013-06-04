@@ -4,10 +4,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
-	import de.maxdidit.hardware.text.HardwareCharacterInstance;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
@@ -27,6 +29,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 		
 		private var _valueCount:uint;
 		private var _values:Vector.<ValueRecord>;
+		
+		private var _parent:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -101,26 +105,65 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 			_valueFormat = value;
 		}
 		
+		public function get parent():LookupTable 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:LookupTable):void 
+		{
+			_parent = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		{
+		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		//{
 			//throw new Error("Function not yet implemented");
-			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			
-			var coverageIndex:int = _coverage.getCoverageIndex(currentCharacter.glyphID);
-			if (coverageIndex == -1)
+			//var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			//
+			//var coverageIndex:int = _coverage.getCoverageIndex(currentCharacter.glyphID);
+			//if (coverageIndex == -1)
+			//{
+				//return;
+			//}
+			//
+			//var value:ValueRecord = _values[coverageIndex];
+			//
+			//currentCharacter.applyPositionAdjustmentValue(value);
+		//}
+		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		{
+			var value:ValueRecord;
+			if (_valueCount == 1)
 			{
-				return;
+				value = _values[0];
+			}
+			else
+			{
+				value = _values[coverageIndex];
 			}
 			
-			var value:ValueRecord = _values[coverageIndex];
+			var result:SingleAdjustmentPositioningLookup = new SingleAdjustmentPositioningLookup();
+			result.value = value;
 			
-			currentCharacter.applyPositionAdjustmentValue(value);
+			return result;
+		}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
+		{
+			_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+		}
+		
+		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
+		{
+			var targetGlyph:Glyph = font.retrieveGlyph(glyphIndex);
+			targetGlyph.addGlyphLookup(TableNames.GLYPH_POSITIONING_DATA, _parent.lookupIndex, retrieveGlyphLookup(glyphIndex, coverageIndex, font));
 		}
 		
 	}

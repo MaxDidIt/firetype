@@ -8,6 +8,7 @@ package de.maxdidit.hardware.text
 	 */
 	public class HardwareCharacterInstanceListElement extends LinkedListElement 
 	{
+		/*
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -36,6 +37,7 @@ package de.maxdidit.hardware.text
 		{
 			_hardwareCharacterInstance = value;
 		}
+		*/
 		
 	}
 

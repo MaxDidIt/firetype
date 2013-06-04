@@ -3,7 +3,6 @@ package de.maxdidit.hardware.font.data.tables.advanced.gdef
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.attachment.AttachmentListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.classes.IClassDefinitionTable;
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...

@@ -16,7 +16,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ChaningContextualSubstitutionSubtableParser implements ISubTableParser
+	public class ChainingContextualSubstitutionSubtableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields
@@ -29,7 +29,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 		// Constructor
 		///////////////////////
 		
-		public function ChaningContextualSubstitutionSubtableParser($dataTypeParser:DataTypeParser, $coverageParser:CoverageTableParser)
+		public function ChainingContextualSubstitutionSubtableParser($dataTypeParser:DataTypeParser, $coverageParser:CoverageTableParser)
 		{
 			this._dataTypeParser = $dataTypeParser;
 			this._coverageParser = $coverageParser;

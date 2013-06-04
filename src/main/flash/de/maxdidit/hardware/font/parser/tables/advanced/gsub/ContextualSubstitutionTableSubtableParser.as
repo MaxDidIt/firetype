@@ -18,7 +18,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced.gsub
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class ContextualSubstitutionTableSubtableParser implements ISubTableParser 
+	public class ContextualSubstitutionTableSubtableParser implements ISubTableParser
 	{
 		///////////////////////
 		// Member Fields

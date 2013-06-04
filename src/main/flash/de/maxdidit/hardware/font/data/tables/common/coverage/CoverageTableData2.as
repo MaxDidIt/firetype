@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.common.coverage 
 {
+	import de.maxdidit.hardware.font.HardwareFont;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -97,6 +98,27 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 			}
 			
 			return -1;
+		}
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable */
+		
+		public function iterateOverCoveredIndices(callback:Function, font:HardwareFont):void 
+		{
+			const l:uint = _rangeCount;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var rangeRecord:RangeRecord = _rangeRecords[i];
+				
+				var start:uint = rangeRecord.start;
+				var end:uint = rangeRecord.end;
+				var startCoverageIndex:uint = rangeRecord.startCoverageIndex;
+				
+				for (var glyphIndex:uint = start; glyphIndex <= end; glyphIndex++)
+				{
+					var coverageIndex:uint = startCoverageIndex + glyphIndex - start;
+					callback.call(null, glyphIndex, coverageIndex, font);
+				}
+			}
 		}
 		
 	}

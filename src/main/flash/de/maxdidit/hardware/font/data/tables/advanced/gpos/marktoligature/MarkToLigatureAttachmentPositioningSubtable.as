@@ -5,9 +5,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
-	import de.maxdidit.hardware.text.HardwareCharacterInstance;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
@@ -32,6 +35,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature
 		
 		private var _ligatureArrayOffset:uint;
 		private var _ligatureArray:LigatureArray;
+		
+		private var _parent:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -136,53 +141,86 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature
 			_ligatureArray = value;
 		}
 		
+		public function get parent():LookupTable 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:LookupTable):void 
+		{
+			_parent = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		{
-			var markInstance:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			
-			var ligatureElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.previous as HardwareCharacterInstanceListElement;
-			if (!ligatureElement)
-			{
-				return;
-			}
-			var ligatureInstance:HardwareCharacterInstance = ligatureElement.hardwareCharacterInstance;
-			
-			var markCoverageIndex:int = _markCoverage.getCoverageIndex(markInstance.glyphID);
-			if (markCoverageIndex == -1)
-			{
-				return;
-			}
-			
-			var ligatureCoverageIndex:int = _ligatureCoverage.getCoverageIndex(ligatureInstance.glyphID);
-			if (ligatureCoverageIndex == -1)
-			{
-				return;
-			}
-			
-			throw new Error("The performLookup function of MarkToLigatureAttachmentPositioningSubtable has not been fully implemented yet.");
-			
-			var markRecord:MarkRecord = _markArray.markRecords[markCoverageIndex];
-			var ligatureAttachment:LigatureAttachment = _ligatureArray.ligatureAttachments[ligatureAttachment];
-			
+		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		//{
+			//var markInstance:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			//
+			//var ligatureElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.previous as HardwareCharacterInstanceListElement;
+			//if (!ligatureElement)
+			//{
+				//return;
+			//}
+			//var ligatureInstance:HardwareCharacterInstance = ligatureElement.hardwareCharacterInstance;
+			//
+			//var markCoverageIndex:int = _markCoverage.getCoverageIndex(markInstance.glyphID);
+			//if (markCoverageIndex == -1)
+			//{
+				//return;
+			//}
+			//
+			//var ligatureCoverageIndex:int = _ligatureCoverage.getCoverageIndex(ligatureInstance.glyphID);
+			//if (ligatureCoverageIndex == -1)
+			//{
+				//return;
+			//}
+			//
+			//throw new Error("The performLookup function of MarkToLigatureAttachmentPositioningSubtable has not been fully implemented yet.");
+			//
+			//var markRecord:MarkRecord = _markArray.markRecords[markCoverageIndex];
+			//var ligatureAttachment:LigatureAttachment = _ligatureArray.ligatureAttachments[ligatureCoverageIndex];
+			//
 			// TODO: I'm not fully clear on how to handle the multiple components of the ligature.
 			// I'm also not sure what exactly the documentation means by "Aligning the attachment points combines the mark and ligature.".
 			// Are the mark and the ligature only visually combined or is the mark a component of the ligature after this?.
-			var componentRecord:ComponentRecord = ligatureAttachment.componentRecords[0];
+			//var componentRecord:ComponentRecord = ligatureAttachment.componentRecords[0];
+			//
+			//var markAnchor:AnchorTable = markRecord.markAnchor;
+			//var ligatureAnchor:AnchorTable = componentRecord.ligatureAnchors[markRecord.markClass];
+			//
+			//var xOffset:int = markAnchor.xCoordinate - baseMarkAnchor.xCoordinate;
+			//var yOffset:int = markAnchor.yCoordinate - baseMarkAnchor.yCoordinate;
+			//
+			//currentCharacter.hardwareCharacterInstance.x = previousCharacter.hardwareCharacterInstance.x + xOffset;
+			//currentCharacter.hardwareCharacterInstance.y = previousCharacter.hardwareCharacterInstance.y + yOffset;
+		//}
+		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		{
+			var markRecord:MarkRecord = _markArray.markRecords[coverageIndex];
 			
-			var markAnchor:AnchorTable = markRecord.markAnchor;
-			var ligatureAnchor:AnchorTable = componentRecord.ligatureAnchors[markRecord.markClass];
+			var result:MarkToLigatureAttachmentPositioningLookup = new MarkToLigatureAttachmentPositioningLookup();
+			result.ligatureCoverage = _ligatureCoverage;
+			result.ligatureArray = _ligatureArray;
+			result.markRecord = markRecord;
 			
-			var xOffset:int = markAnchor.xCoordinate - baseMarkAnchor.xCoordinate;
-			var yOffset:int = markAnchor.yCoordinate - baseMarkAnchor.yCoordinate;
-			
-			currentCharacter.hardwareCharacterInstance.x = previousCharacter.hardwareCharacterInstance.x + xOffset;
-			currentCharacter.hardwareCharacterInstance.y = previousCharacter.hardwareCharacterInstance.y + yOffset;
+			return result;
+		}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
+		{
+			_markCoverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+		}
+		
+		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
+		{
+			var targetGlyph:Glyph = font.retrieveGlyph(glyphIndex);
+			targetGlyph.addGlyphLookup(TableNames.GLYPH_POSITIONING_DATA, _parent.lookupIndex, retrieveGlyphLookup(glyphIndex, coverageIndex, font));
 		}
 	}
 

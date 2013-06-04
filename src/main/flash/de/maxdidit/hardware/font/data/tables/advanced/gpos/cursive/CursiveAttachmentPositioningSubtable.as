@@ -2,8 +2,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.list.LinkedList;
 	
 	/**
@@ -21,6 +25,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive
 		
 		private var _entryExitCount:uint;
 		private var _entryExitRecords:Vector.<EntryExitRecord>;
+		
+		private var _parent:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -75,6 +81,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive
 			_entryExitRecords = value;
 		}
 		
+		public function get parent():LookupTable 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:LookupTable):void 
+		{
+			_parent = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
@@ -86,6 +102,26 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive
 			throw new Error("Function not yet implemented");
 		}
 		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		{
+			var entryExitRecord:EntryExitRecord = _entryExitRecords[coverageIndex];
+			
+			var result:CursiveAttachmentPositioningLookup = new CursiveAttachmentPositioningLookup();
+			result.entryExitRecord = entryExitRecord;
+			
+			return result;
+		}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
+		{
+			_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+		}
+		
+		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
+		{
+			var targetGlyph:Glyph = font.retrieveGlyph(glyphIndex);
+			targetGlyph.addGlyphLookup(TableNames.GLYPH_POSITIONING_DATA, _parent.lookupIndex, retrieveGlyphLookup(glyphIndex, coverageIndex, font));
+		}
 	}
 
 }

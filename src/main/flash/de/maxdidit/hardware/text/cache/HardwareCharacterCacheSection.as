@@ -52,7 +52,7 @@ package de.maxdidit.hardware.text.cache
 			var cachedInstancesForFormat:Object = retrieveProperty(cachedFormatsForSubdivision, textFormat.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;
-			var indexKey:String = String(hardwareGlyphInstance.hardwareGlyph.glyphIndex);
+			var indexKey:String = String(hardwareGlyphInstance.glyph.index);
 			if (cachedInstancesForFormat.hasOwnProperty(indexKey))
 			{
 				instances = cachedInstancesForFormat[indexKey] as Vector.<HardwareGlyphInstance>;

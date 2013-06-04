@@ -10,10 +10,10 @@ package de.maxdidit.list
 		// Member Fields
 		///////////////////////
 		
-		protected var _firstElement:LinkedListElement;
-		protected var _lastElement:LinkedListElement;
+		protected var _firstElement:ILinkedListElement;
+		protected var _lastElement:ILinkedListElement;
 		
-		protected var _currentElement:LinkedListElement;
+		protected var _currentElement:ILinkedListElement;
 		
 		protected var _numElements:uint = 0;
 		
@@ -30,12 +30,12 @@ package de.maxdidit.list
 		// Member Properties
 		///////////////////////
 		
-		public function get firstElement():LinkedListElement 
+		public function get firstElement():ILinkedListElement 
 		{
 			return _firstElement;
 		}
 		
-		public function get lastElement():LinkedListElement 
+		public function get lastElement():ILinkedListElement 
 		{
 			return _lastElement;
 		}
@@ -54,12 +54,12 @@ package de.maxdidit.list
 		
 		// currentElement
 		
-		public function get currentElement():LinkedListElement 
+		public function get currentElement():ILinkedListElement 
 		{
 			return _currentElement;
 		}
 		
-		public function set currentElement(value:LinkedListElement):void 
+		public function set currentElement(value:ILinkedListElement):void 
 		{
 			_currentElement = value;
 		}
@@ -89,7 +89,7 @@ package de.maxdidit.list
 			}
 		}
 		
-		public function addElement(element:LinkedListElement):void
+		public function addElement(element:ILinkedListElement):void
 		{
 			if (!_firstElement)
 			{
@@ -107,7 +107,7 @@ package de.maxdidit.list
 			_numElements++;
 		}
 		
-		public function removeElement(element:LinkedListElement):void 
+		public function removeElement(element:ILinkedListElement):void 
 		{
 			if (element == _firstElement)
 			{
@@ -132,7 +132,7 @@ package de.maxdidit.list
 			_numElements--;
 		}
 		
-		public function addElementAfter(element:LinkedListElement, afterElement:LinkedListElement):void 
+		public function addElementAfter(element:ILinkedListElement, afterElement:ILinkedListElement):void 
 		{
 			if (afterElement == _lastElement)
 			{

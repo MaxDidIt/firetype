@@ -115,18 +115,17 @@ package de.maxdidit.hardware.text
 		{
 			loseAllChildren();
 			
-			_typesetter.assemble(_text, this, _standardFormat, _cache);
+			_typesetter.assemble(this, cache);
 		}
 		
 		override public function loseAllChildren():void 
 		{
 			// clean up instances
-			const l:uint = _children.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var word:HardwareWord = _children[i] as HardwareWord;
-				word.loseCharacters();
-			}
+			//const l:uint = _children.length;
+			//for (var i:uint = 0; i < l; i++)
+			//{
+				//var word:HardwareWord = _children[i] as HardwareWord;
+			//}
 			
 			super.loseAllChildren();
 		}

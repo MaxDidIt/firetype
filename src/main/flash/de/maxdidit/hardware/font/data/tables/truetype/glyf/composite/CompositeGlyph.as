@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite 
+package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
@@ -9,11 +9,12 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import flash.utils.ByteArray;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class CompositeGlyph extends Glyph 
+	public class CompositeGlyph extends Glyph
 	{
 		///////////////////////
 		// Member Fields
@@ -31,7 +32,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		// Constructor
 		///////////////////////
 		
-		public function CompositeGlyph() 
+		public function CompositeGlyph()
 		{
 			_dependencies = new Vector.<Glyph>();
 		}
@@ -42,41 +43,41 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		
 		// components
 		
-		public function get components():Vector.<CompositeGlyphComponent> 
+		public function get components():Vector.<CompositeGlyphComponent>
 		{
 			return _components;
 		}
 		
-		public function set components(value:Vector.<CompositeGlyphComponent>):void 
+		public function set components(value:Vector.<CompositeGlyphComponent>):void
 		{
 			_components = value;
 		}
 		
 		// numInstructions
 		
-		public function get numInstructions():uint 
+		public function get numInstructions():uint
 		{
 			return _numInstructions;
 		}
 		
-		public function set numInstructions(value:uint):void 
+		public function set numInstructions(value:uint):void
 		{
 			_numInstructions = value;
 		}
 		
 		// instructions
 		
-		public function get instructions():ByteArray 
+		public function get instructions():ByteArray
 		{
 			return _instructions;
 		}
 		
-		public function set instructions(value:ByteArray):void 
+		public function set instructions(value:ByteArray):void
 		{
 			_instructions = value;
 		}
 		
-		override public function get leftSideBearing():int 
+		override public function get leftSideBearing():int
 		{
 			if (_indexForMetrics == -1 || _indexForMetrics >= _dependencies.length)
 			{
@@ -86,7 +87,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 			return _dependencies[_indexForMetrics].leftSideBearing;
 		}
 		
-		override public function get advanceWidth():uint 
+		override public function get advanceWidth():uint
 		{
 			if (_indexForMetrics == -1 || _indexForMetrics >= _dependencies.length)
 			{
@@ -100,7 +101,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 		// Member Functions
 		///////////////////////
 		
-		override public function resolveDependencies(glyphTableData:GlyphTableData):void 
+		override public function resolveDependencies(glyphTableData:GlyphTableData):void
 		{
 			const l:uint = _components.length;
 			
@@ -119,48 +120,74 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 			}
 		}
 		
-		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>> 
+		override public function retrieveGlyphInstances(instances:Vector.<HardwareGlyphInstance>):void
 		{
-			return null;
-		}
-		
-		override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter
-		{
-			var character:HardwareCharacter = new HardwareCharacter();
-			
 			const l:uint = _components.length;
+			
 			for (var i:uint = 0; i < l; i++)
 			{
-				var currentComponent:CompositeGlyphComponent = _components[i];
+				var component:CompositeGlyphComponent = _components[i];
+				var glyph:Glyph = _dependencies[i];
 				
-				var glyphIndex:uint = currentComponent.glyphIndex;
-				var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, glyphIndex);
-				var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
+				glyph.retrieveGlyphInstances(instances);
 				
-				if (currentComponent.flags.argumentsAreXYValues)
+				var instance:HardwareGlyphInstance = instances[instances.length - 1];
+				
+				if (component.flags.argumentsAreXYValues)
 				{
-					glyphInstance.x += currentComponent.argument1;
-					glyphInstance.y += currentComponent.argument2;
+					instance.x += component.argument1;
+					instance.y += component.argument2;
 				}
 				else
 				{
 					throw new Error("Matching of points in composite glyphs not yet implemented.");
 				}
 				
-				character.glyph = this;
+				instance.scaleX = component.mtxA;
+				instance.shearX = component.mtxB;
 				
-				glyphInstance.scaleX = currentComponent.mtxA;
-				glyphInstance.shearX = currentComponent.mtxB;
-				
-				glyphInstance.shearY = currentComponent.mtxC;
-				glyphInstance.scaleY = currentComponent.mtxD;
-				
-				character.addGlyphInstance(glyphInstance);
+				instance.shearY = component.mtxC;
+				instance.scaleY = component.mtxD;
 			}
-			
-			return character;
 		}
-		
+	
+		//override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter
+		//{
+		//var character:HardwareCharacter = new HardwareCharacter();
+		//
+		//const l:uint = _components.length;
+		//for (var i:uint = 0; i < l; i++)
+		//{
+		//var currentComponent:CompositeGlyphComponent = _components[i];
+		//
+		//var glyphIndex:uint = currentComponent.glyphIndex;
+		//var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, glyphIndex);
+		//var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
+		//
+		//if (currentComponent.flags.argumentsAreXYValues)
+		//{
+		//glyphInstance.x += currentComponent.argument1;
+		//glyphInstance.y += currentComponent.argument2;
+		//}
+		//else
+		//{
+		//throw new Error("Matching of points in composite glyphs not yet implemented.");
+		//}
+		//
+		//character.glyph = this;
+		//
+		//glyphInstance.scaleX = currentComponent.mtxA;
+		//glyphInstance.shearX = currentComponent.mtxB;
+		//
+		//glyphInstance.shearY = currentComponent.mtxC;
+		//glyphInstance.scaleY = currentComponent.mtxD;
+		//
+		//character.addGlyphInstance(glyphInstance);
+		//}
+		//
+		//return character;
+		//}
+	
 	}
 
 }

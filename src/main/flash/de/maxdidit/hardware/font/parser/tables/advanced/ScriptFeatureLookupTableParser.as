@@ -113,7 +113,10 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			for (var i:uint = 0; i < l; i++)
 			{
 				var offset:uint = lookupOffsets[i];
+				
 				var lookupTable:LookupTable = parseLookupTable(data, lookupListOffset + offset);
+				lookupTable.lookupIndex = i;
+				
 				result[i] = lookupTable;
 			}
 			
@@ -133,6 +136,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 			{
 				var subTableOffset:uint = result.subTableOffsets[i];
 				var subTable:ILookupSubtable = parser.parseTable(data, offset + subTableOffset) as ILookupSubtable;
+				subTable.parent = result;
 				
 				subTables[i] = subTable;
 			}

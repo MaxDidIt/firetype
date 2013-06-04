@@ -1,7 +1,5 @@
 package de.maxdidit.hardware.font.data.tables.required.hmtx 
 {
-	import de.maxdidit.hardware.text.HardwareCharacterInstance;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...

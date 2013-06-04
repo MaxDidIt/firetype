@@ -23,12 +23,15 @@ package de.maxdidit.hardware.font.parser
 		// Member Fields
 		///////////////////////
 		
+		private var _eventDispatcherMap:Object;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
 		public function FontParser() 
 		{
+			_eventDispatcherMap = new Object();
 		}
 		
 		///////////////////////
@@ -39,18 +42,17 @@ package de.maxdidit.hardware.font.parser
 		// Member Functions
 		///////////////////////
 		
-		public function loadFont(url:String):void
+		public function loadFont(url:String):EventDispatcher
 		{
-			var urlRequest:URLRequest = new URLRequest(url);
+			var fontLoaderJob:FontLoaderJob = new FontLoaderJob();
+			fontLoaderJob.addEventListener(Event.COMPLETE, handleFontLoaded);
 			
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+			var eventDispatcher:EventDispatcher = new EventDispatcher();
+			_eventDispatcherMap[url] = eventDispatcher;
 			
-			urlLoader.addEventListener(Event.COMPLETE, handleFontLoaded);
-			urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleFontLoadingFailed);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleFontLoadingFailed);
+			fontLoaderJob.loadFont(url);
 			
-			urlLoader.load(urlRequest);
+			return eventDispatcher;
 		}
 		
 		public function parseFont(data:ByteArray):HardwareFont
@@ -69,13 +71,6 @@ package de.maxdidit.hardware.font.parser
 			return null;
 		}
 		
-		private function removeEventHandlerFromLoader(urlLoader:URLLoader):void
-		{
-			urlLoader.removeEventListener(Event.COMPLETE, handleFontLoaded);
-			urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, handleFontLoadingFailed);
-			urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, handleFontLoadingFailed);
-		}
-		
 		///////////////////////
 		// Event Handler
 		///////////////////////
@@ -83,22 +78,25 @@ package de.maxdidit.hardware.font.parser
 		private function handleFontLoaded(e:Event):void 
 		{
 			// TODO: provide feedback that font has been loaded.
+			var fontLoaderJob:FontLoaderJob = e.target as FontLoaderJob;
 			
-			var urlLoader:URLLoader = e.target as URLLoader;
-			removeEventHandlerFromLoader(urlLoader);
+			var urlLoader:URLLoader = fontLoaderJob.urlLoader;
 			
 			var data:ByteArray = urlLoader.data as ByteArray;
 			var font:HardwareFont = parseFont(data);
+			
+			var eventDispatcher:EventDispatcher = _eventDispatcherMap[fontLoaderJob.url];
+			eventDispatcher.dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
+			delete _eventDispatcherMap[fontLoaderJob.url];
 			
 			dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
 		}
 		
 		private function handleFontLoadingFailed(e:Event):void 
 		{
-			// TODO: provide feedback that the font could not be loaded and why.
-			
-			var urlLoader:URLLoader = e.target as URLLoader;
-			removeEventHandlerFromLoader(urlLoader);
+			var fontLoaderJob:FontLoaderJob = e.target as FontLoaderJob;
+			var urlLoader:URLLoader = fontLoaderJob.urlLoader;
+			delete _eventDispatcherMap[fontLoaderJob.url];
 		}
 	}
 

@@ -4,10 +4,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
-	import de.maxdidit.hardware.text.HardwareCharacterInstance;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.list.LinkedList;
 	
 	/**
@@ -32,6 +34,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 		private var _pairSetCount:uint;
 		private var _pairSetOffset:Vector.<uint>;
 		private var _pairSets:Vector.<PairSet>;
+		
+		private var _parent:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -136,53 +140,86 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 			_pairSetOffset = value;
 		}
 		
+		public function get parent():LookupTable 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:LookupTable):void 
+		{
+			_parent = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		{
-			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			var coverageIndex:int = coverage.getCoverageIndex(currentCharacter.glyphID);
-			
-			if (coverageIndex == -1)
-			{
-				return;
-			}
-			
-			var nextElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.next as HardwareCharacterInstanceListElement;
-			if (!nextElement)
-			{
-				return;
-			}
-			var nextCharacter:HardwareCharacterInstance = nextElement.hardwareCharacterInstance;
-			
-			var pairSet:PairSet = _pairSets[coverageIndex];
-			var pairValueRecord:PairValueRecord;
-			var pairFound:Boolean = false;
-			for (var i:uint = 0; i < pairSet.pairValueCount; i++)
-			{
-				pairValueRecord = pairSet.pairValueRecords[i];
-				if (pairValueRecord.secondGlyphID == nextCharacter.glyphID)
-				{
-					pairFound = true;
-					break;
-				}
-			}
-			
-			if (!pairFound)
-			{
-				return;
-			}
-			
+		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		//{
+			//var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
+			//var coverageIndex:int = coverage.getCoverageIndex(currentCharacter.glyphID);
+			//
+			//if (coverageIndex == -1)
+			//{
+				//return;
+			//}
+			//
+			//var nextElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.next as HardwareCharacterInstanceListElement;
+			//if (!nextElement)
+			//{
+				//return;
+			//}
+			//var nextCharacter:HardwareCharacterInstance = nextElement.hardwareCharacterInstance;
+			//
+			//var pairSet:PairSet = _pairSets[coverageIndex];
+			//var pairValueRecord:PairValueRecord;
+			//var pairFound:Boolean = false;
+			//for (var i:uint = 0; i < pairSet.pairValueCount; i++)
+			//{
+				//pairValueRecord = pairSet.pairValueRecords[i];
+				//if (pairValueRecord.secondGlyphID == nextCharacter.glyphID)
+				//{
+					//pairFound = true;
+					//break;
+				//}
+			//}
+			//
+			//if (!pairFound)
+			//{
+				//return;
+			//}
+			//
 			// apply positioning values
-			var value1:ValueRecord = pairValueRecord.value1;
-			var value2:ValueRecord = pairValueRecord.value2;
+			//var value1:ValueRecord = pairValueRecord.value1;
+			//var value2:ValueRecord = pairValueRecord.value2;
+			//
+			//currentCharacter.applyPositionAdjustmentValue(value1);
+			//nextCharacter.applyPositionAdjustmentValue(value2);
+		//}
+		
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
+		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		{
+			var pairSet:PairSet = _pairSets[coverageIndex];
 			
-			currentCharacter.applyPositionAdjustmentValue(value1);
-			nextCharacter.applyPositionAdjustmentValue(value2);
+			var result:PairAdjustmentPositioningLookup1 = new PairAdjustmentPositioningLookup1();
+			result.pairSet = pairSet;
+			
+			return result;
+		}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
+		{
+			_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+		}
+		
+		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
+		{
+			var targetGlyph:Glyph = font.retrieveGlyph(glyphIndex);
+			targetGlyph.addGlyphLookup(TableNames.GLYPH_POSITIONING_DATA, _parent.lookupIndex, retrieveGlyphLookup(glyphIndex, coverageIndex, font));
 		}
 	}
 

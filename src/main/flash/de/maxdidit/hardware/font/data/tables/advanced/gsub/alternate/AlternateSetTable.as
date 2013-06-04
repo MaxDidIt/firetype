@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -12,6 +13,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		
 		private var _glyphCount:uint;
 		private var _alternateGlyphIDs:Vector.<uint>;
+		private var _alternateGlyphs:Vector.<Glyph>;
 		
 		///////////////////////
 		// Constructor
@@ -44,6 +46,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		public function set alternateGlyphIDs(value:Vector.<uint>):void 
 		{
 			_alternateGlyphIDs = value;
+		}
+		
+		public function get alternateGlyphs():Vector.<Glyph> 
+		{
+			return _alternateGlyphs;
+		}
+		
+		public function set alternateGlyphs(value:Vector.<Glyph>):void 
+		{
+			_alternateGlyphs = value;
 		}
 		
 	}

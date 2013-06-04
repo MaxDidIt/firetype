@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.font.data.tables.advanced.gsub.context 
 {
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -12,6 +13,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.context
 		
 		private var _sequenceIndex:uint;
 		private var _lookupListIndex:uint;
+		private var _lookupTable:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -44,6 +46,16 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.context
 		public function set lookupListIndex(value:uint):void 
 		{
 			_lookupListIndex = value;
+		}
+		
+		public function get lookupTable():LookupTable 
+		{
+			return _lookupTable;
+		}
+		
+		public function set lookupTable(value:LookupTable):void 
+		{
+			_lookupTable = value;
 		}
 		
 	}

@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.text 
 {
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.list.LinkedList;
 	/**
@@ -49,6 +50,7 @@ package de.maxdidit.hardware.text
 		///////////////////////
 		
 		private var _hardwareGlyph:HardwareGlyph;
+		private var _glyph:Glyph;
 		
 		///////////////////////
 		// Constructor
@@ -73,6 +75,16 @@ package de.maxdidit.hardware.text
 		public function set hardwareGlyph(value:HardwareGlyph):void 
 		{
 			_hardwareGlyph = value;
+		}
+		
+		public function get glyph():Glyph 
+		{
+			return _glyph;
+		}
+		
+		public function set glyph(value:Glyph):void 
+		{
+			_glyph = value;
 		}
 		
 		///////////////////////

@@ -2,8 +2,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
+	import de.maxdidit.hardware.font.HardwareFont;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.list.LinkedList;
 	
 	/**
@@ -22,6 +26,8 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		private var _alternateSetCount:uint;
 		private var _alternateSetOffsets:Vector.<uint>;
 		private var _alternateSets:Vector.<AlternateSetTable>;
+		
+		private var _parent:LookupTable;
 		
 		///////////////////////
 		// Constructor
@@ -86,15 +92,60 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 			_alternateSets = value;
 		}
 		
+		public function get parent():LookupTable 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:LookupTable):void 
+		{
+			_parent = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		{
+		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
+		//{
 			//throw new Error("Function not yet implemented");
+		//}
+		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		{
+			var alternateSet:AlternateSetTable = _alternateSets[coverageIndex];
+			
+			var result:AlternateSubstitutionLookup = new AlternateSubstitutionLookup();
+			result.alternateSet = alternateSet;
+			
+			return result;
+		}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
+		{
+			const l:uint = _alternateSetCount;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var alternateSet:AlternateSetTable = _alternateSets[i];
+				
+				var gl:uint = alternateSet.glyphCount;
+				var alternateGlyphs:Vector.<Glyph> = new Vector.<Glyph>(gl);
+				for (var g:uint = 0; g < gl; g++)
+				{
+					alternateGlyphs[g] = font.retrieveGlyph(alternateSet.alternateGlyphIDs[g]);
+				}
+				alternateSet.alternateGlyphs = alternateGlyphs;
+			}
+			
+			_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+		}
+		
+		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
+		{
+			var targetGlyph:Glyph = font.retrieveGlyph(glyphIndex);
+			targetGlyph.addGlyphLookup(TableNames.GLYPH_SUBSTITUTION_DATA, _parent.lookupIndex, retrieveGlyphLookup(glyphIndex, coverageIndex, font));
 		}
 		
 	}

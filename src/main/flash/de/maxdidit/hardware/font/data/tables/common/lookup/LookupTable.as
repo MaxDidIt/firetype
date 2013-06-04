@@ -1,8 +1,8 @@
 package de.maxdidit.hardware.font.data.tables.common.lookup 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.list.LinkedList;
-	import de.maxdidit.hardware.text.HardwareCharacterInstanceListElement;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -15,6 +15,7 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 		
 		private var _lookupType:uint;
 		
+		private var _lookupIndex:uint;
 		private var _lookupFlagData:uint;
 		private var _lookupFlags:LookupTableFlags;
 		
@@ -107,18 +108,52 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 			_lookupType = value;
 		}
 		
+		public function get lookupIndex():uint 
+		{
+			return _lookupIndex;
+		}
+		
+		public function set lookupIndex(value:uint):void 
+		{
+			_lookupIndex = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
-		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
+		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
+		//{
+			//for (var i:uint = 0; i < _subTableCount; i++)
+			//{
+				//var subTable:ILookupSubtable = _subTables[i];
+				//if (subTable)
+				//{
+					//subTable.performLookup(characterInstances, parent);
+				//}
+			//}
+		//}
+		
+		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 
 		{
 			for (var i:uint = 0; i < _subTableCount; i++)
 			{
 				var subTable:ILookupSubtable = _subTables[i];
 				if (subTable)
 				{
-					subTable.performLookup(characterInstances, parent);
+					subTable.resolveDependencies(parent, font);
+				}
+			}
+		}
+		
+		public function addGlyphLookups(glyphIndex:uint, coverageIndex:uint, lookups:Vector.<IGlyphLookup>, font:HardwareFont):void 
+		{
+			for (var i:uint = 0; i < _subTableCount; i++)
+			{
+				var subTable:ILookupSubtable = _subTables[i];
+				if (subTable)
+				{
+					lookups.push(subTable.retrieveGlyphLookup(glyphIndex, coverageIndex, font));
 				}
 			}
 		}
