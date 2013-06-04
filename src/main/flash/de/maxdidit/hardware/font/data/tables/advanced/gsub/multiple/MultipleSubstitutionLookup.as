@@ -53,7 +53,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple
 			const l:uint = _sequence.glyphCount;
 			for (var i:uint = 1; i < _sequence.glyphCount; i++)
 			{
-				var newCharacter:HardwareCharacterInstance = new HardwareCharacterInstance();
+				var newCharacter:HardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance();
 				
 				newCharacter.charCode = 0;
 				newCharacter.glyph = _sequence.substituteGlyphs[i];

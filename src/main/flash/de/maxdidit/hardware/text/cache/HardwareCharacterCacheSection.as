@@ -83,12 +83,6 @@ package de.maxdidit.hardware.text.cache
 		
 		private function deleteMap(map:Object):void 
 		{
-			// TODO: ugly! 
-			if (map is HardwareGlyphInstance)
-			{
-				HardwareGlyphInstance.returnHardwareGlyphInstance(map as HardwareGlyphInstance);
-			}
-			
 			for (var index:String in map)
 			{
 				deleteMap(map[index]);

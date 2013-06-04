@@ -3,8 +3,10 @@ package de.maxdidit.hardware.text.components
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
+	import de.maxdidit.hardware.text.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.TransformedInstance;
 	import de.maxdidit.list.ILinkedListElement;
+	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.list.LinkedListElement;
 	
 	/**
@@ -13,6 +15,45 @@ package de.maxdidit.hardware.text.components
 	 */
 	public class HardwareCharacterInstance extends TransformedInstance implements ILinkedListElement 
 	{
+		///////////////////////
+		// Static Variables
+		///////////////////////
+		
+		private static var _pool:LinkedList = new LinkedList();
+		
+		///////////////////////
+		// Static Functions
+		///////////////////////
+		
+		public static function getHardwareCharacterInstance():HardwareCharacterInstance
+		{
+			var instance:HardwareCharacterInstance;
+			
+			if (_pool.firstElement)
+			{
+				instance = _pool.firstElement as HardwareCharacterInstance;
+				_pool.removeElement(instance);
+				
+				instance.advanceWidthAdjustment = //
+				instance.charCode = 0;
+				
+				instance.glyph = null;
+				instance.next = null;
+				instance.previous = null;
+			}
+			else
+			{
+				instance = new HardwareCharacterInstance();
+			}
+			
+			return instance;
+		}
+		
+		public static function returnHardwareCharacterInstance(instance:HardwareCharacterInstance):void
+		{
+			_pool.addElement(instance);
+		}
+		
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -111,6 +152,17 @@ package de.maxdidit.hardware.text.components
 		{
 			this.x += value.xPlacement;
 			this._advanceWidthAdjustment = value.xAdvance;
+		}
+		
+		override public function loseAllChildren():void 
+		{
+			const l:uint = _children.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var glyphInstance:HardwareGlyphInstance = _children.shift() as HardwareGlyphInstance;
+				glyphInstance.loseAllChildren();
+				HardwareGlyphInstance.returnHardwareGlyphInstance(glyphInstance);
+			}
 		}
 		
 	}

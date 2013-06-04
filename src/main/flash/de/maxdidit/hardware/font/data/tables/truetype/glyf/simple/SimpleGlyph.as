@@ -148,22 +148,9 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		// Member Functions
 		///////////////////////
 		
-		//override public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter 
-		//{
-			//var glyph:HardwareGlyph = cache.getCachedGlyph(font, subdivisions, this.header.index);
-			//
-			//var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(glyph);
-			//
-			//var character:HardwareCharacter = new HardwareCharacter();
-			//character.addGlyphInstance(glyphInstance);
-			//character.glyph = this;
-			//
-			//return character;
-		//}
-		
 		override public function retrieveGlyphInstances(instances:Vector.<HardwareGlyphInstance>):void
 		{
-			var glyphInstance:HardwareGlyphInstance = new HardwareGlyphInstance(null);
+			var glyphInstance:HardwareGlyphInstance = HardwareGlyphInstance.getHardwareGlyphInstance(null);
 			glyphInstance.glyph = this;
 			instances.push(glyphInstance);
 		}

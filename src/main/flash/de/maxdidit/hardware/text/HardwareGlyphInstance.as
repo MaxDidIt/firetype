@@ -28,6 +28,7 @@ package de.maxdidit.hardware.text
 				var element:HardwareGlyphInstanceListElement = _pool.firstElement as HardwareGlyphInstanceListElement;
 				instance = element.hardwareGlyphInstance;
 				instance.hardwareGlyph = glyph;
+				instance.glyph = null;
 				
 				_pool.removeElement(element);
 			}

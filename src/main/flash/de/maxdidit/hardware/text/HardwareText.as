@@ -121,13 +121,12 @@ package de.maxdidit.hardware.text
 		override public function loseAllChildren():void 
 		{
 			// clean up instances
-			//const l:uint = _children.length;
-			//for (var i:uint = 0; i < l; i++)
-			//{
-				//var word:HardwareWord = _children[i] as HardwareWord;
-			//}
-			
-			super.loseAllChildren();
+			const l:uint = _children.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var word:HardwareWord = _children.shift();
+				word.loseAllChildren();
+			}
 		}
 		
 		public function update():void 
