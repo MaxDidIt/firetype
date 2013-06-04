@@ -1,7 +1,8 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text.components 
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.HardwareGlyph;
+	import de.maxdidit.hardware.text.TransformedInstance;
 	import de.maxdidit.list.LinkedList;
 	/**
 	 * ...
@@ -29,6 +30,15 @@ package de.maxdidit.hardware.text
 				instance = element.hardwareGlyphInstance;
 				instance.hardwareGlyph = glyph;
 				instance.glyph = null;
+				
+				instance.x = 0;
+				instance.y = 0;
+				
+				instance.scaleX = 1;
+				instance.scaleY = 1;
+				
+				instance.shearX = 0;
+				instance.shearY = 0;
 				
 				_pool.removeElement(element);
 			}

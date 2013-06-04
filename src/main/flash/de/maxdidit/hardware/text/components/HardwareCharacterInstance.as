@@ -3,7 +3,7 @@ package de.maxdidit.hardware.text.components
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.ValueRecord;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.TransformedInstance;
 	import de.maxdidit.list.ILinkedListElement;
 	import de.maxdidit.list.LinkedList;

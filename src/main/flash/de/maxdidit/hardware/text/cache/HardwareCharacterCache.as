@@ -1,13 +1,13 @@
 package de.maxdidit.hardware.text.cache 
 {
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
-	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.text.renderer.IHardwareTextRenderer;

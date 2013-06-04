@@ -5,7 +5,7 @@ package de.maxdidit.hardware.text.renderer
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;

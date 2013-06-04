@@ -1,12 +1,12 @@
 package de.maxdidit.hardware.font.data.tables.truetype.glyf 
 {
 	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.math.AxisAlignedBoundingBox;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareFont;
-	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	/**
 	 * ...

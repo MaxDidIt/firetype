@@ -3,6 +3,8 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.components.HardwareLine;
+	import de.maxdidit.hardware.text.components.HardwareWord;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	/**
 	 * ...
@@ -124,8 +126,8 @@ package de.maxdidit.hardware.text
 			const l:uint = _children.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				var word:HardwareWord = _children.shift();
-				word.loseAllChildren();
+				var line:HardwareLine = _children.shift() as HardwareLine;
+				line.loseAllChildren();
 			}
 		}
 		

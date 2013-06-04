@@ -29,6 +29,7 @@ package de.maxdidit.hardware.font
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
+	import flash.utils.getTimer;
 	
 	/**
 	 * This is a runnable demo class to test the HardwareFont class.
@@ -96,16 +97,16 @@ package de.maxdidit.hardware.font
 			var hardwareParser:OpenTypeParser = new OpenTypeParser();
 			
 			//hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
-			hardwareParser.loadFont("arial.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("ariali.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("arial.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("ariali.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("impact.ttf");
 			//hardwareParser.loadFont("DAUNPENH.TTF");
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("L_10646.TTF");
 			//hardwareParser.loadFont("COUR.TTF");
-			//hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			//hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF");
 			//hardwareParser.loadFont("CAMBRIAB.TTF");
 			//hardwareParser.loadFont("CONSOLA.TTF");
@@ -119,9 +120,6 @@ package de.maxdidit.hardware.font
 			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
 			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
 			viewProjectionMtx.append(perspectiveMtx);
-			
-			var color:Vector.<Number> = new Vector.<Number>();
-			color.push(0.0, 0.0, 0.0, 1.0);
 			
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
 			stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseUp);
@@ -156,7 +154,7 @@ package de.maxdidit.hardware.font
 			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = baseFont;
 			hardwareFontFormat.subdivisions = 2;
-			hardwareFontFormat.color = 0xFF333333;
+			hardwareFontFormat.color = 0xFF000000;
 			
 			hardwareFontFormat.script = ScriptTag.LATIN;
 			hardwareFontFormat.language = LanguageTag.ENGLISH;
@@ -179,9 +177,21 @@ package de.maxdidit.hardware.font
 			
 			redFontFormat.id = "red";
 			
+			var smallFontFormat:HardwareTextFormat= new HardwareTextFormat();
+			smallFontFormat.font = baseFont;
+			smallFontFormat.subdivisions = 2;
+			smallFontFormat.scale = 0.75;
+			smallFontFormat.color = 0xFF333333;
+			
+			smallFontFormat.script = ScriptTag.LATIN;
+			smallFontFormat.language = LanguageTag.ENGLISH;
+			
+			smallFontFormat.id = "small";
+			
 			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			cache.textFormatMap.addTextFormat(hardwareFontFormat);
 			cache.textFormatMap.addTextFormat(redFontFormat);
+			cache.textFormatMap.addTextFormat(smallFontFormat);
 			
 			hardwareText = new HardwareText(cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
@@ -212,7 +222,7 @@ package de.maxdidit.hardware.font
 			}
 			hardwareText.text += "\n";
 			
-			hardwareText.text += "12/8 1/3 á â à ´´ f fi ffi\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.";
+			hardwareText.text += "12/8 1/3 á â à ´´ f fi ffi\n\n<format id=\"small\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet <format id=\"red\">sed commodo arcu</format> viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.</format>";
 			
 			hardwareText.calculateTransformations(viewProjectionMtx, true);
 			
@@ -231,7 +241,9 @@ package de.maxdidit.hardware.font
 				hardwareText.calculateTransformations(viewProjectionMtx);
 			}
 			
-			//hardwareText.standardFormat.color = 0xFF000000 + Math.random() * 0xFFFFFF;
+			//hardwareText.standardFormat.colorVector[2] = Math.cos(getTimer() * 0.001) * 0.5 + 0.5;
+			//hardwareText.standardFormat.colorVector[1] = Math.cos(getTimer() * 0.0003) * 0.5 + 0.5;
+			//hardwareText.standardFormat.colorVector[0] = Math.cos(getTimer() * 0.0001) * 0.5 + 0.5;
 			
 			context3d.clear(1, 1, 1);
 			cache.render();

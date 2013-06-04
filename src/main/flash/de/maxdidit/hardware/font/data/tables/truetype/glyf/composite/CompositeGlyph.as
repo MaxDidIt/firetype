@@ -5,9 +5,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.composite
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.GlyphTableData;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
-	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import flash.utils.ByteArray;
 	
 	/**

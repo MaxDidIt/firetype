@@ -21,6 +21,9 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.components.HardwareCharacterInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareLine;
+	import de.maxdidit.hardware.text.components.HardwareWord;
 	import de.maxdidit.hardware.text.components.TextSpan;
 	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
@@ -154,6 +157,7 @@ package de.maxdidit.hardware.text
 			var lineX:int = 0;
 			var y:int = 0;
 			
+			var currentLine:HardwareLine = new HardwareLine();
 			var currentWord:HardwareWord;
 			
 			const l:uint = textSpans.length;
@@ -163,6 +167,9 @@ package de.maxdidit.hardware.text
 				var textSpan:TextSpan = textSpans[i];
 				
 				var textFormat:HardwareTextFormat = textSpan.textFormat;
+				currentLine.ascender = currentLine.ascender > textFormat.font.ascender * textFormat.scale ? currentLine.ascender : textFormat.font.ascender * textFormat.scale;
+				currentLine.descender = currentLine.descender > textFormat.font.descender * textFormat.scale ? currentLine.descender : textFormat.font.descender * textFormat.scale;
+				
 				var font:HardwareFont = textFormat.font;
 				
 				var gposData:GlyphPositioningTableData = font.data.retrieveTableData(TableNames.GLYPH_POSITIONING_DATA) as GlyphPositioningTableData;
@@ -177,6 +184,8 @@ package de.maxdidit.hardware.text
 				characterInstances.gotoFirstElement();
 				
 				var glyphInstances:Vector.<HardwareGlyphInstance> = new Vector.<HardwareGlyphInstance>();
+				
+				// TODO: implement line objects and let the line have the height of the biggest ascender/descender value within the line.
 				
 				while (characterInstances.currentElement)
 				{
@@ -207,34 +216,45 @@ package de.maxdidit.hardware.text
 					
 					if (currentCharacter.charCode == CHAR_CODE_NEWLINE || lineX + wordX > hardwareText.width)
 					{
-						//start new line
-						y -= font.ascender - font.descender;
 						lineX = 0;
 						
 						if (currentCharacter.charCode == CHAR_CODE_NEWLINE)
 						{
 							wordX = 0;
-								
+							
 							// start new word
 							if (currentWord)
 							{
+								currentLine.addChild(currentWord);
 								currentWord = null;
 							}
-							
-							continue;
 						}
 						else
 						{
 							if (currentWord)
 							{
 								currentWord.x = 0;
-								currentWord.y = y;
 							}
 							else
 							{
 								wordX = 0;
 							}
 						}
+						
+						//start new line
+						y -= (currentLine.ascender - currentLine.descender);
+						currentLine.y = y;
+						hardwareText.addChild(currentLine);
+						
+						currentLine = new HardwareLine();
+						currentLine.ascender = textFormat.font.ascender * textFormat.scale;
+						currentLine.descender = textFormat.font.descender * textFormat.scale;
+					}
+					
+					// skip non printable characters
+					if (currentCharacter.charCode == CHAR_CODE_NEWLINE)
+					{
+						continue;
 					}
 					
 					if (currentCharacter.charCode == CHAR_CODE_SPACE)
@@ -242,6 +262,7 @@ package de.maxdidit.hardware.text
 						// start new word
 						if (currentWord)
 						{
+							currentLine.addChild(currentWord);
 							currentWord = null;
 						}
 					}
@@ -254,18 +275,23 @@ package de.maxdidit.hardware.text
 							
 							currentWord = new HardwareWord();
 							currentWord.x = lineX;
-							currentWord.y = y;
-							
-							hardwareText.addChild(currentWord);
 						}
 						
 						currentWord.addChild(currentCharacter);
 					}
 					
 					currentCharacter.x = wordX;
-					wordX += currentCharacter.advanceWidthAdjustment + currentCharacter.glyph.advanceWidth;
+					wordX += (currentCharacter.advanceWidthAdjustment + currentCharacter.glyph.advanceWidth) * textFormat.scale;
+					
+					currentCharacter.scaleX *= textFormat.scale;
+					currentCharacter.scaleY *= textFormat.scale;
 				}
 			}
+			
+			y -= (currentLine.ascender - currentLine.descender);
+			currentLine.addChild(currentWord);
+			currentLine.y = y;
+			hardwareText.addChild(currentLine);
 		}
 		
 		private function createTextSpans(text:String, font:HardwareFont, standardTextFormat:HardwareTextFormat, cache:HardwareCharacterCache):Vector.<TextSpan>
@@ -338,12 +364,10 @@ package de.maxdidit.hardware.text
 				currentCharacter.glyph = glyph;
 				currentCharacter.charCode = charCode;
 				
-				//currentCharacter.textFormat = currentFontFormat;
-				
 				currentCharacterInstances.addElement(currentCharacter);
 				
-				currentCharacter.previous = lastCharacter;
-				var lastCharacter:de.maxdidit.hardware.text.components.HardwareCharacterInstance = currentCharacter;
+				//currentCharacter.previous = lastCharacter;
+				var lastCharacter:HardwareCharacterInstance = currentCharacter;
 			}
 			
 			return result;

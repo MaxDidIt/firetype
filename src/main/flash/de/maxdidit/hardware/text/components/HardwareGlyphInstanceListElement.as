@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text.components 
 {
 	import de.maxdidit.list.LinkedListElement;
 	/**

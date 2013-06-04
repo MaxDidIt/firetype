@@ -1,9 +1,9 @@
-package de.maxdidit.hardware.text
+package de.maxdidit.hardware.text.components
 {
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.components.HardwareCharacterInstance;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
-	import de.maxdidit.hardware.text.HardwareCharacter;
+	import de.maxdidit.hardware.text.TransformedInstance;
 	import de.maxdidit.math.AxisAlignedBoundingBox;
 	
 	/**
@@ -16,30 +16,17 @@ package de.maxdidit.hardware.text
 		// Member Fields
 		///////////////////////
 		
-		private var _boundingBox:AxisAlignedBoundingBox;
-		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
 		public function HardwareWord()
 		{
-			_boundingBox = new AxisAlignedBoundingBox();
 		}
 		
 		///////////////////////
 		// Member Properties
 		///////////////////////
-		
-		public function get boundingBox():AxisAlignedBoundingBox
-		{
-			return _boundingBox;
-		}
-		
-		public function set boundingBox(value:AxisAlignedBoundingBox):void
-		{
-			_boundingBox = value;
-		}
 		
 		///////////////////////
 		// Member Functions

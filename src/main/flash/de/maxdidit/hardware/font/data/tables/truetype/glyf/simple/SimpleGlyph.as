@@ -6,9 +6,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.HardwareFont;
-	import de.maxdidit.hardware.text.HardwareCharacter;
 	import de.maxdidit.hardware.font.HardwareGlyph;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	/**

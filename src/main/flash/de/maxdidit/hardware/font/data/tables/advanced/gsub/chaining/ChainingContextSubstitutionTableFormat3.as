@@ -6,7 +6,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.tables.TableNames;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.list.LinkedList;
 	import de.maxdidit.hardware.font.data.tables.advanced.gsub.context.SubstitutionLookupRecord;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
