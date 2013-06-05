@@ -244,7 +244,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 			var glyphIDs:Vector.<uint> = new Vector.<uint>();
 			for (var i:uint = 0; i < 256; i++)
 			{
-				glyphIDs.push(_dataTypeParser.parseByte(data));
+				glyphIDs.push(_dataTypeParser.parseUnsignedByte(data));
 			}
 			result.glyphIDs = glyphIDs;
 			

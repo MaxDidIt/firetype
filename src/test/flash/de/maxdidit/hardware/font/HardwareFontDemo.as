@@ -98,16 +98,16 @@ package de.maxdidit.hardware.font
 			hardwareParser = new OpenTypeParser();
 			
 			//hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
+			hardwareParser.loadFont("L_10646.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("arial.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("ariali.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("impact.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("DAUNPENH.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			//hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			//hardwareParser.loadFont("L_10646.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("COUR.TTF");
-			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF");
 			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
@@ -201,7 +201,7 @@ package de.maxdidit.hardware.font
 			
 			hardwareText.standardFormat = hardwareFontFormat;
 			
-			hardwareText.text = "Hold the <format id=\"red\">left mouse button</format> and drag the text up and down.\n\n" 
+			hardwareText.text = "âÂ Hold the <format id=\"red\">left mouse button</format> and <format id=\"red\">drag</format> the text up and down.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{
@@ -243,9 +243,9 @@ package de.maxdidit.hardware.font
 				hardwareText.calculateTransformations(viewProjectionMtx);
 			}
 			
-			//hardwareText.standardFormat.colorVector[2] = Math.cos(getTimer() * 0.001) * 0.5 + 0.5;
-			//hardwareText.standardFormat.colorVector[1] = Math.cos(getTimer() * 0.0003) * 0.5 + 0.5;
-			//hardwareText.standardFormat.colorVector[0] = Math.cos(getTimer() * 0.0001) * 0.5 + 0.5;
+			//hardwareText.standardFormat.colorVector[2] = Math.cos(getTimer() * 0.01) * 0.5 + 0.5;
+			//hardwareText.standardFormat.colorVector[1] = Math.cos(getTimer() * 0.003) * 0.5 + 0.5;
+			//hardwareText.standardFormat.colorVector[0] = Math.cos(getTimer() * 0.001) * 0.5 + 0.5;
 			
 			context3d.clear(1, 1, 1);
 			cache.render();

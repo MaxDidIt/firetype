@@ -157,9 +157,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			}
 			else
 			{
-				var argument1and2:uint = _dataTypeParser.parseUnsignedShort(data);
-				argument1 = (argument1and2 >> 8) & 0xFF;
-				argument2 = argument1and2 & 0xFF;
+				argument1 = _dataTypeParser.parseByte(data);
+				argument2 = _dataTypeParser.parseByte(data);
 			}
 			
 			result.argument1 = argument1;
@@ -280,7 +279,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				
 				if (!flags.sameXAsPrevious)
 				{
-					delta = flags.shortXVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortXVector" indicates a 1-byte value, not a 2-byte value as usual.
+					delta = flags.shortXVector ? int(_dataTypeParser.parseUnsignedByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortXVector" indicates a 1-byte value, not a 2-byte value as usual.
 					delta = flags.shortXVector && !flags.isXPositive ? -delta : delta;
 					
 					x += delta;
@@ -307,7 +306,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				
 				if (!flags.sameYAsPrevious)
 				{
-					delta = flags.shortYVector ? int(_dataTypeParser.parseByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortYVector" indicates a 1-byte value, not a 2-byte value as usual.
+					delta = flags.shortYVector ? int(_dataTypeParser.parseUnsignedByte(data)) : _dataTypeParser.parseShort(data); // in this context "shortYVector" indicates a 1-byte value, not a 2-byte value as usual.
 					delta = flags.shortYVector && !flags.isYPositive ? -delta : delta;
 					
 					y += delta;
@@ -324,7 +323,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var i:uint = 0;
 			while (i < numPoints)
 			{
-				var flagData:uint = _dataTypeParser.parseByte(data);
+				var flagData:uint = _dataTypeParser.parseUnsignedByte(data);
 				flagDatas.push(flagData);
 				
 				var flags:SimpleGlyphFlags = new SimpleGlyphFlags();
@@ -335,7 +334,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				flags.shortYVector = ((flagData >> 2) & 1) == 1;
 				
 				flags.isRepeated = ((flagData >> 3) & 1) == 1;
-				flags.numRepeats = flags.isRepeated ? _dataTypeParser.parseByte(data) + 1 : 1;
+				flags.numRepeats = flags.isRepeated ? _dataTypeParser.parseUnsignedByte(data) + 1 : 1;
 				
 				flags.isXPositive = flags.shortXVector ? ((flagData >> 4) & 1) == 1 : false;
 				flags.sameXAsPrevious = !flags.shortXVector ? ((flagData >> 4) & 1) == 1 : false;
