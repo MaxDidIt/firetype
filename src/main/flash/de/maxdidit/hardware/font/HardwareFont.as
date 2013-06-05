@@ -116,7 +116,7 @@ package de.maxdidit.hardware.font
 			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
 			_fontFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
 			_fontSubFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
-			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
+			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER) + " " + _fontSubFamily;
 			
 			// resolve dependencies between tables/compile font values
 			applyHorizontalMetrics();

@@ -49,6 +49,7 @@ package de.maxdidit.hardware.font
 		private var textClickY:Number;
 		private var mouseClickY:Number;
 		private var baseFont:HardwareFont;
+		private var hardwareParser:OpenTypeParser;
 		
 		
 		///////////////////////
@@ -94,21 +95,22 @@ package de.maxdidit.hardware.font
 			context3d.enableErrorChecking = true;
 			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 8, false);
 			
-			var hardwareParser:OpenTypeParser = new OpenTypeParser();
+			hardwareParser = new OpenTypeParser();
 			
 			//hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
 			//hardwareParser.loadFont("arial.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("ariali.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			//hardwareParser.loadFont("impact.ttf");
-			//hardwareParser.loadFont("DAUNPENH.TTF");
+			//hardwareParser.loadFont("impact.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("DAUNPENH.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			//hardwareParser.loadFont("L_10646.TTF");
+			//hardwareParser.loadFont("L_10646.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("COUR.TTF");
 			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF");
-			//hardwareParser.loadFont("CAMBRIAB.TTF");
+			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
@@ -210,11 +212,11 @@ package de.maxdidit.hardware.font
 			}
 			else
 			{
-				hardwareText.text += "This text is displayed using the font <format id=\"red\">" + e.font.fontFamily + " " + e.font.fontSubFamily + "</format>.\n\n";
+				hardwareText.text += "This text is (mostly) displayed using the font <format id=\"red\">" + baseFont.fontFamily + " " + baseFont.fontSubFamily + "</format>.\n\n";
 			}
 			
 			hardwareText.text += "The font implements the following features for the script '" + hardwareFontFormat.script + "' and the language '" + hardwareFontFormat.language + "':\n\n";
-			var features:Vector.<FeatureRecord> = e.font.getAdvancedFeatures(hardwareFontFormat.script, hardwareFontFormat.language);
+			var features:Vector.<FeatureRecord> = baseFont.getAdvancedFeatures(hardwareFontFormat.script, hardwareFontFormat.language);
 			const l:uint = features.length;
 			for (var i:uint = 0; i < l; i++)
 			{
@@ -233,7 +235,7 @@ package de.maxdidit.hardware.font
 		
 		private function handleEnterFrame(e:Event):void 
 		{
-			//hardwareText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100);
+			//hardwareText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. <format id=\"red\">Donec ipsum mi</format>, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n<format id=\"small\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. <format id=\"red\">Quisque suscipit pulvinar arcu</format>, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100) + "</format>";
 			
 			if (mouseDown)
 			{

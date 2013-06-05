@@ -16,6 +16,9 @@ package de.maxdidit.hardware.text.components
 		// Member Fields
 		///////////////////////
 		
+		public var ascender:Number;
+		public var descender:Number;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////

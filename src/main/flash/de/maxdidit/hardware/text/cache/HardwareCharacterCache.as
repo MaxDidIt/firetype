@@ -29,7 +29,7 @@ package de.maxdidit.hardware.text.cache
 		// Member Fields
 		///////////////////////
 		
-		private var _characterCache:Object = new Object();
+		//private var _characterCache:Object = new Object();
 		private var _glyphCache:Object = new Object();
 		
 		private var _rendererFactory:IHardwareTextRendererFactory;

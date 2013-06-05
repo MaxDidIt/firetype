@@ -120,6 +120,10 @@ package de.maxdidit.hardware.text
 		private function retrieveLookupIndices(scriptFeatureLookup:ScriptFeatureLookupTable, lookupIndices:Vector.<int>, textFormat:HardwareTextFormat):void
 		{
 			lookupIndices.length = 0;
+			if (!scriptFeatureLookup)
+			{
+				return;
+			}
 			
 			var scriptTable:ScriptTable = scriptFeatureLookup.scriptListTable.retrieveScriptTable(textFormat.scriptTag);
 			if (!scriptTable)
@@ -151,147 +155,138 @@ package de.maxdidit.hardware.text
 		
 		private function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void
 		{
-			var lookupIndices:Vector.<int> = new Vector.<int>();
+			var printhead:Printhead = new Printhead();
 			
-			var wordX:int = 0;
-			var lineX:int = 0;
-			var y:int = 0;
+			printhead.lineX = 0;
+			printhead.y = 0;
 			
-			var currentLine:HardwareLine = new HardwareLine();
-			var currentWord:HardwareWord;
+			printhead.currentLine = new HardwareLine();
+			
+			printhead.lookupIndices = new Vector.<int>();
+			printhead.glyphInstances = new Vector.<HardwareGlyphInstance>();
 			
 			const l:uint = textSpans.length;
 			for (var i:uint = 0; i < l; i++)
 			{
 				// set up
-				var textSpan:TextSpan = textSpans[i];
+				printhead.textSpan = textSpans[i];
 				
-				var textFormat:HardwareTextFormat = textSpan.textFormat;
-				currentLine.ascender = currentLine.ascender > textFormat.font.ascender * textFormat.scale ? currentLine.ascender : textFormat.font.ascender * textFormat.scale;
-				currentLine.descender = currentLine.descender > textFormat.font.descender * textFormat.scale ? currentLine.descender : textFormat.font.descender * textFormat.scale;
-				
-				var font:HardwareFont = textFormat.font;
-				
-				var gposData:GlyphPositioningTableData = font.data.retrieveTableData(TableNames.GLYPH_POSITIONING_DATA) as GlyphPositioningTableData;
-				if (!gposData)
+				if (printhead.currentWord)
 				{
-					continue;
+					printhead.currentWord.ascender = printhead.currentWord.ascender < printhead.font.ascender * printhead.textFormat.scale ? printhead.font.ascender * printhead.textFormat.scale : printhead.currentWord.ascender;
+					printhead.currentWord.descender = printhead.currentWord.descender > printhead.font.descender * printhead.textFormat.scale ? printhead.font.descender * printhead.textFormat.scale : printhead.currentWord.descender;
 				}
 				
-				retrieveLookupIndices(gposData, lookupIndices, textFormat);
+				var gposData:GlyphPositioningTableData = printhead.font.data.retrieveTableData(TableNames.GLYPH_POSITIONING_DATA) as GlyphPositioningTableData;
+				retrieveLookupIndices(gposData, printhead.lookupIndices, printhead.textFormat);
 				
-				var characterInstances:LinkedList = textSpan.characterInstances;
-				characterInstances.gotoFirstElement();
+				printhead.characterInstances.gotoFirstElement();
 				
-				var glyphInstances:Vector.<HardwareGlyphInstance> = new Vector.<HardwareGlyphInstance>();
-				
-				// TODO: implement line objects and let the line have the height of the biggest ascender/descender value within the line.
-				
-				while (characterInstances.currentElement)
+				while (printhead.characterInstances.currentElement)
 				{
-					var currentCharacter:de.maxdidit.hardware.text.components.HardwareCharacterInstance = characterInstances.currentElement as de.maxdidit.hardware.text.components.HardwareCharacterInstance;
-					currentCharacter.glyph.applyGlyphLookups(TableNames.GLYPH_POSITIONING_DATA, characterInstances, lookupIndices);
-					
-					glyphInstances.length = 0;
-					currentCharacter.glyph.retrieveGlyphInstances(glyphInstances);
-					
-					var il:uint = glyphInstances.length;
-					for (var g:uint = 0; g < il; g++)
-					{
-						var glyphInstance:HardwareGlyphInstance = glyphInstances[g];
-						var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(font, textFormat.subdivisions, currentCharacter.glyph.index);
-						if (!hardwareGlyph)
-						{
-							var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(textFormat.subdivisions);
-							hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, font, textFormat.subdivisions, glyphInstance.glyph.index);
-						}
-						glyphInstance.hardwareGlyph = hardwareGlyph;
-						
-						cache.registerGlyphInstance(glyphInstance, font.uniqueIdentifier, textFormat.subdivisions, textFormat);
-						currentCharacter.addChild(glyphInstance);
-					}
-					
-					// iterate linked list, don't update currentCharacter variable yet.
-					characterInstances.gotoNextElement();
-					
-					if (currentCharacter.charCode == CHAR_CODE_NEWLINE || lineX + wordX > hardwareText.width)
-					{
-						lineX = 0;
-						
-						if (currentCharacter.charCode == CHAR_CODE_NEWLINE)
-						{
-							wordX = 0;
-							
-							// start new word
-							if (currentWord)
-							{
-								currentLine.addChild(currentWord);
-								currentWord = null;
-							}
-						}
-						else
-						{
-							if (currentWord)
-							{
-								currentWord.x = 0;
-							}
-							else
-							{
-								wordX = 0;
-							}
-						}
-						
-						//start new line
-						y -= (currentLine.ascender - currentLine.descender);
-						currentLine.y = y;
-						hardwareText.addChild(currentLine);
-						
-						currentLine = new HardwareLine();
-						currentLine.ascender = textFormat.font.ascender * textFormat.scale;
-						currentLine.descender = textFormat.font.descender * textFormat.scale;
-					}
-					
-					// skip non printable characters
-					if (currentCharacter.charCode == CHAR_CODE_NEWLINE)
-					{
-						continue;
-					}
-					
-					if (currentCharacter.charCode == CHAR_CODE_SPACE)
-					{
-						// start new word
-						if (currentWord)
-						{
-							currentLine.addChild(currentWord);
-							currentWord = null;
-						}
-					}
-					else
-					{
-						if (!currentWord)
-						{
-							lineX += wordX; // add white space
-							wordX = 0;
-							
-							currentWord = new HardwareWord();
-							currentWord.x = lineX;
-						}
-						
-						currentWord.addChild(currentCharacter);
-					}
-					
-					currentCharacter.x = wordX;
-					wordX += (currentCharacter.advanceWidthAdjustment + currentCharacter.glyph.advanceWidth) * textFormat.scale;
-					
-					currentCharacter.scaleX *= textFormat.scale;
-					currentCharacter.scaleY *= textFormat.scale;
+					printCharacter(hardwareText, printhead, cache);
+					printhead.characterInstances.gotoNextElement();
+					continue;
 				}
 			}
 			
-			y -= (currentLine.ascender - currentLine.descender);
-			currentLine.addChild(currentWord);
-			currentLine.y = y;
-			hardwareText.addChild(currentLine);
+			endWord(hardwareText, printhead);
+			startNewLine(hardwareText, printhead);
+		}
+		
+		private function printCharacter(hardwareText:HardwareText, printhead:Printhead, cache:HardwareCharacterCache):void
+		{
+			var currentCharacter:HardwareCharacterInstance = printhead.characterInstances.currentElement as HardwareCharacterInstance;
+			if (currentCharacter.charCode == CHAR_CODE_NEWLINE)
+			{
+				endWord(hardwareText, printhead);
+				
+				printhead.currentLine.ascender = printhead.currentLine.ascender < printhead.font.ascender * printhead.textFormat.scale ? printhead.font.ascender * printhead.textFormat.scale : printhead.currentLine.ascender;
+				printhead.currentLine.descender = printhead.currentLine.descender > printhead.font.descender * printhead.textFormat.scale ? printhead.font.descender * printhead.textFormat.scale : printhead.currentLine.descender;
+				
+				startNewLine(hardwareText, printhead)
+				return;
+			}
+			
+			currentCharacter.glyph.applyGlyphLookups(TableNames.GLYPH_POSITIONING_DATA, printhead.characterInstances, printhead.lookupIndices);
+			
+			// move print head
+			currentCharacter.x = printhead.wordX;
+			printhead.wordX += (currentCharacter.advanceWidthAdjustment + currentCharacter.glyph.advanceWidth) * printhead.textFormat.scale;
+			
+			if (currentCharacter.charCode == CHAR_CODE_SPACE)
+			{
+				endWord(hardwareText, printhead);
+				return;
+			}
+			
+			if (!printhead.currentWord)
+			{
+				startWord(printhead);
+			}
+			
+			printhead.glyphInstances.length = 0;
+			currentCharacter.glyph.retrieveGlyphInstances(printhead.glyphInstances);
+			
+			var il:uint = printhead.glyphInstances.length;
+			for (var g:uint = 0; g < il; g++)
+			{
+				var glyphInstance:HardwareGlyphInstance = printhead.glyphInstances[g];
+				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font, printhead.textFormat.subdivisions, glyphInstance.glyph.index);
+				if (!hardwareGlyph)
+				{
+					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.subdivisions);
+					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.subdivisions, glyphInstance.glyph.index);
+				}
+				glyphInstance.hardwareGlyph = hardwareGlyph;
+				
+				cache.registerGlyphInstance(glyphInstance, printhead.font.uniqueIdentifier, printhead.textFormat.subdivisions, printhead.textFormat);
+				currentCharacter.addChild(glyphInstance);
+			}
+			
+			currentCharacter.scaleX = currentCharacter.scaleY = printhead.textFormat.scale;
+			
+			printhead.currentWord.addChild(currentCharacter);
+		}
+		
+		private function startWord(printhead:Printhead):void
+		{
+			printhead.currentWord = new HardwareWord();
+			
+			printhead.currentWord.ascender = printhead.font.ascender * printhead.textFormat.scale;
+			printhead.currentWord.descender = printhead.font.descender * printhead.textFormat.scale;
+		}
+		
+		private function endWord(hardwareText:HardwareText, printhead:Printhead):void
+		{
+			if (printhead.currentWord)
+			{
+				if (printhead.lineX + printhead.wordX > hardwareText.width)
+				{
+					startNewLine(hardwareText, printhead);
+				}
+				
+				printhead.currentLine.ascender = printhead.currentLine.ascender < printhead.currentWord.ascender ? printhead.currentWord.ascender : printhead.currentLine.ascender;
+				printhead.currentLine.descender = printhead.currentLine.descender > printhead.currentWord.descender ? printhead.currentWord.descender : printhead.currentLine.descender;
+				
+				printhead.currentWord.x = printhead.lineX;
+				printhead.currentLine.addChild(printhead.currentWord);
+				printhead.currentWord = null;
+				
+				printhead.lineX += printhead.wordX;
+				printhead.wordX = 0;
+			}
+		}
+		
+		private function startNewLine(hardwareText:HardwareText, printhead:Printhead):void
+		{
+			printhead.y -= printhead.currentLine.ascender - printhead.currentLine.descender;
+			printhead.currentLine.y = printhead.y;
+			hardwareText.addChild(printhead.currentLine);
+			
+			printhead.lineX = 0;
+			
+			printhead.currentLine = new HardwareLine();
 		}
 		
 		private function createTextSpans(text:String, font:HardwareFont, standardTextFormat:HardwareTextFormat, cache:HardwareCharacterCache):Vector.<TextSpan>
@@ -366,7 +361,6 @@ package de.maxdidit.hardware.text
 				
 				currentCharacterInstances.addElement(currentCharacter);
 				
-				//currentCharacter.previous = lastCharacter;
 				var lastCharacter:HardwareCharacterInstance = currentCharacter;
 			}
 			

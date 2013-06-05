@@ -43,14 +43,18 @@ package de.maxdidit.hardware.font.parser
 			return _url;
 		}
 		
+		public function set url(value:String):void 
+		{
+			_url = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
 		
 		public function loadFont(url:String):void
 		{
-			_url = url;
-			var urlRequest:URLRequest = new URLRequest(url);
+			var urlRequest:URLRequest = new URLRequest(_url);
 			
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.BINARY;

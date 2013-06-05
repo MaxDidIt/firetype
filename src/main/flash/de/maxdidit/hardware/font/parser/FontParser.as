@@ -23,7 +23,8 @@ package de.maxdidit.hardware.font.parser
 		// Member Fields
 		///////////////////////
 		
-		private var _eventDispatcherMap:Object;
+		private var _loaderQueue:Vector.<FontLoaderJob> = new Vector.<FontLoaderJob>();
+		private var _currentJob:FontLoaderJob;
 		
 		///////////////////////
 		// Constructor
@@ -31,7 +32,6 @@ package de.maxdidit.hardware.font.parser
 		
 		public function FontParser() 
 		{
-			_eventDispatcherMap = new Object();
 		}
 		
 		///////////////////////
@@ -45,14 +45,29 @@ package de.maxdidit.hardware.font.parser
 		public function loadFont(url:String):EventDispatcher
 		{
 			var fontLoaderJob:FontLoaderJob = new FontLoaderJob();
-			fontLoaderJob.addEventListener(Event.COMPLETE, handleFontLoaded);
+			fontLoaderJob.url = url;
+			_loaderQueue.push(fontLoaderJob);
 			
-			var eventDispatcher:EventDispatcher = new EventDispatcher();
-			_eventDispatcherMap[url] = eventDispatcher;
+			if (!_currentJob)
+			{
+				loadNextJob();
+			}
 			
-			fontLoaderJob.loadFont(url);
+			return fontLoaderJob;
+		}
+		
+		private function loadNextJob():void 
+		{	
+			if (_loaderQueue.length == 0)
+			{
+				_currentJob = null;
+				return;
+			}
 			
-			return eventDispatcher;
+			_currentJob = _loaderQueue.shift();
+			
+			_currentJob.addEventListener(Event.COMPLETE, handleFontLoaded);
+			_currentJob.loadFont(_currentJob.url);
 		}
 		
 		public function parseFont(data:ByteArray):HardwareFont
@@ -85,18 +100,18 @@ package de.maxdidit.hardware.font.parser
 			var data:ByteArray = urlLoader.data as ByteArray;
 			var font:HardwareFont = parseFont(data);
 			
-			var eventDispatcher:EventDispatcher = _eventDispatcherMap[fontLoaderJob.url];
-			eventDispatcher.dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
-			delete _eventDispatcherMap[fontLoaderJob.url];
-			
+			fontLoaderJob.dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
 			dispatchEvent(new FontEvent(FontEvent.FONT_PARSED, font));
+			
+			loadNextJob();
 		}
 		
 		private function handleFontLoadingFailed(e:Event):void 
-		{
+		{	
 			var fontLoaderJob:FontLoaderJob = e.target as FontLoaderJob;
 			var urlLoader:URLLoader = fontLoaderJob.urlLoader;
-			delete _eventDispatcherMap[fontLoaderJob.url];
+			
+			loadNextJob();
 		}
 	}
 
