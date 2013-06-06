@@ -108,14 +108,20 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		//{
-			//throw new Error("Function not yet implemented");
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
 		{
-			var alternateSet:AlternateSetTable = _alternateSets[coverageIndex];
+			throw new Error("Function not yet implemented");
+		}
+		
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
+		{
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var alternateSet:AlternateSetTable = _alternateSets[actualCoverageIndex];
 			
 			var result:AlternateSubstitutionLookup = new AlternateSubstitutionLookup();
 			result.alternateSet = alternateSet;

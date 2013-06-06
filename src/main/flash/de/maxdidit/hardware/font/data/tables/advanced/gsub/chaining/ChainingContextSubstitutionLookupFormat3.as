@@ -3,6 +3,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 	import de.maxdidit.hardware.font.data.tables.advanced.gsub.context.SubstitutionLookupRecord;
 	import de.maxdidit.hardware.font.data.tables.common.coverage.ICoverageTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
+	import de.maxdidit.hardware.text.components.HardwareCharacterInstance;
 	import de.maxdidit.list.LinkedList;
 	
 	/**
@@ -20,6 +21,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 		private var _lookaheadCoverages:Vector.<ICoverageTable>;
 		
 		private var _substitutionLookupRecords:Vector.<SubstitutionLookupRecord>;
+		private var _substitutionLookups:Vector.<IGlyphLookup>;
 		
 		///////////////////////
 		// Constructor
@@ -74,15 +76,132 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 			_substitutionLookupRecords = value;
 		}
 		
+		public function get substitutionLookups():Vector.<IGlyphLookup> 
+		{
+			return _substitutionLookups;
+		}
+		
+		public function set substitutionLookups(value:Vector.<IGlyphLookup>):void 
+		{
+			_substitutionLookups = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		private function matchBacktrackGlyphs(characterInstances:LinkedList):Boolean 
+		{
+			var backtrackGlyph:HardwareCharacterInstance = characterInstances.currentElement as HardwareCharacterInstance;
+			
+			const l:uint = _backtackCoverages.length;
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				backtrackGlyph = backtrackGlyph.previous as HardwareCharacterInstance;
+				
+				if (!backtrackGlyph)
+				{
+					return false;
+				}
+				
+				var coverage:ICoverageTable = _backtackCoverages[i];
+				var coverageIndex:int = coverage.getCoverageIndex(backtrackGlyph.glyph.index);
+				
+				if (coverageIndex == -1)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		private function matchInputGlyphs(characterInstances:LinkedList):Boolean 
+		{
+			var inputGlyph:HardwareCharacterInstance = characterInstances.currentElement as HardwareCharacterInstance;
+			
+			const l:uint = _inputCoverages.length;
+			
+			// start with the next glyph. The first input glyph is automatically matched when the lookup was assigned to this glyph.
+			for (var i:uint = 1; i < l; i++)
+			{
+				inputGlyph = inputGlyph.next as HardwareCharacterInstance;
+				
+				if (!inputGlyph)
+				{
+					return false;
+				}
+				
+				var coverage:ICoverageTable = _inputCoverages[i];
+				var coverageIndex:int = coverage.getCoverageIndex(inputGlyph.glyph.index);
+				
+				if (coverageIndex == -1)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		private function matchLookaheadGlyphs(characterInstances:LinkedList):Boolean 
+		{
+			var lookaheadGlyph:HardwareCharacterInstance = characterInstances.currentElement as HardwareCharacterInstance;
+			var l:uint = _inputCoverages.length;
+			// go to end of input glyphs
+			for (var i:uint = 1; i < l; i++)
+			{
+				lookaheadGlyph = lookaheadGlyph.next as HardwareCharacterInstance;
+			}
+			
+			l = _lookaheadCoverages.length;
+			
+			for (i = 0; i < l; i++)
+			{
+				lookaheadGlyph = lookaheadGlyph.next as HardwareCharacterInstance;
+				
+				if (!lookaheadGlyph)
+				{
+					return false;
+				}
+				
+				var coverage:ICoverageTable = _lookaheadCoverages[i];
+				var coverageIndex:int = coverage.getCoverageIndex(lookaheadGlyph.glyph.index);
+				
+				if (coverageIndex == -1)
+				{
+					return false;
+				}
+			}
+			
+			return true;
+		}
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup */
 		
 		public function performLookup(characterInstances:LinkedList):void 
 		{
-			//throw new Error("Not yet implemented.");
+			if (!matchInputGlyphs(characterInstances))
+			{
+				return;
+			}
+			
+			if (!matchBacktrackGlyphs(characterInstances))
+			{
+				return;
+			}
+			
+			if (!matchLookaheadGlyphs(characterInstances))
+			{
+				return;
+			}
+			
+			const l:uint = _substitutionLookups.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				_substitutionLookups[i].performLookup(characterInstances);
+			}
 		}
 	}
 

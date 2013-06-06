@@ -114,9 +114,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 			throw new Error("Function not yet implemented");
 		}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
-			var chainSubruleSetTable:ChainSubRuleSet = _chainSubRuleSets[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var chainSubruleSetTable:ChainSubRuleSet = _chainSubRuleSets[actualCoverageIndex];
 			
 			var tableMap:Object = new Object();
 			var tableList:Vector.<LookupTable> = new Vector.<LookupTable>();

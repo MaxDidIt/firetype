@@ -1,6 +1,8 @@
-package de.maxdidit.hardware.font.data.tables.truetype.glyf 
+package de.maxdidit.hardware.font.data.tables.truetype.glyf
 {
 	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
+	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
+	import de.maxdidit.hardware.font.parser.tables.TableNames;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.list.LinkedList;
@@ -8,6 +10,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -29,15 +32,15 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		//private var _positioningLookups:Vector.<IGlyphLookup>;
 		
 		private var _index:uint;
-		private var _lookupMap:Object;
+		private var _lookupMap:Vector.<Vector.<Vector.<IGlyphLookup>>>;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function Glyph() 
+		public function Glyph()
 		{
-			_lookupMap = new Object();
+			_lookupMap = new Vector.<Vector.<Vector.<IGlyphLookup>>>();
 		}
 		
 		///////////////////////
@@ -46,72 +49,72 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		
 		// header
 		
-		public function get header():GlyphHeader 
+		public function get header():GlyphHeader
 		{
 			return _header;
 		}
 		
-		public function set header(value:GlyphHeader):void 
+		public function set header(value:GlyphHeader):void
 		{
 			_header = value;
 		}
 		
-		public function get advanceWidth():uint 
+		public function get advanceWidth():uint
 		{
 			return _advanceWidth;
 		}
 		
-		public function set advanceWidth(value:uint):void 
+		public function set advanceWidth(value:uint):void
 		{
 			_advanceWidth = value;
 		}
 		
-		public function get leftSideBearing():int 
+		public function get leftSideBearing():int
 		{
 			return _leftSideBearing;
 		}
 		
-		public function set leftSideBearing(value:int):void 
+		public function set leftSideBearing(value:int):void
 		{
 			_leftSideBearing = value;
 		}
 		
-		public function get glyphClass():uint 
+		public function get glyphClass():uint
 		{
 			return _glyphClass;
 		}
 		
-		public function set glyphClass(value:uint):void 
+		public function set glyphClass(value:uint):void
 		{
 			_glyphClass = value;
 		}
 		
 		//public function get substitutionLookups():Vector.<IGlyphLookup> 
 		//{
-			//return _substitutionLookups;
+		//return _substitutionLookups;
 		//}
 		//
 		//public function set substitutionLookups(value:Vector.<IGlyphLookup>):void 
 		//{
-			//_substitutionLookups = value;
+		//_substitutionLookups = value;
 		//}
 		//
 		//public function get positioningLookups():Vector.<IGlyphLookup> 
 		//{
-			//return _positioningLookups;
+		//return _positioningLookups;
 		//}
 		//
 		//public function set positioningLookups(value:Vector.<IGlyphLookup>):void 
 		//{
-			//_positioningLookups = value;
+		//_positioningLookups = value;
 		//}
 		
-		public function get index():uint 
+		public function get index():uint
 		{
 			return _index;
 		}
 		
-		public function set index(value:uint):void 
+		public function set index(value:uint):void
 		{
 			_index = value;
 		}
@@ -135,22 +138,38 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			// do nothing
 		}
 		
-		//public function retrieveHardwareCharacter(font:HardwareFont, subdivisions:uint, cache:HardwareCharacterCache):HardwareCharacter
-		//{
-			//throw new Error("Can't execute retrieveHardwareCharacter for Glyph. Extend the Glyph class and implement this function.");
-		//}
-		
-		public function addGlyphLookup(tag:String, lookupIndex:uint, glyphLookup:IGlyphLookup):void 
+		public function getTagIndex(tag:String):int
 		{
-			var lookupTables:Vector.<Vector.<IGlyphLookup>>;
-			if (_lookupMap.hasOwnProperty(tag))
+			switch(tag)
 			{
-				lookupTables = _lookupMap[tag];
+				case TableNames.GLYPH_SUBSTITUTION_DATA:
+					return 0;
+					
+				case TableNames.GLYPH_POSITIONING_DATA:
+					return 1;
 			}
-			else
+			
+			return -1;
+		}
+		
+		public function addGlyphLookup(tag:String, lookupIndex:uint, glyphLookup:IGlyphLookup):void
+		{
+			var tagIndex:uint = getTagIndex(tag);
+			if (tagIndex == -1)
+			{
+				return;
+			}
+			
+			if (_lookupMap.length <= tagIndex)
+			{
+				_lookupMap.length = tagIndex + 1;
+			}
+			
+			var lookupTables:Vector.<Vector.<IGlyphLookup>> = _lookupMap[tagIndex];
+			if (!lookupTables)
 			{
 				lookupTables = new Vector.<Vector.<IGlyphLookup>>();
-				_lookupMap[tag] = lookupTables;
+				_lookupMap[tagIndex] = lookupTables;
 			}
 			
 			var lookups:Vector.<IGlyphLookup>
@@ -168,39 +187,44 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			lookups.push(glyphLookup);
 		}
 		
-		public function applyGlyphLookups(tag:String, characterInstances:LinkedList, lookupIndices:Vector.<int>):void 
+		public function applyGlyphLookup(tag:String, characterInstances:LinkedList, lookupTableIndex:uint):void
 		{
-			if (!_lookupMap.hasOwnProperty(tag))
+			var tagIndex:uint = getTagIndex(tag);
+			if (tagIndex == -1)
 			{
 				return;
 			}
 			
-			var lookupTables:Vector.<Vector.<IGlyphLookup>> = _lookupMap[tag];
-			const l:uint = lookupTables.length;
-			
-			const ll:uint = lookupIndices.length;
-			for (var li:uint = 0; li < ll; li++)
+			if (tagIndex >= _lookupMap.length)
 			{
-				var lookupTableIndex:uint = lookupIndices[li];
-				if (lookupTableIndex >= l)
-				{
-					continue;
-				}
-				
-				var lookupTable:Vector.<IGlyphLookup> = lookupTables[li];
-				if (!lookupTable)
-				{
-					continue;
-				}
-				
-				var lt:uint = lookupTable.length;
-				for (var i:uint = 0; i < lt; i++)
-				{
-					lookupTable[i].performLookup(characterInstances);
-				}
+				return;
 			}
-		}
+			
+			var lookupTables:Vector.<Vector.<IGlyphLookup>> = _lookupMap[tagIndex];
+			if (!lookupTables)
+			{
+				return;
+			}
+			
+			if (lookupTableIndex >= lookupTables.length)
+			{
+				return;
+			}
+			
+			var lookupTable:Vector.<IGlyphLookup> = lookupTables[lookupTableIndex];
+			if (!lookupTable)
+			{
+				return;
+			}
+			
+			var lt:uint = lookupTable.length;
+			for (var i:uint = 0; i < lt; i++)
+			{
+				lookupTable[i].performLookup(characterInstances);
+			}
 		
+		}
+	
 	}
 
 }

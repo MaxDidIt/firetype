@@ -145,12 +145,18 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.single
 			//currentElement.hardwareCharacterInstance.glyphID = newGlyphIndex;
 		//}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
 			var newGlyphIndex:uint;
 			if (substituteGlyphIDs)
 			{
-				newGlyphIndex = substituteGlyphIDs[coverageIndex];
+				newGlyphIndex = substituteGlyphIDs[actualCoverageIndex];
 			}
 			else
 			{

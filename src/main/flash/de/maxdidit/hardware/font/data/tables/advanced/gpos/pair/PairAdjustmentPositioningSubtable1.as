@@ -156,54 +156,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		//{
-			//var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			//var coverageIndex:int = coverage.getCoverageIndex(currentCharacter.glyphID);
-			//
-			//if (coverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var nextElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.next as HardwareCharacterInstanceListElement;
-			//if (!nextElement)
-			//{
-				//return;
-			//}
-			//var nextCharacter:HardwareCharacterInstance = nextElement.hardwareCharacterInstance;
-			//
-			//var pairSet:PairSet = _pairSets[coverageIndex];
-			//var pairValueRecord:PairValueRecord;
-			//var pairFound:Boolean = false;
-			//for (var i:uint = 0; i < pairSet.pairValueCount; i++)
-			//{
-				//pairValueRecord = pairSet.pairValueRecords[i];
-				//if (pairValueRecord.secondGlyphID == nextCharacter.glyphID)
-				//{
-					//pairFound = true;
-					//break;
-				//}
-			//}
-			//
-			//if (!pairFound)
-			//{
-				//return;
-			//}
-			//
-			// apply positioning values
-			//var value1:ValueRecord = pairValueRecord.value1;
-			//var value2:ValueRecord = pairValueRecord.value2;
-			//
-			//currentCharacter.applyPositionAdjustmentValue(value1);
-			//nextCharacter.applyPositionAdjustmentValue(value2);
-		//}
-		
-		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
-			var pairSet:PairSet = _pairSets[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var pairSet:PairSet = _pairSets[actualCoverageIndex];
 			
 			var result:PairAdjustmentPositioningLookup1 = new PairAdjustmentPositioningLookup1();
 			result.pairSet = pairSet;

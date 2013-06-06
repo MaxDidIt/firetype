@@ -108,39 +108,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
-		//{
-			//var currentElement:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
-			//
-			//var glyphIndex:uint = currentElement.hardwareCharacterInstance.glyphID;
-			//var coverageIndex:int = _coverage.getCoverageIndex(glyphIndex);
-			//if (coverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var ligatureSets:LigatureSetTable = _ligatureSets[coverageIndex];
-			//var ligature:LigatureTable = findLigatureTableMatch(characterInstances, ligatureSets);
-			//
-			//if (!ligature)
-			//{
-				//return;
-			//}
-			//
-			// perform substitution
-			//currentElement.hardwareCharacterInstance.glyphID = ligature.ligatureGlyphID;
-			//
-			// remove ligature component glyphs.
-			//const l:uint = ligature.componentCount - 1;
-			//for (var i:uint = 0; i < l; i++)
-			//{
-				//characterInstances.removeElement(currentElement.next);
-			//}
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
-			var ligatureSets:LigatureSetTable = _ligatureSets[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var ligatureSets:LigatureSetTable = _ligatureSets[actualCoverageIndex];
 			
 			var result:LigatureSubstitutionLookup = new LigatureSubstitutionLookup();
 			result.ligatureSets = ligatureSets;

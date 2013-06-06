@@ -155,54 +155,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktoligature
 		// Member Functions
 		///////////////////////
 		
-		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
-		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		//{
-			//var markInstance:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			//
-			//var ligatureElement:HardwareCharacterInstanceListElement = characterInstances.currentElement.previous as HardwareCharacterInstanceListElement;
-			//if (!ligatureElement)
-			//{
-				//return;
-			//}
-			//var ligatureInstance:HardwareCharacterInstance = ligatureElement.hardwareCharacterInstance;
-			//
-			//var markCoverageIndex:int = _markCoverage.getCoverageIndex(markInstance.glyphID);
-			//if (markCoverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var ligatureCoverageIndex:int = _ligatureCoverage.getCoverageIndex(ligatureInstance.glyphID);
-			//if (ligatureCoverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//throw new Error("The performLookup function of MarkToLigatureAttachmentPositioningSubtable has not been fully implemented yet.");
-			//
-			//var markRecord:MarkRecord = _markArray.markRecords[markCoverageIndex];
-			//var ligatureAttachment:LigatureAttachment = _ligatureArray.ligatureAttachments[ligatureCoverageIndex];
-			//
-			// TODO: I'm not fully clear on how to handle the multiple components of the ligature.
-			// I'm also not sure what exactly the documentation means by "Aligning the attachment points combines the mark and ligature.".
-			// Are the mark and the ligature only visually combined or is the mark a component of the ligature after this?.
-			//var componentRecord:ComponentRecord = ligatureAttachment.componentRecords[0];
-			//
-			//var markAnchor:AnchorTable = markRecord.markAnchor;
-			//var ligatureAnchor:AnchorTable = componentRecord.ligatureAnchors[markRecord.markClass];
-			//
-			//var xOffset:int = markAnchor.xCoordinate - baseMarkAnchor.xCoordinate;
-			//var yOffset:int = markAnchor.yCoordinate - baseMarkAnchor.yCoordinate;
-			//
-			//currentCharacter.hardwareCharacterInstance.x = previousCharacter.hardwareCharacterInstance.x + xOffset;
-			//currentCharacter.hardwareCharacterInstance.y = previousCharacter.hardwareCharacterInstance.y + yOffset;
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
-			var markRecord:MarkRecord = _markArray.markRecords[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _markCoverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var markRecord:MarkRecord = _markArray.markRecords[actualCoverageIndex];
 			
 			var result:MarkToLigatureAttachmentPositioningLookup = new MarkToLigatureAttachmentPositioningLookup();
 			result.ligatureCoverage = _ligatureCoverage;

@@ -121,23 +121,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.single
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		//{
-			//throw new Error("Function not yet implemented");
-			//var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			//
-			//var coverageIndex:int = _coverage.getCoverageIndex(currentCharacter.glyphID);
-			//if (coverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var value:ValueRecord = _values[coverageIndex];
-			//
-			//currentCharacter.applyPositionAdjustmentValue(value);
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
 			var value:ValueRecord;
 			if (_valueCount == 1)

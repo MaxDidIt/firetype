@@ -100,7 +100,7 @@ package de.maxdidit.hardware.font.data.tables.advanced
 			_extensionSubtable.resolveDependencies(parent, font);
 		}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
 			return _extensionSubtable.retrieveGlyphLookup(glyphIndex, coverageIndex, font);
 		}

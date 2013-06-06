@@ -146,7 +146,7 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 			}
 		}
 		
-		public function addGlyphLookups(glyphIndex:uint, coverageIndex:uint, lookups:Vector.<IGlyphLookup>, font:HardwareFont):void 
+		public function addGlyphLookups(glyphIndex:uint, coverageIndex:int, lookups:Vector.<IGlyphLookup>, font:HardwareFont):void 
 		{
 			for (var i:uint = 0; i < _subTableCount; i++)
 			{

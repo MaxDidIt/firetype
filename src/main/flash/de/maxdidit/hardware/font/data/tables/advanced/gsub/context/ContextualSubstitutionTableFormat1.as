@@ -113,9 +113,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.context
 			throw new Error("Function not yet implemented");
 		}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
-			var subruleSetTable:SubRuleSetTable = _subruleSetTables[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var subruleSetTable:SubRuleSetTable = _subruleSetTables[actualCoverageIndex];
 			
 			var result:ContextualSubstitutionLookupFormat1 = new ContextualSubstitutionLookupFormat1();
 			result.subruleSetTable = subruleSetTable;
@@ -134,12 +140,14 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.context
 					var subruleLookups:Vector.<IGlyphLookup> = new Vector.<IGlyphLookup>();
 					for (var r:uint = 0; r < rl; r++)
 					{
-						subrule.substitutionLookupRecords[r].lookupTable.addGlyphLookups(glyphIndex, coverageIndex, subruleLookups, font);
+						subrule.substitutionLookupRecords[r].lookupTable.addGlyphLookups(glyphIndex, -1, subruleLookups, font);
 					}
 					subruleSetLookups[s] = subruleLookups;
 				}
 				subruleSetsLookups[i] = subruleSetLookups;
 			}
+			
+			// TODO: assign subruleSetsLookups
 			
 			return result;
 		}

@@ -158,43 +158,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktomark
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void
-		//{
-			//var previousCharacter:HardwareCharacterInstanceListElement = characterInstances.currentElement.previous as HardwareCharacterInstanceListElement;
-			//if (!previousCharacter)
-			//{
-				//return;
-			//}
-			//
-			//var currentCharacter:HardwareCharacterInstanceListElement = characterInstances.currentElement as HardwareCharacterInstanceListElement;
-			//var markCoverageIndex:int = _mark1Coverage.getCoverageIndex(currentCharacter.hardwareCharacterInstance.glyphID);
-			//if (markCoverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var baseMarkCoverageIndex:int = _mark2Coverage.getCoverageIndex(previousCharacter.hardwareCharacterInstance.glyphID);
-			//if (baseMarkCoverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var markRecord:MarkRecord = _mark1Array.markRecords[markCoverageIndex];
-			//var markAnchor:AnchorTable = markRecord.markAnchor;
-			//
-			//var baseMarkRecord:Mark2Record = _mark2Array.mark2Records[baseMarkCoverageIndex];
-			//var baseMarkAnchor:AnchorTable = baseMarkRecord.mark2Anchors[markRecord.markClass];
-			//
-			//var xOffset:int = markAnchor.xCoordinate - baseMarkAnchor.xCoordinate;
-			//var yOffset:int = markAnchor.yCoordinate - baseMarkAnchor.yCoordinate;
-			//
-			//currentCharacter.hardwareCharacterInstance.x = previousCharacter.hardwareCharacterInstance.x + xOffset;
-			//currentCharacter.hardwareCharacterInstance.y = previousCharacter.hardwareCharacterInstance.y + yOffset;
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
-			var markRecord:MarkRecord = _mark1Array.markRecords[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _mark1Coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var markRecord:MarkRecord = _mark1Array.markRecords[actualCoverageIndex];
 			
 			var result:MarkToMarkAttachmentPositioningLookup = new MarkToMarkAttachmentPositioningLookup();
 			result.mark2Coverage = _mark2Coverage;

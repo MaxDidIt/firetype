@@ -107,12 +107,12 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 		public function get inputCoverages():Vector.<ICoverageTable> 
 		{
 			return _inputCoverages;
-			_lookup.inputCoverages = _backtrackCoverages;
 		}
 		
 		public function set inputCoverages(value:Vector.<ICoverageTable>):void 
 		{
 			_inputCoverages = value;
+			_lookup.inputCoverages = _inputCoverages;
 		}
 		
 		public function get lookaheadGlyphCount():uint 
@@ -217,9 +217,32 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 			//}
 		//}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
-			return _lookup;
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _inputCoverages[0].getCoverageIndex(glyphIndex);
+			}
+			
+			var substitutionLookups:Vector.<IGlyphLookup> = new Vector.<IGlyphLookup>();
+			
+			const l:uint = _lookup.substitutionLookupRecords.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var record:SubstitutionLookupRecord = _lookup.substitutionLookupRecords[i];
+				record.lookupTable.addGlyphLookups(glyphIndex, -1, substitutionLookups, font);
+			}
+			
+			var result:ChainingContextSubstitutionLookupFormat3 = new ChainingContextSubstitutionLookupFormat3()
+			result.backtackCoverages = _backtrackCoverages;
+			result.lookaheadCoverages = _lookaheadCoverages;
+			result.inputCoverages = _inputCoverages;
+			result.substitutionLookupRecords = _substitutionLookupRecords;
+			
+			result.substitutionLookups = substitutionLookups;
+			
+			return result;
 		}
 		
 		public function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void 

@@ -12,8 +12,7 @@ package de.maxdidit.hardware.font.data.tables.common.lookup
 		function get parent():LookupTable;
 		function set parent(value:LookupTable):void;
 		
-		//function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void;
-		function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		function resolveDependencies(parent:ScriptFeatureLookupTable, font:HardwareFont):void
 	}
 

@@ -134,9 +134,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.multiple
 			//}
 		//}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
-			var sequence:SequenceTable = _sequences[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var sequence:SequenceTable = _sequences[actualCoverageIndex];
 			
 			var result:MultipleSubstitutionLookup = new MultipleSubstitutionLookup();
 			result.sequence = sequence;

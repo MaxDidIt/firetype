@@ -34,7 +34,7 @@ package de.maxdidit.hardware.font.data.tables
 			throw new Error("This type of lookup table is not yet implemented");
 		}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup
 		{
 			throw new Error("This type of lookup table is not yet implemented");
 		}

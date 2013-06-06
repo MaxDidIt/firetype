@@ -204,40 +204,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 		
 		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.ILookupSubtable */
 		
-		//public function performLookup(characterInstances:LinkedList, parent:ScriptFeatureLookupTable):void 
-		//{
-			//var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstanceListElement).hardwareCharacterInstance;
-			//
-			//var nextElement:HardwareCharacterInstanceListElement = (characterInstances.currentElement.next as HardwareCharacterInstanceListElement);
-			//if (!nextElement)
-			//{
-				//return;
-			//}
-			//
-			//var nextCharacter:HardwareCharacterInstance = nextElement.hardwareCharacterInstance;
-			//
-			//var coverageIndex:int = _coverage.getCoverageIndex(currentCharacter.glyphID);
-			//if (coverageIndex == -1)
-			//{
-				//return;
-			//}
-			//
-			//var class1:uint = _classDefinition1.getGlyphClassByID(currentCharacter.glyphID);
-			//var class2:uint = _classDefinition2.getGlyphClassByID(nextCharacter.glyphID);
-			//
-			//var class2Record:Class2Record = _class1Records[class1].class2Records[class2];
-			//
-			// apply positioning values
-			//var value1:ValueRecord = class2Record.value1;
-			//var value2:ValueRecord = class2Record.value2;
-			//
-			//currentCharacter.applyPositionAdjustmentValue(value1);
-			//nextCharacter.applyPositionAdjustmentValue(value2);
-		//}
-		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
-			var class1:uint = _classDefinition1.getGlyphClassByID(glyphIndex);
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var class1:uint = _classDefinition1.getGlyphClassByID(actualCoverageIndex);
 			var class1Record:Class1Record = _class1Records[class1];
 			
 			var result:PairAdjustmentPositioningLookup2 = new PairAdjustmentPositioningLookup2();

@@ -102,9 +102,15 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive
 			throw new Error("Function not yet implemented");
 		}
 		
-		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):IGlyphLookup 
+		public function retrieveGlyphLookup(glyphIndex:uint, coverageIndex:int, font:HardwareFont):IGlyphLookup 
 		{
-			var entryExitRecord:EntryExitRecord = _entryExitRecords[coverageIndex];
+			var actualCoverageIndex:int = coverageIndex;
+			if (coverageIndex == -1)
+			{
+				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
+			}
+			
+			var entryExitRecord:EntryExitRecord = _entryExitRecords[actualCoverageIndex];
 			
 			var result:CursiveAttachmentPositioningLookup = new CursiveAttachmentPositioningLookup();
 			result.entryExitRecord = entryExitRecord;
