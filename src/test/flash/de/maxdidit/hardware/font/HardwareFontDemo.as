@@ -106,11 +106,11 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("COUR.TTF");
-			//hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			//hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF");
-			hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("CAMBRIAI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("CAMBRIAI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("CONSOLA.TTF");
 			
 			// Buggy
@@ -209,7 +209,7 @@ package de.maxdidit.hardware.font
 			hardwareText.standardFormat = hardwareFontFormat;
 			
 			hardwareText.text = "Hold the <format id=\"red\">left mouse button</format> and <format id=\"red\">drag</format> the text up and down.\n\n" 
-			hardwareText.text = "Every character in this text has been decoded from a OpenType TrueType font, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
+			hardwareText.text += "Every character in this text has been decoded from an OpenType font file containing TrueType outlines, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
 			{
@@ -243,7 +243,7 @@ package de.maxdidit.hardware.font
 		
 		private function handleEnterFrame(e:Event):void 
 		{
-			hardwareText.text = "<format id=\"fractions\">12/8</format> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <format id=\"red\">Donec ipsum mi</format>, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n<format id=\"small\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. <format id=\"red\">Quisque suscipit pulvinar arcu</format>, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100) + "</format>";
+			//hardwareText.text = "<format id=\"fractions\">12/8</format> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <format id=\"red\">Donec ipsum mi</format>, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n<format id=\"small\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. <format id=\"red\">Quisque suscipit pulvinar arcu</format>, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100) + "</format>";
 			
 			if (mouseDown)
 			{

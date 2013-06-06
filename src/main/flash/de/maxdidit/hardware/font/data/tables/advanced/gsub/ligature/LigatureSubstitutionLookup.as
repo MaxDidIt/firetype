@@ -76,7 +76,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 		{
 			var currentCharacter:ILinkedListElement = characterInstances.currentElement;
 			var componentGlyphIDs:Vector.<uint> = ligature.componentGlyphIDs;
-			var cc:uint = ligature.componentCount;
+			var cc:uint = ligature.componentCount - 1;
 			
 			for (var c:uint = 0; c < cc; c++)
 			{
