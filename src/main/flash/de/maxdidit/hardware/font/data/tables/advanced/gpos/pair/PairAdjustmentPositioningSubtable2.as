@@ -212,7 +212,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 				actualCoverageIndex = _coverage.getCoverageIndex(glyphIndex);
 			}
 			
-			var class1:uint = _classDefinition1.getGlyphClassByID(actualCoverageIndex);
+			var class1:uint = _classDefinition1.getGlyphClassByID(glyphIndex);
 			var class1Record:Class1Record = _class1Records[class1];
 			
 			var result:PairAdjustmentPositioningLookup2 = new PairAdjustmentPositioningLookup2();

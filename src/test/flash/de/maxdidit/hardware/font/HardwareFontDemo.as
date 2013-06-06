@@ -208,7 +208,7 @@ package de.maxdidit.hardware.font
 			
 			hardwareText.standardFormat = hardwareFontFormat;
 			
-			hardwareText.text = "Hold the <format id=\"red\">left mouse button</format> and <format id=\"red\">drag</format> the text up and down.\n\n" 
+			hardwareText.text = "od Hold the <format id=\"red\">left mouse button</format> and <format id=\"red\">drag</format> the text up and down.\n\n" 
 			hardwareText.text += "Every character in this text has been decoded from an OpenType font file containing TrueType outlines, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
 			
 			if (e.font.fontFamily == "News Cycle")
