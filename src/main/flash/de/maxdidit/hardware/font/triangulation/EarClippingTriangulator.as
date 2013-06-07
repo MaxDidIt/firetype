@@ -122,6 +122,7 @@ package de.maxdidit.hardware.font.triangulation
 		private function isInsideTriangle(currentVertex:Vertex, vertexA:Vertex, vertexB:Vertex, vertexC:Vertex):Boolean 
 		{
 			// source: http://www.blackpawn.com/texts/pointinpoly/
+			// test if currentVertex coincides with one of the triangle vertices.
 			if (currentVertex.x == vertexA.x && currentVertex.y == vertexA.y)
 			{
 				return false;
@@ -137,20 +138,53 @@ package de.maxdidit.hardware.font.triangulation
 				return false;
 			}
 			
-			const v0_x:Number = vertexC.x - vertexA.x;
-			const v0_y:Number = vertexC.y - vertexA.y;
+			const v1_x:Number = currentVertex.x - vertexB.x;
+			const v1_y:Number = currentVertex.y - vertexB.y;
 			
-			const v1_x:Number = vertexB.x - vertexA.x;
-			const v1_y:Number = vertexB.y - vertexA.y;
+			const vBC_x:Number = vertexC.x - vertexB.x;
+			const vBC_y:Number = vertexC.y - vertexB.y;
+			
+			if (v1_x * vBC_y + v1_y * vBC_x == 0)
+			{
+				var projection:Number = (v1_x * vBC_x + v1_y * vBC_y) / (vBC_x * vBC_x + vBC_y * vBC_y);
+				if (projection > 0 && projection < 1)
+				{
+					return true;
+				}
+			}
 			
 			const v2_x:Number = currentVertex.x - vertexA.x;
 			const v2_y:Number = currentVertex.y - vertexA.y;
 			
-			const dot00:Number = v0_x * v0_x + v0_y * v0_y;
-			const dot01:Number = v0_x * v1_x + v0_y * v1_y;
-			const dot02:Number = v0_x * v2_x + v0_y * v2_y;
-			const dot11:Number = v1_x * v1_x + v1_y * v1_y;
-			const dot12:Number = v1_x * v2_x + v1_y * v2_y;
+			const vAC_x:Number = vertexC.x - vertexA.x;
+			const vAC_y:Number = vertexC.y - vertexA.y;
+			
+			//if (v2_x * vAC_y + v2_y * vAC_x == 0)
+			//{
+				//var projection:Number = (v2_x * vAC_x + v2_y * vAC_y) / (vAC_x * vAC_x + vAC_y * vAC_y);
+				//if (projection > 0 && projection < 1)
+				//{
+					//return true;
+				//}
+			//}
+			
+			const vAB_x:Number = vertexB.x - vertexA.x;
+			const vAB_y:Number = vertexB.y - vertexA.y;
+			
+			//if (v2_x * vAB_y + v2_y * vAB_x == 0)
+			//{
+				//projection = (v2_x * vAB_x + v2_y * vAB_y) / (vAB_x * vAB_x + vAB_y * vAB_y);
+				//if (projection > 0 && projection < 1)
+				//{
+					//return true;
+				//}
+			//}
+			
+			const dot00:Number = vAC_x * vAC_x + vAC_y * vAC_y;
+			const dot01:Number = vAC_x * vAB_x + vAC_y * vAB_y;
+			const dot02:Number = vAC_x * v2_x + vAC_y * v2_y;
+			const dot11:Number = vAB_x * vAB_x + vAB_y * vAB_y;
+			const dot12:Number = vAB_x * v2_x + vAB_y * v2_y;
 			
 			const inverseDenominator:Number = 1 / (dot00 * dot11 - dot01 * dot01);
 			const u:Number = inverseDenominator * (dot11 * dot02 - dot01 * dot12);

@@ -145,7 +145,11 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.alternate
 				alternateSet.alternateGlyphs = alternateGlyphs;
 			}
 			
-			_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+			// TODO: Fix bug: This should not be null in any case.
+			if (_coverage)
+			{
+				_coverage.iterateOverCoveredIndices(assignGlyphLookup, font);
+			}
 		}
 		
 		private function assignGlyphLookup(glyphIndex:uint, coverageIndex:uint, font:HardwareFont):void 
