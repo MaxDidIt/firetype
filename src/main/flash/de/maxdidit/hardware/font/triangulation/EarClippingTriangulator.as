@@ -33,6 +33,7 @@ package de.maxdidit.hardware.font.triangulation
 			var availableIndices:CircularLinkedList = new CircularLinkedList();
 			for (var i:uint = 0; i < l; i++)
 			{
+				//trace(path[i].x + "\t" + path[i].y);
 				availableIndices.addElement(new UnsignedIntegerListElement(i));
 			}
 			
@@ -59,7 +60,7 @@ package de.maxdidit.hardware.font.triangulation
 				// test if current vertex is part of convex hull
 				var crossProduct:Number = toPreviousX * toNextY - toPreviousY * toNextX;
 				
-				if (crossProduct <= 0)
+				if (crossProduct < 0)
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
@@ -76,9 +77,7 @@ package de.maxdidit.hardware.font.triangulation
 				}
 				
 				// add triangle to result
-				result.push((currentIndex.previous as UnsignedIntegerListElement).value + indexOffset);
-				result.push(currentIndex.value + indexOffset);
-				result.push((currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
+				result.push((currentIndex.previous as UnsignedIntegerListElement).value + indexOffset, currentIndex.value + indexOffset, (currentIndex.next as UnsignedIntegerListElement).value + indexOffset);
 				
 				numTriangles++;
 				

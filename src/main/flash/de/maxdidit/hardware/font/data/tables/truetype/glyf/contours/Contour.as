@@ -261,7 +261,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 				var AB_y:Number = vertexB.y - vertexA.y;
 				currentDistance = AB_x * AB_x + AB_y * AB_y;
 				
-				if (!intersectsAllRelevantPaths(vertexA, vertexB, pathA) && currentDistance < smallestDistance)
+				if (!intersectsAllRelevantPaths(vertexA, vertexB, pathA) && currentDistance <= smallestDistance)
 				{
 					validA = a;
 					smallestDistance = currentDistance;

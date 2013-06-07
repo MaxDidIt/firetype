@@ -116,7 +116,7 @@ package de.maxdidit.hardware.text.renderer
 			var vertexOffset:uint = _vertexData.length / FIELDS_PER_VERTEX;
 			var indexOffset:uint = _indexData.length;
 			
-			var localIndexOffset:uint = 0;
+			var numVertices:uint = 0;
 			var numTriangles:uint = 0;
 			
 			var indices:Vector.<uint> = new Vector.<uint>();
@@ -125,9 +125,9 @@ package de.maxdidit.hardware.text.renderer
 			for (var i:uint = 0; i < l; i++)
 			{
 				var path:Vector.<Vertex> = paths[i];
-				numTriangles += _triangulator.triangulatePath(path, indices, localIndexOffset + vertexOffset);
+				numTriangles += _triangulator.triangulatePath(path, indices, numVertices + vertexOffset);
 				
-				localIndexOffset += path.length;
+				numVertices += path.length;
 			}
 			
 			if (!fitsIntoIndexBuffer(indices.length))
@@ -135,8 +135,8 @@ package de.maxdidit.hardware.text.renderer
 				return null;
 			}
 			
-			addToIndexData(indices, localIndexOffset);
-			addToVertexData(paths);
+			addToIndexData(indices, numVertices);
+			addToVertexData(paths, numVertices);
 			
 			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
 			hardwareGlyph.vertexOffset = vertexOffset;
@@ -152,25 +152,36 @@ package de.maxdidit.hardware.text.renderer
 		{
 			const l:uint = indices.length;
 			
+			var index:uint = _indexData.length;
+			const newLength:uint = index + l * DRAW_CALLS_PER_BATCH;
+			
 			var indexOffset:uint = 0;
 			
 			for (var i:uint = 0; i < DRAW_CALLS_PER_BATCH; i++)
 			{
 				for (var j:uint = 0; j < l; j++)
 				{
-					_indexData.push(indices[j] + indexOffset);
+					_indexData[index++] = indices[j] + indexOffset;
+					//_indexData.push(indices[j] + indexOffset);
 				}
 				
 				indexOffset += numVertices;
 			}
 		}
 		
-		private function addToVertexData(paths:Vector.<Vector.<Vertex>>):void
+		private function addToVertexData(paths:Vector.<Vector.<Vertex>>, numVertices:uint):void
 		{
 			const l:uint = paths.length;
 			
+			var index:uint = _vertexData.length;
+			const newLength:uint = index + numVertices * DRAW_CALLS_PER_BATCH * FIELDS_PER_VERTEX;
+			
+			_vertexData.length = newLength;
+			
 			for (var b:uint = 0; b < DRAW_CALLS_PER_BATCH; b++)
 			{
+				var bTimes4:uint = b * 4;
+				
 				for (var p:uint = 0; p < l; p++)
 				{
 					var path:Vector.<Vertex> = paths[p];
@@ -179,7 +190,11 @@ package de.maxdidit.hardware.text.renderer
 					for (var i:uint = 0; i < pl; i++)
 					{
 						var vertex:Vertex = path[i];
-						_vertexData.push(vertex.x, vertex.y, 0, b * 4);
+						
+						_vertexData[index++] = vertex.x;
+						_vertexData[index++] = vertex.y;
+						_vertexData[index++] = 0;
+						_vertexData[index++] = bTimes4;
 					}
 				}
 			}

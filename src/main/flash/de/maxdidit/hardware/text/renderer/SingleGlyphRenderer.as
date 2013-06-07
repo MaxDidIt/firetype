@@ -7,7 +7,7 @@ package de.maxdidit.hardware.text.renderer
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
-	import de.maxdidit.hardware.text.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
@@ -25,10 +25,12 @@ package de.maxdidit.hardware.text.renderer
 		// Constants
 		///////////////////////
 		
-		
 		private const VERTEX_SHADER:String = "m44 op, va0, vc0"
 		private const FRAGMENT_SHADER:String = "mov oc, fc0";
+		
 		private const FIELDS_PER_VERTEX:uint = 3;
+		private const MAX_VERTEXBUFFER_BYTES:uint = (256 << 9) << 9;
+		private const MAX_INDEXBUFFER_BYTES:uint = (128 << 9) << 9;
 		
 		///////////////////////
 		// Member Fields
@@ -118,12 +120,13 @@ package de.maxdidit.hardware.text.renderer
 			var localIndexOffset:uint = 0;
 			var numTriangles:uint = 0;
 			
+			var indices:Vector.<uint> = new Vector.<uint>();
+			
 			const l:uint = paths.length;
 			for (var i:uint = 0; i < l; i++)
 			{
 				var path:Vector.<Vertex> = paths[i];
-				numTriangles += _triangulator.triangulatePath(path, _indexData, localIndexOffset + vertexOffset);
-				pushVertexData(path, _vertexData);
+				numTriangles += _triangulator.triangulatePath(path, indices, localIndexOffset + vertexOffset);
 				
 				localIndexOffset += path.length;
 			}
@@ -132,6 +135,9 @@ package de.maxdidit.hardware.text.renderer
 			{
 				return null;
 			}
+			
+			addToIndexData(indices, localIndexOffset);
+			addToVertexData(paths);
 			
 			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
 			hardwareGlyph.vertexOffset = vertexOffset;
@@ -143,16 +149,41 @@ package de.maxdidit.hardware.text.renderer
 			return hardwareGlyph;
 		}
 		
-		private function pushVertexData(path:Vector.<Vertex>, result:Vector.<Number>):void
+		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void 
 		{
-			const l:uint = path.length;
+			const l:uint = indices.length;
 			
-			for (var i:uint = 0; i < l; i++)
+			var index:uint = _indexData.length;
+			const newLength:uint = index + l;
+			
+			for (var j:uint = 0; j < l; j++)
 			{
-				var index:uint = i * FIELDS_PER_VERTEX;
-				var vertex:Vertex = path[i];
+				_indexData[index++] = indices[j] ;
+			}
+		}
+		
+		private function addToVertexData(paths:Vector.<Vector.<Vertex>>):void
+		{
+			const l:uint = paths.length;
+			
+			var index:uint = _vertexData.length;
+			const newLength:uint = index + l * FIELDS_PER_VERTEX;
+			
+			_vertexData.length = newLength;
+			
+			for (var p:uint = 0; p < l; p++)
+			{
+				var path:Vector.<Vertex> = paths[p];
+				var pl:uint = path.length;
 				
-				result.push(vertex.x, vertex.y, 0);
+				for (var i:uint = 0; i < pl; i++)
+				{
+					var vertex:Vertex = path[i];
+					
+					_vertexData[index++] = vertex.x;
+					_vertexData[index++] = vertex.y;
+					_vertexData[index++] = 0;
+				}
 			}
 		}
 		
@@ -187,7 +218,7 @@ package de.maxdidit.hardware.text.renderer
 						var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
 						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
 						
-						for each (var instances:Vector.<HardwareGlyphInstance> in format)
+						for each (var instances:Vector.<HardwareGlyphInstance>in format)
 						{
 							var l:uint = instances.length;
 							for (var i:uint = 0; i < l; i++)
