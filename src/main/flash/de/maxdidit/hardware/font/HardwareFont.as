@@ -217,7 +217,6 @@ package de.maxdidit.hardware.font
 				var glyphClass:uint = glyphClassDefinitionTable.getGlyphClassByID(i);
 				var glyph:Glyph = glyphTableData.retrieveGlyph(i);
 				glyph.glyphClass = glyphClass;
-				glyph.index = i;
 			}
 		}
 		

@@ -28,9 +28,6 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		private var _advanceWidth:uint;
 		private var _leftSideBearing:int;
 		
-		//private var _substitutionLookups:Vector.<IGlyphLookup>;
-		//private var _positioningLookups:Vector.<IGlyphLookup>;
-		
 		private var _index:uint;
 		private var _lookupMap:Vector.<Vector.<Vector.<IGlyphLookup>>>;
 		
@@ -87,36 +84,6 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		public function set glyphClass(value:uint):void
 		{
 			_glyphClass = value;
-		}
-		
-		//public function get substitutionLookups():Vector.<IGlyphLookup> 
-		//{
-		//return _substitutionLookups;
-		//}
-		//
-		//public function set substitutionLookups(value:Vector.<IGlyphLookup>):void 
-		//{
-		//_substitutionLookups = value;
-		//}
-		//
-		//public function get positioningLookups():Vector.<IGlyphLookup> 
-		//{
-		//return _positioningLookups;
-		//}
-		//
-		//public function set positioningLookups(value:Vector.<IGlyphLookup>):void 
-		//{
-		//_positioningLookups = value;
-		//}
-		
-		public function get index():uint
-		{
-			return _index;
-		}
-		
-		public function set index(value:uint):void
-		{
-			_index = value;
 		}
 		
 		///////////////////////

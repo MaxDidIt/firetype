@@ -106,7 +106,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 				}
 				
 				var coverage:ICoverageTable = _backtackCoverages[i];
-				var coverageIndex:int = coverage.getCoverageIndex(backtrackGlyph.glyph.index);
+				var coverageIndex:int = coverage.getCoverageIndex(backtrackGlyph.glyph.header.index);
 				
 				if (coverageIndex == -1)
 				{
@@ -134,7 +134,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 				}
 				
 				var coverage:ICoverageTable = _inputCoverages[i];
-				var coverageIndex:int = coverage.getCoverageIndex(inputGlyph.glyph.index);
+				var coverageIndex:int = coverage.getCoverageIndex(inputGlyph.glyph.header.index);
 				
 				if (coverageIndex == -1)
 				{
@@ -167,7 +167,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining
 				}
 				
 				var coverage:ICoverageTable = _lookaheadCoverages[i];
-				var coverageIndex:int = coverage.getCoverageIndex(lookaheadGlyph.glyph.index);
+				var coverageIndex:int = coverage.getCoverageIndex(lookaheadGlyph.glyph.header.index);
 				
 				if (coverageIndex == -1)
 				{

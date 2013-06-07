@@ -239,11 +239,11 @@ package de.maxdidit.hardware.text
 			for (i = 0; i < il; i++)
 			{
 				var glyphInstance:HardwareGlyphInstance = printhead.glyphInstances[i];
-				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.subdivisions, glyphInstance.glyph.index);
+				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.subdivisions, glyphInstance.glyph.header.index);
 				if (!hardwareGlyph)
 				{
 					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.subdivisions);
-					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.subdivisions, glyphInstance.glyph.index);
+					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.subdivisions, glyphInstance.glyph.header.index);
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
@@ -310,12 +310,7 @@ package de.maxdidit.hardware.text
 			{
 				// react to tag
 				if (switchFont)
-				{
-					//if (currentSpan && currentSpan.characterInstances.firstElement)
-					//{
-						//
-					//}
-					
+				{					
 					var currentFontFormat:HardwareTextFormat = (fontStack.lastElement as HardwareTextFormatListElement).hardwareTextFormat;
 					
 					var cmapData:CharacterIndexMappingTableData = currentFontFormat.font.data.retrieveTableData(TableNames.CHARACTER_INDEX_MAPPING) as CharacterIndexMappingTableData;

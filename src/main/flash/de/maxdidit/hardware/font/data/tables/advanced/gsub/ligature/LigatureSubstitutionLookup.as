@@ -104,7 +104,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.ligature
 					return false;
 				}
 				
-				if (currentCharacter.glyph.index != componentGlyphIDs[c])
+				if (currentCharacter.glyph.header.index != componentGlyphIDs[c])
 				{
 					return false;
 				}

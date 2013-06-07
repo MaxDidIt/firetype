@@ -67,7 +67,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 				return;
 			}
 			
-			var class2:uint = _classDefinition2.getGlyphClassByID(nextCharacter.glyph.index);
+			var class2:uint = _classDefinition2.getGlyphClassByID(nextCharacter.glyph.header.index);
 			
 			var class2Record:Class2Record = _class1Record.class2Records[class2];
 			

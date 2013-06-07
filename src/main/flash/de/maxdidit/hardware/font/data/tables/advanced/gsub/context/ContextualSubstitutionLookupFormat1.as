@@ -86,7 +86,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gsub.context
 					return false;
 				}
 				
-				if (currentCharacter.glyph.index != inputGlyphIDs[c])
+				if (currentCharacter.glyph.header.index != inputGlyphIDs[c])
 				{
 					return false;
 				}

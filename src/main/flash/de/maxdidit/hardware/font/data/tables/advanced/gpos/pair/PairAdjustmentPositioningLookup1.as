@@ -58,7 +58,7 @@ package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair
 			for (var i:uint = 0; i < l; i++)
 			{
 				var pair:PairValueRecord = _pairSet.pairValueRecords[i];
-				if (pair.secondGlyphID == nextCharacter.glyph.index)
+				if (pair.secondGlyphID == nextCharacter.glyph.header.index)
 				{
 					currentCharacter.applyAdjustmentValue(pair.value1);
 					nextCharacter.applyAdjustmentValue(pair.value2);
