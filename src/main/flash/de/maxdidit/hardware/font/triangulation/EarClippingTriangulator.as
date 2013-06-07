@@ -30,43 +30,16 @@ package de.maxdidit.hardware.font.triangulation
 			var numTriangles:uint = 0;
 			
 			// create index array
-			var smallestX:Number = Number.MAX_VALUE;
-			var smallestY:Number = Number.MAX_VALUE;
-			var smallestI:uint = 0;
 			var availableIndices:CircularLinkedList = new CircularLinkedList();
 			for (var i:uint = 0; i < l; i++)
 			{
-				if (path[i].x < smallestX)
-				{
-					smallestX = path[i].x;
-					smallestI = i;
-				}
-				else if (path[i].x == smallestX)
-				{
-					if (path[i].y < smallestY)
-					{
-						smallestY = path[i].y;
-						smallestI = i;
-					}
-				}
-				
-				//trace(path[i].x.toFixed(2) + "  \t" + path[i].y.toFixed(2));
 				availableIndices.addElement(new UnsignedIntegerListElement(i));
 			}
 			
-			// determine whether the polygon is clockwise or counter-clockwise
-			var j:uint = smallestI == 0 ? l - 1 : smallestI - 1;
-			var k:uint = (smallestI + 1) % l;
-			
-			var currentVertex:Vertex = path[j];
-			var previousVertex:Vertex = path[smallestI];
-			var nextVertex:Vertex = path[k];
-			
-			var determinant:Number = (currentVertex.x * nextVertex.y + previousVertex.x * currentVertex.y + previousVertex.y * nextVertex.x);
-			determinant -= (previousVertex.y * currentVertex.x + currentVertex.y * nextVertex.x + previousVertex.x * nextVertex.y);
-			var clockwise:Boolean = determinant > 0;
-			
 			// ear clipping algorithm
+			var currentVertex:Vertex;
+			var previousVertex:Vertex;
+			var nextVertex:Vertex;
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
@@ -86,25 +59,12 @@ package de.maxdidit.hardware.font.triangulation
 				// test if current vertex is part of convex hull
 				var crossProduct:Number = toPreviousX * toNextY - toPreviousY * toNextX;
 				
-				if (clockwise)
+				if (crossProduct <= 0)
 				{
-					if (crossProduct <= 0)
-					{
-						// iterate
-						currentIndex = currentIndex.next as UnsignedIntegerListElement;
-						//iterations++;
-						continue;
-					}
-				}
-				else
-				{
-					if (crossProduct >= 0)
-					{
-						// iterate
-						currentIndex = currentIndex.next as UnsignedIntegerListElement;
-						//iterations++;
-						continue;
-					}
+					// iterate
+					currentIndex = currentIndex.next as UnsignedIntegerListElement;
+					//iterations++;
+					continue;
 				}
 				
 				if (containsAnyPointFromPath(path, previousVertex, currentVertex, nextVertex, currentIndex.next.next as UnsignedIntegerListElement, currentIndex.previous as UnsignedIntegerListElement))
@@ -126,7 +86,7 @@ package de.maxdidit.hardware.font.triangulation
 				availableIndices.removeElement(currentIndex);
 				
 				currentIndex = availableIndices.firstElement as UnsignedIntegerListElement;
-				//iterations = 0;
+					//iterations = 0;
 			}
 			
 			// add the last triangle
@@ -146,7 +106,6 @@ package de.maxdidit.hardware.font.triangulation
 			while (currentElement != endElement)
 			{
 				var currentVertex:Vertex = path[currentElement.value];
-				
 				
 				if (isInsideTriangle(currentVertex, vertexA, vertexB, vertexC))
 				{

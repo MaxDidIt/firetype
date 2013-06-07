@@ -89,7 +89,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		// Member Functions
 		///////////////////////
 		
-		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint):void 
+		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint, addBackwards:Boolean):void 
 		{
 			const n:uint = _controlPoints.length - 1;
 			
@@ -109,11 +109,25 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 					vertex.y += _controlPoints[i].y * weight;
 				}
 				
-				list.push(vertex);
+				if (addBackwards)
+				{
+					list.unshift(vertex);
+				}
+				else
+				{
+					list.push(vertex);
+				}
 			}
 			
 			// add second anchor point
-			list.push(_controlPoints[n]);
+			if (addBackwards)
+			{
+				list.unshift(_controlPoints[n]);
+			}
+			else
+			{
+				list.push(_controlPoints[n]);
+			}
 		}
 		
 		private function bernsteinPolynomial(coefficients:Vector.<Number>, i:uint, n:uint, t:Number):Number

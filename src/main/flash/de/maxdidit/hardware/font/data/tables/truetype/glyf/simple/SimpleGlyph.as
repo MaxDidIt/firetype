@@ -169,52 +169,45 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		
 		private function distributeHoles():void 
 		{
-			var hole:Contour;
-			var currentContour:Contour;
+			var potentialHole:Contour;
+			var potentialContainer:Contour;
 			
 			var container:Contour;
 			
 			for (var i:int = _contours.length - 1; i >= 0; i--)
 			{
-				hole = _contours[i];
-				
-				if (hole.clockWise)
-				{
-					// not a hole;
-					continue;
-				}
+				potentialHole = _contours[i];
 				
 				container = null;
 				
 				for (var j:uint = 0; j < _contours.length; j++)
 				{
-					currentContour = _contours[j];
+					potentialContainer = _contours[j];
 					
-					if (!currentContour.clockWise)
+					if (potentialContainer == potentialHole)
 					{
-						// is a hole;
 						continue;
 					}
 					
-					if (!currentContour.contains(hole))
+					if (!potentialContainer.contains(potentialHole))
 					{
 						continue;
 					}
 					
 					if (!container)
 					{
-						container = currentContour;
+						container = potentialContainer;
 					}
-					else if(container.boundingBox.width > currentContour.boundingBox.width || container.boundingBox.height > currentContour.boundingBox.height)
+					else if(container.boundingBox.width > potentialContainer.boundingBox.width || container.boundingBox.height > potentialContainer.boundingBox.height)
 					{
-						container = currentContour;
+						container = potentialContainer;
 					}
 				}
 				
 				if (container)
 				{
 					_contours.splice(i, 1);
-					container.addHole(hole);
+					container.addHole(potentialHole);
 				}
 			}
 			

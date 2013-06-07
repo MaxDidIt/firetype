@@ -53,11 +53,18 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		// Member Functions
 		///////////////////////
 		
-		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint):void 
+		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint, addBackwards:Boolean):void 
 		{
 			// ignore subdivisions, a line always has the same number of points.
 			// only add anchor B. Anchor A should have been added by the previous path segment.
-			list.push(_anchorB);
+			if (addBackwards)
+			{
+				list.unshift(_anchorB);
+			}
+			else
+			{
+				list.push(_anchorB);
+			}
 		}
 		
 	}
