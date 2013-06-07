@@ -32,6 +32,7 @@ package de.maxdidit.hardware.font.triangulation
 			var availableIndices:CircularLinkedList = new CircularLinkedList();
 			for (var i:uint = 0; i < l; i++)
 			{
+				//trace(path[i].x.toFixed(2) + "  \t" + path[i].y.toFixed(2));
 				availableIndices.addElement(new UnsignedIntegerListElement(i));
 			}
 			
@@ -44,7 +45,7 @@ package de.maxdidit.hardware.font.triangulation
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
 			var iterations:uint = 0; // fail safe to prevent infinite loops
-			while (availableIndices.numElements > 3 && iterations < 1000)
+			while (availableIndices.numElements > 3 && iterations < 1500)
 			{	
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];
@@ -155,7 +156,7 @@ package de.maxdidit.hardware.font.triangulation
 			const u:Number = inverseDenominator * (dot11 * dot02 - dot01 * dot12);
 			const v:Number = inverseDenominator * (dot00 * dot12 - dot01 * dot02);
 			
-			return (u > 0) && (v > 0) && (u + v < 1);
+			return (u >= 0) && (v >= 0) && (u + v < 1);
 		}
 	}
 
