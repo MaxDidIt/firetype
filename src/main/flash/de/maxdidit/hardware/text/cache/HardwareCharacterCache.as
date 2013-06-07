@@ -203,6 +203,11 @@ package de.maxdidit.hardware.text.cache
 			return glyph;
 		}
 		
+		public function clearHardwareGlyphCache():void 
+		{
+			_glyphCache = new Object();
+		}
+		
 		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, subdivisions:uint, glyphID:uint):void 
 		{
 			var subdivisionsInFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);

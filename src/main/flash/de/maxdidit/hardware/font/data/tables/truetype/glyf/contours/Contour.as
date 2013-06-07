@@ -130,19 +130,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		
 		private function compareHole(contourA:Contour, contourB:Contour):Number 
 		{
-			var firstX:Number = _segments[0].anchorA.x;
-			var firstY:Number = _segments[0].anchorA.y;
-			
-			var centerXA:Number = (contourA.boundingBox.left + contourA.boundingBox.right) / 2 - firstX;
-			var centerYA:Number = (contourA.boundingBox.bottom + contourA.boundingBox.top) / 2 - firstY;
-			
-			var centerXB:Number = (contourB.boundingBox.left + contourB.boundingBox.right) / 2 - firstX;
-			var centerYB:Number = (contourB.boundingBox.bottom + contourB.boundingBox.top) / 2 - firstY;
-			
-			var d1:Number = Math.atan2(centerYA, -centerXA);			
-			var d2:Number = Math.atan2(centerYB, -centerXB);
-			
-			return d1 - d2;
+			return contourB.boundingBox.right - contourA.boundingBox.right;
 		}
 		
 		private function calculateBoundingBox():void
@@ -205,57 +193,106 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			const lA:uint = pathA.length;
 			const lB:uint = pathB.length;
 			
-			var smallestA:uint = 0;
-			var smallestB:uint = 0;
-			var smallestDistance:Number = Number.MAX_VALUE;
+			var validA:uint = 0;
+			var biggestB:uint = 0;
 			
-			for (var a:uint = 0; a < lA; a++)
+			var biggestX:Number = Number.MIN_VALUE;
+			var biggestY:Number = Number.MIN_VALUE;
+			for (var b:uint = 0; b < lB; b++)
 			{
-				var vertexA:Vertex = pathA[a];
+				var vertexB:Vertex = pathB[b];
 				
-				for (var b:uint = 0; b < lB; b++)
+				if (vertexB.x > biggestX)
 				{
-					var vertexB:Vertex = pathB[b];
-					
-					var dX:Number = vertexB.x - vertexA.x;
-					var dY:Number = vertexB.y - vertexA.y;
-					
-					var distance:Number = dX * dX + dY * dY;
-					if (distance <= smallestDistance)
+					biggestX = vertexB.x;
+					biggestY = Number.MIN_VALUE;
+					biggestB = b;
+				}
+				else if (vertexB.x == biggestX)
+				{
+					if (vertexB.y > biggestY)
 					{
-						smallestA = a;
-						smallestB = b;
-						smallestDistance = distance;
+						biggestY = vertexB.y;
+						biggestB = b;
 					}
 				}
 			}
 			
+			vertexB = pathB[biggestB];
+			while (validA < lA)
+			{
+				var vertexA:Vertex = pathA[validA];
+				if (vertexA.x <= biggestX)
+				{
+					validA++;
+					continue;
+				}
+				
+				if (!intersectsAllRelevantPaths(vertexA, vertexB, pathA))
+				{
+					break;
+				}
+				
+				validA++;
+			}
+			
 			// fill result
 			// fill up to bridge vertex in A
-			for (var i:uint = 0; i <= smallestA; i++)
+			for (var i:uint = 0; i <= validA; i++)
 			{
 				result.push(pathA[i]);
 			}
 			
 			// fill from bridge vertex in B till end
-			for (i = smallestB; i < lB; i++)
+			for (i = biggestB; i < lB; i++)
 			{
 				result.push(pathB[i]);
 			}
 			
 			// fill from beginning to bridge vertex in B
-			for (i = 0; i <= smallestB; i++)
+			for (i = 0; i <= biggestB; i++)
 			{
 				result.push(pathB[i]);
 			}
 			
 			// fill from bridge vertex in A till end
-			for (i = smallestA; i < lA; i++)
+			for (i = validA; i < lA; i++)
 			{
 				result.push(pathA[i]);
 			}
 			
 			return result;
+		}
+		
+		private function intersectsAllRelevantPaths(vertexA:Vertex, vertexB:Vertex, pathA:Vector.<Vertex>):Boolean 
+		{
+			intersectsPath(new Vertex(1, 1), new Vertex(-1, -1), new Vertex(-1, 1), new Vertex(1, -1));
+			intersectsPath(new Vertex(-1, 1), new Vertex(1, -1), new Vertex(1, 1), new Vertex(-1, -1));
+			
+			const l:uint = pathA.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				var vertexC:Vertex = pathA[i];
+				var vertexD:Vertex = pathA[(i + 1) % l];
+				if (intersectsPath(vertexA, vertexB, vertexC, vertexD) && //
+					intersectsPath(vertexC, vertexD, vertexA, vertexB))
+				{
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		private function intersectsPath(vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, vertexD:Vertex):Boolean 
+		{
+			var vertexAB:Vertex = new Vertex(vertexB.x - vertexA.x, vertexB.y - vertexA.y);
+			var vertexCD:Vertex = new Vertex(vertexD.x - vertexC.x, vertexD.y - vertexC.y);
+			
+			var s:Number = vertexA.y + vertexAB.y * (vertexC.x - vertexA.x) / vertexAB.x - vertexC.y;
+			s /= vertexCD.y - vertexCD.x * vertexAB.y / vertexAB.x;
+			
+			return s > 0 && s < 1;
 		}
 	}
 

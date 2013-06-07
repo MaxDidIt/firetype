@@ -70,8 +70,8 @@ package de.maxdidit.hardware.font.triangulation
 			
 			var currentIndex:UnsignedIntegerListElement = availableIndices.firstElement as UnsignedIntegerListElement;
 			
-			var iterations:uint = 0; // fail safe to prevent infinite loops
-			while (availableIndices.numElements > 3 && iterations < 1500)
+			//var iterations:uint = 0; // fail safe to prevent infinite loops
+			while (availableIndices.numElements > 3) // && iterations < 1500)
 			{
 				currentVertex = path[currentIndex.value];
 				previousVertex = path[(currentIndex.previous as UnsignedIntegerListElement).value];
@@ -92,7 +92,7 @@ package de.maxdidit.hardware.font.triangulation
 					{
 						// iterate
 						currentIndex = currentIndex.next as UnsignedIntegerListElement;
-						iterations++;
+						//iterations++;
 						continue;
 					}
 				}
@@ -102,7 +102,7 @@ package de.maxdidit.hardware.font.triangulation
 					{
 						// iterate
 						currentIndex = currentIndex.next as UnsignedIntegerListElement;
-						iterations++;
+						//iterations++;
 						continue;
 					}
 				}
@@ -111,7 +111,7 @@ package de.maxdidit.hardware.font.triangulation
 				{
 					// iterate
 					currentIndex = currentIndex.next as UnsignedIntegerListElement;
-					iterations++;
+					//iterations++;
 					continue;
 				}
 				
@@ -126,7 +126,7 @@ package de.maxdidit.hardware.font.triangulation
 				availableIndices.removeElement(currentIndex);
 				
 				currentIndex = availableIndices.firstElement as UnsignedIntegerListElement;
-				iterations = 0;
+				//iterations = 0;
 			}
 			
 			// add the last triangle
@@ -146,6 +146,7 @@ package de.maxdidit.hardware.font.triangulation
 			while (currentElement != endElement)
 			{
 				var currentVertex:Vertex = path[currentElement.value];
+				
 				
 				if (isInsideTriangle(currentVertex, vertexA, vertexB, vertexC))
 				{
@@ -198,26 +199,8 @@ package de.maxdidit.hardware.font.triangulation
 			const vAC_x:Number = vertexC.x - vertexA.x;
 			const vAC_y:Number = vertexC.y - vertexA.y;
 			
-			//if (v2_x * vAC_y + v2_y * vAC_x == 0)
-			//{
-			//var projection:Number = (v2_x * vAC_x + v2_y * vAC_y) / (vAC_x * vAC_x + vAC_y * vAC_y);
-			//if (projection > 0 && projection < 1)
-			//{
-			//return true;
-			//}
-			//}
-			
 			const vAB_x:Number = vertexB.x - vertexA.x;
 			const vAB_y:Number = vertexB.y - vertexA.y;
-			
-			//if (v2_x * vAB_y + v2_y * vAB_x == 0)
-			//{
-			//projection = (v2_x * vAB_x + v2_y * vAB_y) / (vAB_x * vAB_x + vAB_y * vAB_y);
-			//if (projection > 0 && projection < 1)
-			//{
-			//return true;
-			//}
-			//}
 			
 			const dot00:Number = vAC_x * vAC_x + vAC_y * vAC_y;
 			const dot01:Number = vAC_x * vAB_x + vAC_y * vAB_y;
