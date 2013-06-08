@@ -5,7 +5,12 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.components.HardwareLine;
 	import de.maxdidit.hardware.text.components.HardwareWord;
+	import de.maxdidit.hardware.text.components.TextSpan;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
+	import de.maxdidit.hardware.text.layout.ILayout;
+	import de.maxdidit.hardware.text.layout.LeftToRightLayout;
+	import de.maxdidit.hardware.text.renderer.SingleGlyphRendererFactory;
+	import flash.display3D.Context3D;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -28,16 +33,32 @@ package de.maxdidit.hardware.text
 		
 		private var _textDirty:Boolean;
 		
+		private var _layout:ILayout;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareText(cache:HardwareCharacterCache) 
+		public function HardwareText(context3D:Context3D, cache:HardwareCharacterCache = null, layout:ILayout = null, typesetter:Typesetter = null) 
 		{
 			this._cache = cache;
+			if (!_cache)
+			{
+				_cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3D, new EarClippingTriangulator));
+			}
 			this._cache.addClient(this);
 			
-			this._typesetter = new Typesetter();
+			this._layout = layout;
+			if (!_layout)
+			{
+				_layout = new LeftToRightLayout();
+			}
+			
+			this._typesetter = typesetter
+			if (!_typesetter)
+			{
+				_typesetter = new Typesetter();
+			}
 		}
 		
 		///////////////////////
@@ -117,7 +138,8 @@ package de.maxdidit.hardware.text
 		{
 			loseAllChildren();
 			
-			_typesetter.assemble(this, cache);
+			var textSpans:Vector.<TextSpan> = _typesetter.createTextSpans(_text, _standardFormat, _cache);
+			_layout.layout(this, textSpans, _cache);
 		}
 		
 		override public function loseAllChildren():void 

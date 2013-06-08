@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.text 
+package de.maxdidit.hardware.text.layout 
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;

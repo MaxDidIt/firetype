@@ -205,7 +205,7 @@ package de.maxdidit.hardware.font
 			cache.textFormatMap.addTextFormat(smallFontFormat);
 			cache.textFormatMap.addTextFormat(fractionFontFormat);
 			
-			hardwareText = new HardwareText(cache);
+			hardwareText = new HardwareText(context3d, cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
 			hardwareText.width = 40000;
 			
