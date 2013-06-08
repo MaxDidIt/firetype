@@ -104,19 +104,18 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("DAUNPENH.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			//hardwareParser.loadFont("CAMBRIAZ.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("CONSOLA.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("CAMBRIAZ.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("COURBD.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("impact.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			//hardwareParser.loadFont("TIMESI.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("ariali.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("LINDS.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("JELLYBELLY.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("TLPSMB.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			
-			// Buggy
-			//hardwareParser.loadFont("HDZB_5.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
@@ -156,8 +155,6 @@ package de.maxdidit.hardware.font
 		{
 			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			hardwareFontFormat.font = baseFont;
-			hardwareFontFormat.subdivisions = 2;
-			//hardwareFontFormat.scale = 2;
 			hardwareFontFormat.color = 0xFF000000;
 			
 			hardwareFontFormat.script = ScriptTag.LATIN;
@@ -168,7 +165,6 @@ package de.maxdidit.hardware.font
 			
 			var fractionFontFormat:HardwareTextFormat = new HardwareTextFormat();
 			fractionFontFormat.font = baseFont;
-			fractionFontFormat.subdivisions = 2;
 			fractionFontFormat.color = 0xFF666680;
 			
 			fractionFontFormat.script = ScriptTag.LATIN;
@@ -180,7 +176,8 @@ package de.maxdidit.hardware.font
 			
 			var redFontFormat:HardwareTextFormat= new HardwareTextFormat();
 			redFontFormat.font = e.font;
-			redFontFormat.subdivisions = 2;
+			//redFontFormat.scale = 13;
+			//redFontFormat.precision = 50;
 			redFontFormat.color = 0xFFFF0000;
 			
 			redFontFormat.script = ScriptTag.LATIN;
@@ -190,7 +187,6 @@ package de.maxdidit.hardware.font
 			
 			var smallFontFormat:HardwareTextFormat= new HardwareTextFormat();
 			smallFontFormat.font = baseFont;
-			smallFontFormat.subdivisions = 2;
 			smallFontFormat.scale = 0.75;
 			smallFontFormat.color = 0xFF333333;
 			
@@ -199,7 +195,7 @@ package de.maxdidit.hardware.font
 			
 			smallFontFormat.id = "small";
 			
-			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
+			cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			cache.textFormatMap.addTextFormat(hardwareFontFormat);
 			cache.textFormatMap.addTextFormat(redFontFormat);
 			cache.textFormatMap.addTextFormat(smallFontFormat);
@@ -236,7 +232,7 @@ package de.maxdidit.hardware.font
 			hardwareText.text += "\n";
 			
 			hardwareText.text += "<format id=\"fractions\">12/8</format> <format id=\"fractions\">1/3</format> á â à Â f fi ffi\n\n<format id=\"small\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet <format id=\"red\">sed commodo arcu</format> viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\nAenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.</format>";
-			//hardwareText.text = "b";
+			//hardwareText.text = "<format id=\"red\">O</format>";
 			
 			hardwareText.calculateTransformations(viewProjectionMtx, true);
 			

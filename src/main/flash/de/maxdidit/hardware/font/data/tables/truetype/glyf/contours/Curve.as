@@ -12,7 +12,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		///////////////////////
 		
 		private var _controlPoints:Vector.<Vertex>;
-		private var _coefficients:Vector.<Number>;
+		//private var _coefficients:Vector.<Number>;
 		
 		///////////////////////
 		// Constructor
@@ -26,7 +26,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 				
 				// binomial coefficients for each vertex
 				const n:uint = _controlPoints.length - 1;
-				_coefficients = MaxMath.calculateBinomialCoefficients(n);
+				//_coefficients = MaxMath.calculateBinomialCoefficients(n);
 				
 				// bounding box
 				calculateBoundingBox();
@@ -89,25 +89,34 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		// Member Functions
 		///////////////////////
 		
-		public function addVerticesToList(list:Vector.<Vertex>, subdivisions:uint, addBackwards:Boolean):void 
+		public function addVerticesToList(list:Vector.<Vertex>, vertexDensity:Number, addBackwards:Boolean):void 
 		{
 			const n:uint = _controlPoints.length - 1;
 			
-			const l:uint = subdivisions + 1;
+			//const l:uint = subdivisions + 1;
 			
-			for (var s:uint = 1; s < l; s++)
-			{
-				var t:Number = Number(s) / Number(l);
-				var vertex:Vertex = new Vertex();
+			var t:Number = 0;
+			var it:Number = 1 - t;
 				
-				// iterate over control points
-				for (var i:uint = 0; i <= n; i++)
-				{
-					var weight:Number = bernsteinPolynomial(_coefficients, i, n, t);
-					
-					vertex.x += _controlPoints[i].x * weight;
-					vertex.y += _controlPoints[i].y * weight;
-				}
+			var derivation_X:Number = -2 * _controlPoints[0].x + 2 * _controlPoints[1].x + _controlPoints[2].x;
+			var derivation_Y:Number = -2 * _controlPoints[0].y + 2 * _controlPoints[1].y + _controlPoints[2].y;
+			var derivation:Number = Math.sqrt(derivation_X * derivation_X + derivation_Y * derivation_Y);
+			
+			t += vertexDensity / derivation;
+			
+			while (t < 1)
+			{
+				var vertex:Vertex = new Vertex();
+				it = 1 - t;
+				
+				vertex.x = it * it * _controlPoints[0].x + 2 * t * it * _controlPoints[1].x + t * t * _controlPoints[2].x;
+				vertex.y = it * it * _controlPoints[0].y + 2 * t * it * _controlPoints[1].y + t * t * _controlPoints[2].y;
+				
+				derivation_X = -2 * it * _controlPoints[0].x + (2 * it - 2 * t) * _controlPoints[1].x + 2 * t * _controlPoints[2].x;
+				derivation_Y = -2 * it * _controlPoints[0].y + (2 * it - 2 * t) * _controlPoints[1].y + 2 * t * _controlPoints[2].y;
+				derivation = Math.sqrt(derivation_X * derivation_X + derivation_Y * derivation_Y);
+				
+				t += vertexDensity / derivation;
 				
 				if (addBackwards)
 				{
@@ -130,12 +139,12 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			}
 		}
 		
-		private function bernsteinPolynomial(coefficients:Vector.<Number>, i:uint, n:uint, t:Number):Number
-		{
-			var factor1:Number = Math.pow(t, i);
-			var factor2:Number = Math.pow(1 - t, n - i);
-			return coefficients[i] * factor1 * factor2;
-		}
+		//private function bernsteinPolynomial(coefficients:Vector.<Number>, i:uint, n:uint, t:Number):Number
+		//{
+			//var factor1:Number = Math.pow(t, i);
+			//var factor2:Number = Math.pow(1 - t, n - i);
+			//return coefficients[i] * factor1 * factor2;
+		//}
 		
 		private function calculateBoundingBox():void 
 		{

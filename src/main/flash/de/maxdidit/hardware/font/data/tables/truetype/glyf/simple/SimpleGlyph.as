@@ -154,14 +154,14 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 			instances.push(glyphInstance);
 		}
 		
-		override public function retrievePaths(subdivisions:uint):Vector.<Vector.<Vertex>>
+		override public function retrievePaths(vertexDensity:Number):Vector.<Vector.<Vertex>>
 		{
 			const l:uint = _contours.length;
 			var shapes:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>(l);
 			
 			for (var i:uint = 0; i < l; i++)
 			{
-				shapes[i] = _contours[i].retrievePath(subdivisions);
+				shapes[i] = _contours[i].retrievePath(vertexDensity);
 			}
 			
 			return shapes;

@@ -22,7 +22,7 @@ package de.maxdidit.hardware.text.format
 		private var _color:uint = 0x0;
 		private var _colorVector:Vector.<Number>;
 		
-		private var _subdivisions:uint = 1;
+		private var _vertexDensity:uint = 100;
 		
 		private var _scriptTag:String = ScriptTag.LATIN;
 		private var _languageTag:String = LanguageTag.ENGLISH;
@@ -100,14 +100,14 @@ package de.maxdidit.hardware.text.format
 		
 		// subdivisions
 		
-		public function get subdivisions():uint
+		public function get vertexDensity():Number
 		{
-			return _subdivisions;
+			return _vertexDensity;
 		}
 		
-		public function set subdivisions(value:uint):void
+		public function set vertexDensity(value:Number):void
 		{
-			_subdivisions = value;
+			_vertexDensity = value;
 		}
 		
 		// scriptTag

@@ -169,11 +169,11 @@ package de.maxdidit.hardware.text.layout
 			for (i = 0; i < il; i++)
 			{
 				var glyphInstance:HardwareGlyphInstance = printhead.glyphInstances[i];
-				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.subdivisions, glyphInstance.glyph.header.index);
+				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.vertexDensity, glyphInstance.glyph.header.index);
 				if (!hardwareGlyph)
 				{
-					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.subdivisions);
-					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.subdivisions, glyphInstance.glyph.header.index);
+					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.vertexDensity);
+					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.vertexDensity, glyphInstance.glyph.header.index);
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
