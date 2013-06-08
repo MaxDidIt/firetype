@@ -97,21 +97,21 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return true;
 		}
 		
-		public function retrievePath(subdivision:uint, expectedClockwise:Boolean = true):Vector.<Vertex>
+		public function retrievePath(vertexDensity:uint, expectedClockwise:Boolean = true):Vector.<Vertex>
 		{
 			var path:Vector.<Vertex> = new Vector.<Vertex>();
 			
 			const l:uint = _segments.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				_segments[i].addVerticesToList(path, subdivision, expectedClockwise == _clockWise);
+				_segments[i].addVerticesToList(path, vertexDensity, expectedClockwise == _clockWise);
 			}
 			
 			// add holes
 			const h:uint = _holes.length;
 			for (i = 0; i < h; i++)
 			{
-				var holePath:Vector.<Vertex> = _holes[i].retrievePath(subdivision, !expectedClockwise);
+				var holePath:Vector.<Vertex> = _holes[i].retrievePath(vertexDensity, !expectedClockwise);
 				path = connectPaths(path, holePath);
 			}
 			

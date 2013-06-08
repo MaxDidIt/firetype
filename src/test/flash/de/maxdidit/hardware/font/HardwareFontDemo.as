@@ -195,7 +195,7 @@ package de.maxdidit.hardware.font
 			
 			smallFontFormat.id = "small";
 			
-			cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3d, new EarClippingTriangulator()));
+			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			cache.textFormatMap.addTextFormat(hardwareFontFormat);
 			cache.textFormatMap.addTextFormat(redFontFormat);
 			cache.textFormatMap.addTextFormat(smallFontFormat);

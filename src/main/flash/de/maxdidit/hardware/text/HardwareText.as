@@ -164,6 +164,11 @@ package de.maxdidit.hardware.text
 			}
 		}
 		
+		public function dirty():void 
+		{
+			_textDirty = true;
+		}
+		
 	}
 
 }

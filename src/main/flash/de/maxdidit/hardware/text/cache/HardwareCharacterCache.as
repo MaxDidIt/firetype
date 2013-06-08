@@ -134,6 +134,8 @@ package de.maxdidit.hardware.text.cache
 				var section:HardwareCharacterCacheSection = _sections[i];
 				section.clear();
 			}
+			
+			dirtyAllClientTexts();
 		}
 		
 		public function addClient(hardwareText:HardwareText):void 
@@ -175,7 +177,7 @@ package de.maxdidit.hardware.text.cache
 			return hardwareGlyph;
 		}
 		
-		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, subdivisions:uint, glyphID:uint):HardwareGlyph 
+		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, vertexDensity:uint, glyphID:uint):HardwareGlyph 
 		{
 			const l:uint = _sections.length;
 			
@@ -186,7 +188,7 @@ package de.maxdidit.hardware.text.cache
 				{
 					// cache glyph
 					glyph.cacheSectionIndex = i;
-					addHardwareGlyphToCache(glyph, font, subdivisions, glyphID);
+					addHardwareGlyphToCache(glyph, font, vertexDensity, glyphID);
 					return glyph;
 				}
 			}
@@ -196,7 +198,7 @@ package de.maxdidit.hardware.text.cache
 			
 			glyph = section.addPathsToSection(paths);
 			glyph.cacheSectionIndex = _sections.length;
-			addHardwareGlyphToCache(glyph, font, subdivisions, glyphID);
+			addHardwareGlyphToCache(glyph, font, vertexDensity, glyphID);
 			
 			_sections.push(section);
 			
@@ -206,12 +208,22 @@ package de.maxdidit.hardware.text.cache
 		public function clearHardwareGlyphCache():void 
 		{
 			_glyphCache = new Object();
+			dirtyAllClientTexts();
 		}
 		
-		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, subdivisions:uint, glyphID:uint):void 
+		private function dirtyAllClientTexts():void
+		{
+			const l:uint = _clientTexts.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				_clientTexts[i].dirty();
+			}
+		}
+		
+		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, vertexDensity:uint, glyphID:uint):void 
 		{
 			var subdivisionsInFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
-			var glyphsInSubdivisions:Object = retrieveProperty(subdivisionsInFont, String(subdivisions));
+			var glyphsInSubdivisions:Object = retrieveProperty(subdivisionsInFont, String(vertexDensity));
 			
 			glyphsInSubdivisions[String(glyphID)] = glyph;
 		}
