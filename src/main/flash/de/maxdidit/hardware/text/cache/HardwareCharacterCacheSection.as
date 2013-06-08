@@ -46,11 +46,9 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, textFormat:HardwareTextFormat):void 
 		{
-			var cachedSubdivisionsForFont:Object = retrieveProperty(_instanceMap, uniqueIdentifier);
-			var cachedFormatsForSubdivision:Object = retrieveProperty(cachedSubdivisionsForFont, String(subdivisions));
-			var cachedInstancesForFormat:Object = retrieveProperty(cachedFormatsForSubdivision, textFormat.id);
+			var cachedInstancesForFormat:Object = retrieveProperty(_instanceMap, textFormat.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;
 			var indexKey:String = String(hardwareGlyphInstance.glyph.header.index);

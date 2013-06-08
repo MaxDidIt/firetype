@@ -104,10 +104,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, uniqueIdentifier:String, subdivisions:uint, textFormat:HardwareTextFormat):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, textFormat:HardwareTextFormat):void 
 		{
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
-			section.registerGlyphInstance(hardwareGlyphInstance, uniqueIdentifier, subdivisions, textFormat);
+			section.registerGlyphInstance(hardwareGlyphInstance, textFormat);
 		}
 		
 		public function render():void 

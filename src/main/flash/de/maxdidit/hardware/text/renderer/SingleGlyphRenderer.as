@@ -149,7 +149,7 @@ package de.maxdidit.hardware.text.renderer
 			return hardwareGlyph;
 		}
 		
-		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void 
+		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void
 		{
 			const l:uint = indices.length;
 			
@@ -158,7 +158,7 @@ package de.maxdidit.hardware.text.renderer
 			
 			for (var j:uint = 0; j < l; j++)
 			{
-				_indexData[index++] = indices[j] ;
+				_indexData[index++] = indices[j];
 			}
 		}
 		
@@ -202,33 +202,27 @@ package de.maxdidit.hardware.text.renderer
 			
 			_context3d.setProgram(programPair);
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-			for each (var fonts:Object in instanceMap)
+			for (var formatId:String in instanceMap)
 			{
-				for each (var subdivisions:Object in fonts)
+				var format:Object = instanceMap[formatId];
+				
+				if (!textFormatMap.hasTextFormatId(formatId))
 				{
-					for (var formatId:String in subdivisions)
+					throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
+				}
+				
+				var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
+				_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
+				
+				for each (var instances:Vector.<HardwareGlyphInstance>in format)
+				{
+					var l:uint = instances.length;
+					for (var i:uint = 0; i < l; i++)
 					{
-						var format:Object = subdivisions[formatId];
+						var currentInstance:HardwareGlyphInstance = instances[i];
 						
-						if (!textFormatMap.hasTextFormatId(formatId))
-						{
-							throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
-						}
-						
-						var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
-						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
-						
-						for each (var instances:Vector.<HardwareGlyphInstance>in format)
-						{
-							var l:uint = instances.length;
-							for (var i:uint = 0; i < l; i++)
-							{
-								var currentInstance:HardwareGlyphInstance = instances[i];
-								
-								_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
-								_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
-							}
-						}
+						_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
+						_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
 					}
 				}
 			}

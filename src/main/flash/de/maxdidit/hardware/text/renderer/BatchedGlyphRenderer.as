@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.text.renderer 
+package de.maxdidit.hardware.text.renderer
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.HardwareGlyph;
@@ -12,18 +12,19 @@ package de.maxdidit.hardware.text.renderer
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.Program3D;
 	import flash.display3D.VertexBuffer3D;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class BatchedGlyphRenderer implements IHardwareTextRenderer 
+	public class BatchedGlyphRenderer implements IHardwareTextRenderer
 	{
 		///////////////////////
 		// Constants
 		///////////////////////
 		
-		private const VERTEX_SHADER:String = 	"m44 op, va0, vc[va1.x]";
-		private const FRAGMENT_SHADER:String = 	"mov oc, fc0";
+		private const VERTEX_SHADER:String = "m44 op, va0, vc[va1.x]";
+		private const FRAGMENT_SHADER:String = "mov oc, fc0";
 		
 		private const DRAW_CALLS_PER_BATCH:uint = 128 / 4; // 128 is the maximum of vertex shader registers. A matrix requires 4 registers.
 		
@@ -148,7 +149,7 @@ package de.maxdidit.hardware.text.renderer
 			return hardwareGlyph;
 		}
 		
-		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void 
+		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void
 		{
 			const l:uint = indices.length;
 			
@@ -162,7 +163,7 @@ package de.maxdidit.hardware.text.renderer
 				for (var j:uint = 0; j < l; j++)
 				{
 					_indexData[index++] = indices[j] + indexOffset;
-					//_indexData.push(indices[j] + indexOffset);
+						//_indexData.push(indices[j] + indexOffset);
 				}
 				
 				indexOffset += numVertices;
@@ -221,48 +222,43 @@ package de.maxdidit.hardware.text.renderer
 			
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_1);
-			for each (var fonts:Object in instanceMap)
+			
+			for (var formatId:String in instanceMap)
 			{
-				for each (var subdivisions:Object in fonts)
+				var format:Object = instanceMap[formatId];
+				
+				if (!textFormatMap.hasTextFormatId(formatId))
 				{
-					for (var formatId:String in subdivisions)
+					throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
+				}
+				
+				var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
+				_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
+				
+				for each (var instances:Vector.<HardwareGlyphInstance>in format)
+				{
+					var l:uint = instances.length;
+					var i:uint = 0;
+					var b:uint = 0;
+					
+					while (i < l)
 					{
-						var format:Object = subdivisions[formatId];
+						var currentInstance:HardwareGlyphInstance = instances[i];
+						_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
 						
-						if (!textFormatMap.hasTextFormatId(formatId))
+						b++;
+						i++;
+						
+						if (b == DRAW_CALLS_PER_BATCH || i == l)
 						{
-							throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
-						}
-						
-						var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
-						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
-						
-						for each (var instances:Vector.<HardwareGlyphInstance> in format)
-						{
-							var l:uint = instances.length;
-							var i:uint = 0;
-							var b:uint = 0;
-							
-							while (i < l)
-							{
-								var currentInstance:HardwareGlyphInstance = instances[i];
-								_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
-								
-								b++;
-								i++;
-								
-								if (b == DRAW_CALLS_PER_BATCH || i == l)
-								{
-									_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
-									b = 0;
-								}
-							}
+							_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
+							b = 0;
 						}
 					}
 				}
 			}
 		}
-		
+	
 	}
 
 }

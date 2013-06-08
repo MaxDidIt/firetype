@@ -177,7 +177,7 @@ package de.maxdidit.hardware.text.layout
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
-				cache.registerGlyphInstance(glyphInstance, printhead.font.uniqueIdentifier, printhead.textFormat.subdivisions, printhead.textFormat);
+				cache.registerGlyphInstance(glyphInstance, printhead.textFormat);
 				currentCharacter.addChild(glyphInstance);
 			}
 			
