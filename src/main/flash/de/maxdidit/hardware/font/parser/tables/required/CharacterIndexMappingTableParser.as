@@ -137,6 +137,12 @@ package de.maxdidit.hardware.font.parser.tables.required
 			var segmentStartIndex:Vector.<uint> = new Vector.<uint>();
 			for (i = 0; i < segCount; i++)
 			{
+				// Terminate search if "segment" 0xFFFF has been reached.
+				if (startCount[i] == 0xFFFF)
+				{
+					break;
+				}
+				
 				value = _dataTypeParser.parseUnsignedShort(data);
 				idRangeOffset.push(value);
 				

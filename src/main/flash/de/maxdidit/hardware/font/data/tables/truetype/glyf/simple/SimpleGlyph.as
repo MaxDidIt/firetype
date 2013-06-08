@@ -174,17 +174,36 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 			
 			var container:Contour;
 			
+			if (_contours.length == 1)
+			{
+				return;
+			}
+			
+			_contours.sort(sortByBoundingBox);
+			var holeDirection:Boolean = !_contours[0].clockWise; // assume that the biggest contour is not a hole.
+			
 			for (var i:int = _contours.length - 1; i >= 0; i--)
 			{
 				potentialHole = _contours[i];
 				
+				if (potentialHole.clockWise != holeDirection)
+				{
+					// this is not a hole
+					continue;
+				}
+				
 				container = null;
 				
-				for (var j:uint = 0; j < _contours.length; j++)
+				for (var j:int = _contours.length - 1; j >= 0; j--)
 				{
 					potentialContainer = _contours[j];
 					
 					if (potentialContainer == potentialHole)
+					{
+						continue;
+					}
+					
+					if (potentialContainer.clockWise == potentialHole.clockWise)
 					{
 						continue;
 					}
@@ -215,6 +234,11 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 			{
 				_contours[i].sortHoles();
 			}
+		}
+		
+		private function sortByBoundingBox(contourA:Contour, contourB:Contour):Number 
+		{
+			return (contourB.boundingBox.width * contourB.boundingBox.height) - (contourA.boundingBox.width * contourA.boundingBox.height);
 		}
 	}
 

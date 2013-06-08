@@ -73,6 +73,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				
 				var glyph:Glyph = parseGlyph(data, offset + glyphOffsets[i], hasContour);
 				glyph.header.index = i;
+				
 				result[i] = glyph;
 			}
 			
@@ -89,7 +90,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			if (!hasContour || header.numCountours == 0)
 			{
 				result = new Glyph();
-			} else if (header.numCountours > 0)
+			}
+			else if (header.numCountours > 0)
 			{
 				result = parseSimpleGlyph(data, header);
 			}

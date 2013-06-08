@@ -56,7 +56,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			calculateDirection();
 		}
 		
-		public function get boundingBox():AxisAlignedBoundingBox 
+		public function get boundingBox():AxisAlignedBoundingBox
 		{
 			return _boundingBox;
 		}
@@ -118,19 +118,19 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return path;
 		}
 		
-		public function addHole(hole:Contour):void 
+		public function addHole(hole:Contour):void
 		{
 			_holes.push(hole);
 		}
 		
 		public function sortHoles():void
 		{
-			_holes.sort(sortByRightBoundary);
+			_holes.sort(sortByUpperBoundary);
 		}
 		
-		private function sortByRightBoundary(contourA:Contour, contourB:Contour):Number 
+		private function sortByUpperBoundary(contourA:Contour, contourB:Contour):Number
 		{
-			return contourB.boundingBox.right - contourA.boundingBox.right;
+			return contourB.boundingBox.top - contourA.boundingBox.top;
 		}
 		
 		private function calculateBoundingBox():void
@@ -165,7 +165,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			_boundingBox.top = maxY;
 		}
 		
-		private function calculateDirection():void 
+		private function calculateDirection():void
 		{
 			var startElement:VertexListElement = _vertices.firstElement as VertexListElement;
 			var currentElement:VertexListElement = startElement as VertexListElement;
@@ -235,11 +235,11 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			var result:Vector.<Vertex> = new Vector.<Vertex>();
 			
 			// find shortest distance between vertices
-			const lA:uint = pathA.length;			
+			const lA:uint = pathA.length;
 			const lB:uint = pathB.length;
 			
 			var a:uint = 0;
-			var validA:uint = 0;			
+			var validA:uint = 0;
 			var biggestB:uint = findBiggestXIndex(pathB);
 			
 			var vertexB:Vertex = pathB[biggestB];
@@ -298,7 +298,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return result;
 		}
 		
-		private function intersectsAllRelevantPaths(vertexA:Vertex, vertexB:Vertex, pathA:Vector.<Vertex>):Boolean 
+		private function intersectsAllRelevantPaths(vertexA:Vertex, vertexB:Vertex, pathA:Vector.<Vertex>):Boolean
 		{
 			const l:uint = pathA.length;
 			for (var i:uint = 0; i < l; i++)
@@ -315,8 +315,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return false;
 		}
 		
-		private function intersectsPath(vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, vertexD:Vertex):Boolean 
-		{			
+		private function intersectsPath(vertexA:Vertex, vertexB:Vertex, vertexC:Vertex, vertexD:Vertex):Boolean
+		{
 			const vAB_x:Number = vertexB.x - vertexA.x;
 			const vAB_y:Number = vertexB.y - vertexA.y;
 			

@@ -123,12 +123,12 @@ package de.maxdidit.hardware.font.parser
 			
 			_tableParsingPriority[TableNames.FONT_HEADER]					= priority++; // font header should be parsed first
 			_tableParsingPriority[TableNames.MAXIMUM_PROFILE]				= priority++;
+			_tableParsingPriority[TableNames.HORIZONTAL_HEADER]				= priority++; // horizontal header needs to be parsed before horizontal metrics
+			_tableParsingPriority[TableNames.HORIZONTAL_METRICS]			= priority++; 
 			_tableParsingPriority[TableNames.INDEX_TO_LOCATION]				= priority++; // font header and maximum profile need to be parsed before this
 			_tableParsingPriority[TableNames.GLYPH_DATA]					= priority++; // index to location needs to be parsed before this
 			
 			_tableParsingPriority[TableNames.CHARACTER_INDEX_MAPPING]		= iDontCare;
-			_tableParsingPriority[TableNames.HORIZONTAL_HEADER]				= iDontCare;
-			_tableParsingPriority[TableNames.HORIZONTAL_METRICS]			= iDontCare;
 			_tableParsingPriority[TableNames.NAMING_TABLE]					= iDontCare;
 			_tableParsingPriority[TableNames.OS2_WINDOWS_METRICS]			= iDontCare;
 			_tableParsingPriority[TableNames.POSTSCRIPT_INFORMATION]		= iDontCare;
