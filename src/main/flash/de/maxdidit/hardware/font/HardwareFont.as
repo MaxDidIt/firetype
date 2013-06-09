@@ -32,6 +32,7 @@ package de.maxdidit.hardware.font
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
+	import flash.utils.getTimer;
 	
 	/**
 	 * ...
@@ -39,6 +40,12 @@ package de.maxdidit.hardware.font
 	 */
 	public class HardwareFont
 	{
+		///////////////////////
+		// Constant
+		///////////////////////
+		
+		static public const RANDOM_TAG_LENGTH:uint = 8;
+		
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -116,7 +123,22 @@ package de.maxdidit.hardware.font
 			var namingTableData:NamingTableData = _data.retrieveTable(TableNames.NAMING_TABLE).data as NamingTableData;
 			_fontFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_FAMILY);
 			_fontSubFamily = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.FONT_SUBFAMILY);
-			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER) + " " + _fontSubFamily;
+			_uniqueIdentifier = namingTableData.retrieveString("1", "0", "0", NamingTableNameID.UNIQUE_FONT_IDENTIFIER);
+			
+			if (!_uniqueIdentifier || _uniqueIdentifier == "")
+			{
+				// generate random tag
+				var start:int = getTimer(); // use get timer to prevent collisions with other random tags.
+				_uniqueIdentifier = "fontID 0x" + start.toString(16);
+			}
+			else if(_fontSubFamily || _fontSubFamily == "")
+			{
+				_uniqueIdentifier += " " + _fontSubFamily;
+			}
+			else
+			{
+				_uniqueIdentifier += " ID 0x" + getTimer().toString(16);
+			}
 			
 			// resolve dependencies between tables/compile font values
 			applyHorizontalMetrics();

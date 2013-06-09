@@ -103,7 +103,9 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("arial.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("DAUNPENH.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("framd.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			hardwareParser.loadFont("tahoma.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("WBV4.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("CAMBRIAB.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("CONSOLA.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
@@ -115,7 +117,9 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("LINDS.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("JELLYBELLY.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("TLPSMB.TTF").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			//hardwareParser.loadFont("jingjing.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
+			hardwareParser.loadFont("tahomabd.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			
 			viewProjectionMtx = new Matrix3D();
 			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
