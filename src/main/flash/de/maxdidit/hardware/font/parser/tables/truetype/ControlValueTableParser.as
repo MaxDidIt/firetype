@@ -36,6 +36,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		
 		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
 		{
+			data.position = record.offset;
+			
 			var result:ControlValueTableData = new ControlValueTableData();
 			
 			const l:uint = record.length >> 1; // table is filled with 16 byte values
