@@ -309,17 +309,6 @@ package de.maxdidit.hardware.font
 			return glyphIndex;
 		}
 		
-		//public function performCharacterSubstitutions(characterInstances:LinkedList, scriptTag:String, languageTag:String, activatedFeatures:HardwareFontFeatures ):void 
-		//{
-			//var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;
-			//if (!gsubTableData)
-			//{
-				//return;
-			//}
-			//
-			//gsubTableData.applyTable(characterInstances, scriptTag, languageTag, activatedFeatures);
-		//}
-		
 		public function getAdvancedFeatures(standardScript:String, standardLanguage:String):Vector.<FeatureRecord> 
 		{
 			var gsubTableData:GlyphSubstitutionTableData = _data.retrieveTableData(TableNames.GLYPH_SUBSTITUTION_DATA) as GlyphSubstitutionTableData;

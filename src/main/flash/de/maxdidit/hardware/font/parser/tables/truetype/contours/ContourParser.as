@@ -43,6 +43,30 @@ package de.maxdidit.hardware.font.parser.tables.truetype.contours
 				var contour:Contour = new Contour();
 				var vertices:CircularLinkedList = new CircularLinkedList;
 				
+				// There seems to be only one point in this contour. Skip it.
+				if (i == endPoint)
+				{
+					result[c] = contour;
+					i++;
+					continue;
+				}
+				
+				// the endpoints suggest more coordinates than are available (WTF?)
+				if (i >= xCoordinates.length)
+				{
+					result[c] = contour;
+					result.length = c + 1;
+					return result;
+				}
+				
+				if (i >= yCoordinates.length)
+				{
+					result[c] = contour;
+					result.length = c + 1;
+					return result;
+				}
+				
+				// actually compile vertices
 				for (i; i <= endPoint; i++)
 				{
 					var vertex:Vertex = new Vertex(xCoordinates[i], yCoordinates[i], flags[i].onCurve);

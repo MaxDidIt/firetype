@@ -100,6 +100,10 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		public function retrievePath(vertexDensity:uint, expectedClockwise:Boolean = true):Vector.<Vertex>
 		{
 			var path:Vector.<Vertex> = new Vector.<Vertex>();
+			if (!_segments)
+			{
+				return path;
+			}
 			
 			const l:uint = _segments.length;
 			for (var i:uint = 0; i < l; i++)

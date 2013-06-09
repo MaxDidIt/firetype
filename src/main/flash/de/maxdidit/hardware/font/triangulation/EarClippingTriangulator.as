@@ -27,6 +27,11 @@ package de.maxdidit.hardware.font.triangulation
 		public function triangulatePath(path:Vector.<Vertex>, result:Vector.<uint>, indexOffset:uint):uint
 		{
 			const l:uint = path.length;
+			if (l == 0)
+			{
+				return 0;
+			}
+			
 			var numTriangles:uint = 0;
 			
 			// create index array

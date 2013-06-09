@@ -44,6 +44,8 @@ package de.maxdidit.hardware.font.parser.tables.common
 		
 		public function parseTable(data:ByteArray, offset:uint):* 
 		{
+			data.position = offset;
+			
 			var result:LanguageSystemTable = new LanguageSystemTable();
 			
 			// skip reserved offset field

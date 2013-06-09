@@ -32,6 +32,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		///////////////////////
 		
 		private var _dataTypeParser:DataTypeParser;
+		private var _contourParser:ContourParser;
 		
 		///////////////////////
 		// Constructor
@@ -40,6 +41,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		public function GlyphDataTableParser(dataTypeParser:DataTypeParser)
 		{
 			this._dataTypeParser = dataTypeParser;
+			_contourParser = new ContourParser();
 		}
 		
 		///////////////////////
@@ -260,8 +262,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var yCoordinates:Vector.<int> = parseYCoordinates(data, flags);
 			result.yCoordinates = yCoordinates;
 			
-			var contourParser:ContourParser = new ContourParser();
-			result.contours = contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags);
+			result.contours = _contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags);
 			
 			return result;
 		}

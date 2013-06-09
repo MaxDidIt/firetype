@@ -104,7 +104,10 @@ package de.maxdidit.hardware.font.data.tables.common.coverage
 			const l:uint = _glyphCount;
 			for (var coverageIndex:uint = 0; coverageIndex < l; coverageIndex++)
 			{
-				callback.call(null, _glyphIDs[coverageIndex], coverageIndex, font);
+				if (_glyphIDs[coverageIndex] != 0xFFFF)
+				{
+					callback.call(null, _glyphIDs[coverageIndex], coverageIndex, font);
+				}
 			}
 		}
 	}

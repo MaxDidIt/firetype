@@ -210,7 +210,8 @@ package de.maxdidit.hardware.text
 					}
 				}
 				
-				var glyphIndex:uint = cmapData.getGlyphIndex(charCode, 3, 1);
+				var glyphIndex:int = cmapData.getGlyphIndex(charCode, 3, 1);
+				
 				var glyph:Glyph = glyfData.retrieveGlyph(glyphIndex);
 				
 				var currentCharacter:HardwareCharacterInstance = HardwareCharacterInstance.getHardwareCharacterInstance();

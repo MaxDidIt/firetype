@@ -77,6 +77,11 @@ package de.maxdidit.hardware.font.data.tables.required.cmap
 		public function getGlyphIndex(charCode:Number, platformID:int, encodingID:int):int
 		{
 			var subTable:CharacterIndexMappingSubtable = _tableMap[platformID][encodingID];
+			if (!subTable)
+			{
+				return -1;
+			}
+			
 			var glyphIndex:int = subTable.data.getGlyphIndex(charCode);
 			
 			return glyphIndex;
