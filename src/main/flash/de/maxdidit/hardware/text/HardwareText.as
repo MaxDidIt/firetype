@@ -98,6 +98,8 @@ package de.maxdidit.hardware.text
 			if (_text != value)
 			{
 				_text = value;
+				
+				_cache.clearInstanceCache();
 				_textDirty = true;
 			}
 		}
@@ -157,7 +159,6 @@ package de.maxdidit.hardware.text
 		{
 			if (_textDirty)
 			{
-				_cache.clearInstanceCache(); // TODO: will cause problems if multiple texts use the same cache.
 				parseText();
 				calculateTransformations();
 				_textDirty = false;

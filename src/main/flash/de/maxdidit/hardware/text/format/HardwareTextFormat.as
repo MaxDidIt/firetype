@@ -21,6 +21,7 @@ package de.maxdidit.hardware.text.format
 		
 		private var _color:uint = 0x0;
 		private var _colorVector:Vector.<Number>;
+		private var _textAlign:uint = TextAlign.LEFT;
 		
 		private var _vertexDensity:uint = 100;
 		
@@ -174,6 +175,16 @@ package de.maxdidit.hardware.text.format
 		public function get colorVector():Vector.<Number> 
 		{
 			return _colorVector;
+		}
+		
+		public function get textAlign():uint 
+		{
+			return _textAlign;
+		}
+		
+		public function set textAlign(value:uint):void 
+		{
+			_textAlign = value;
 		}
 	
 		///////////////////////

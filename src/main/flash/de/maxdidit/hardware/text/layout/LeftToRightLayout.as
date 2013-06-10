@@ -1,4 +1,4 @@
-package de.maxdidit.hardware.text.layout 
+package de.maxdidit.hardware.text.layout
 {
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.GlyphPositioningTableData;
 	import de.maxdidit.hardware.font.data.tables.advanced.ScriptFeatureLookupTable;
@@ -15,14 +15,16 @@ package de.maxdidit.hardware.text.layout
 	import de.maxdidit.hardware.text.components.HardwareWord;
 	import de.maxdidit.hardware.text.components.TextSpan;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
+	import de.maxdidit.hardware.text.format.TextAlign;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.layout.Printhead;
 	import flash.ui.Keyboard;
+	
 	/**
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class LeftToRightLayout implements ILayout 
+	public class LeftToRightLayout implements ILayout
 	{
 		///////////////////////
 		// Constants
@@ -41,7 +43,7 @@ package de.maxdidit.hardware.text.layout
 		// Constructor
 		///////////////////////
 		
-		public function LeftToRightLayout() 
+		public function LeftToRightLayout()
 		{
 			printhead = new Printhead();
 		}
@@ -52,7 +54,7 @@ package de.maxdidit.hardware.text.layout
 		
 		/* INTERFACE de.maxdidit.hardware.text.layout.ILayout */
 		
-		public function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void 
+		public function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void
 		{
 			printhead.lineX = 0;
 			printhead.y = 0;
@@ -219,6 +221,22 @@ package de.maxdidit.hardware.text.layout
 		{
 			printhead.y -= printhead.currentLine.ascender - printhead.currentLine.descender;
 			printhead.currentLine.y = printhead.y;
+			
+			switch (printhead.textFormat.textAlign)
+			{
+				case TextAlign.LEFT: 
+					printhead.currentLine.x = 0;
+					break;
+					
+				case TextAlign.CENTER: 
+					printhead.currentLine.x = (hardwareText.width - printhead.lineX) / 2;
+					break;
+					
+				case TextAlign.RIGHT: 
+					printhead.currentLine.x = hardwareText.width - printhead.lineX;
+					break;
+			}
+			
 			hardwareText.addChild(printhead.currentLine);
 			
 			printhead.lineX = 0;
