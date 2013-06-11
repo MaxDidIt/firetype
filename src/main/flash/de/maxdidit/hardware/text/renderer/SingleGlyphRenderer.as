@@ -1,7 +1,9 @@
 package de.maxdidit.hardware.text.renderer
 {
 	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
+	import de.maxdidit.hardware.text.cache.TextColorMap;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
+	import de.maxdidit.hardware.text.format.TextColor;
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
@@ -187,7 +189,7 @@ package de.maxdidit.hardware.text.renderer
 			}
 		}
 		
-		public function render(instanceMap:Object, textFormatMap:HardwareTextFormatMap):void
+		public function render(instanceMap:Object, textColorMap:TextColorMap):void
 		{
 			if (_buffersDirty)
 			{
@@ -200,29 +202,39 @@ package de.maxdidit.hardware.text.renderer
 				_buffersDirty = false;
 			}
 			
+			var fallbackTextColor:TextColor = new TextColor();
+			var textColor:TextColor = textColor;
+			_context3d.setProgram(programPair);
+			
 			_context3d.setProgram(programPair);
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-			for (var formatId:String in instanceMap)
+			for each (var vertexDensity:Object in instanceMap)
 			{
-				var format:Object = instanceMap[formatId];
-				
-				if (!textFormatMap.hasTextFormatId(formatId))
+				for (var colorId:String in vertexDensity)
 				{
-					throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
-				}
-				
-				var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
-				_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
-				
-				for each (var instances:Vector.<HardwareGlyphInstance>in format)
-				{
-					var l:uint = instances.length;
-					for (var i:uint = 0; i < l; i++)
+					var color:Object = vertexDensity[colorId];
+					
+					if (textColorMap.hasTextColorId(colorId))
 					{
-						var currentInstance:HardwareGlyphInstance = instances[i];
-						
-						_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
-						_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
+						textColor = textColorMap.getTextColorById(colorId);
+					}
+					else
+					{
+						textColor = fallbackTextColor;
+					}
+					
+					_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
+					
+					for each (var instances:Vector.<HardwareGlyphInstance>in color)
+					{
+						var l:uint = instances.length;
+						for (var i:uint = 0; i < l; i++)
+						{
+							var currentInstance:HardwareGlyphInstance = instances[i];
+							
+							_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
+							_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
+						}
 					}
 				}
 			}

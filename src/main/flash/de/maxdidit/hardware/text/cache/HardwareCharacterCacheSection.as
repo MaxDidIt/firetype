@@ -5,6 +5,7 @@ package de.maxdidit.hardware.text.cache
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.format.TextColor;
 	import de.maxdidit.hardware.text.renderer.IHardwareTextRenderer;
 	/**
 	 * ...
@@ -46,20 +47,21 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, textFormat:HardwareTextFormat):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, vertexDensity:Number, color:TextColor):void 
 		{
-			var cachedInstancesForFormat:Object = retrieveProperty(_instanceMap, textFormat.id);
+			var cachedColorsForDensity:Object = retrieveProperty(_instanceMap, String(vertexDensity));
+			var cachedInstancesForColor:Object = retrieveProperty(cachedColorsForDensity, color.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;
 			var indexKey:String = String(hardwareGlyphInstance.glyph.header.index);
-			if (cachedInstancesForFormat.hasOwnProperty(indexKey))
+			if (cachedInstancesForColor.hasOwnProperty(indexKey))
 			{
-				instances = cachedInstancesForFormat[indexKey] as Vector.<HardwareGlyphInstance>;
+				instances = cachedInstancesForColor[indexKey] as Vector.<HardwareGlyphInstance>;
 			}
 			else
 			{
 				instances = new Vector.<HardwareGlyphInstance>();
-				cachedInstancesForFormat[indexKey] = instances;
+				cachedInstancesForColor[indexKey] = instances;
 			}
 			
 			instances.push(hardwareGlyphInstance);
@@ -70,9 +72,9 @@ package de.maxdidit.hardware.text.cache
 			return _renderer.addPathsToRenderer(paths);
 		}
 		
-		public function render(textFormatMap:HardwareTextFormatMap):void 
+		public function render(textColorMap:TextColorMap):void 
 		{
-			_renderer.render(_instanceMap, textFormatMap);
+			_renderer.render(_instanceMap, textColorMap);
 		}
 		
 		public function clear():void 

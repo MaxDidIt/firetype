@@ -41,6 +41,8 @@ package de.maxdidit.hardware.text
 		
 		public function HardwareText(context3D:Context3D, cache:HardwareCharacterCache = null, layout:ILayout = null, typesetter:Typesetter = null) 
 		{
+			_standardFormat = new HardwareTextFormat();
+			
 			this._cache = cache;
 			if (!_cache)
 			{

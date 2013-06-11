@@ -85,7 +85,6 @@ package de.maxdidit.hardware.text.layout
 				{
 					printCharacter(hardwareText, printhead, cache);
 					printhead.characterInstances.gotoNextElement();
-					continue;
 				}
 			}
 			
@@ -179,7 +178,7 @@ package de.maxdidit.hardware.text.layout
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
-				cache.registerGlyphInstance(glyphInstance, printhead.textFormat);
+				cache.registerGlyphInstance(glyphInstance, printhead.textFormat.vertexDensity, printhead.textFormat.textColor);
 				currentCharacter.addChild(glyphInstance);
 			}
 			

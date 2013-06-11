@@ -11,6 +11,7 @@ package de.maxdidit.hardware.font
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
 	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
 	import de.maxdidit.hardware.text.format.TextAlign;
+	import de.maxdidit.hardware.text.format.TextColor;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRenderer;
@@ -50,10 +51,11 @@ package de.maxdidit.hardware.font
 		private var mouseDown:Boolean;
 		private var textClickY:Number;
 		private var mouseClickY:Number;
-		private var baseFont:HardwareFont;
 		private var hardwareParser:OpenTypeParser;
-		private var firetypeFont:HardwareFont;
 		
+		private var highlightFont:HardwareFont;
+		private var firetypeFont:HardwareFont;
+		private var highlightColor:TextColor;
 		
 		///////////////////////
 		// Constructor
@@ -100,6 +102,8 @@ package de.maxdidit.hardware.font
 			
 			hardwareParser = new OpenTypeParser();
 			
+			cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3d, new EarClippingTriangulator()));
+			
 			hardwareParser.loadFont("ArchivoNarrow-BoldItalic.ttf").addEventListener(FontEvent.FONT_PARSED, handleFiretypeFontParsed);
 			
 			//hardwareParser.addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
@@ -110,7 +114,7 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("MSYH.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("DAUNPENH.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("TIMES.TTF").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
-			hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
+			//hardwareParser.loadFont("newscycle-regular.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("framd.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("tahoma.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
 			//hardwareParser.loadFont("MOIRE-REGULAR.ttf").addEventListener(FontEvent.FONT_PARSED, handleBaseFontParsed);
@@ -131,20 +135,6 @@ package de.maxdidit.hardware.font
 			//hardwareParser.loadFont("jingjing.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("tahomabd.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
 			//hardwareParser.loadFont("MOIRE-BOLD.ttf").addEventListener(FontEvent.FONT_PARSED, handleHighlightFontParsed);
-			
-			viewProjectionMtx = new Matrix3D();
-			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
-			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
-			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
-			viewProjectionMtx.append(perspectiveMtx);
-			
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
-			stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseUp);
-		}
-		
-		private function handleFiretypeFontParsed(e:FontEvent):void 
-		{
-			firetypeFont = e.font;
 		}
 		
 		private function handleMouseUp(e:MouseEvent):void 
@@ -168,120 +158,59 @@ package de.maxdidit.hardware.font
 		
 		private function handleBaseFontParsed(e:FontEvent):void 
 		{
-			baseFont = e.font;
+			cache.fontMap.addFont(e.font);
 		}
 		
-		private function handleHighlightFontParsed(e:FontEvent):void
+		private function handleFiretypeFontParsed(e:FontEvent):void 
 		{
-			var hardwareFontFormat:HardwareTextFormat = new HardwareTextFormat();
-			hardwareFontFormat.font = baseFont;
-			hardwareFontFormat.color = 0xFF000000;
-			//hardwareFontFormat.scale = 8;
+			firetypeFont = e.font;
+			cache.fontMap.addFont(e.font);
+		}
+		
+		private function handleHighlightFontParsed(e:FontEvent):void 
+		{
+			highlightFont = e.font;
+			cache.fontMap.addFont(e.font);
 			
-			hardwareFontFormat.script = ScriptTag.LATIN;
-			hardwareFontFormat.language = LanguageTag.ENGLISH;
-			
-			hardwareFontFormat.id = "standardFont";
-			hardwareFontFormat.features.addFeature(FeatureTag.STANDARD_LIGATURES);
-			
-			var fractionFontFormat:HardwareTextFormat = new HardwareTextFormat();
-			fractionFontFormat.font = baseFont;
-			fractionFontFormat.color = 0xFF666680;
-			
-			fractionFontFormat.script = ScriptTag.LATIN;
-			fractionFontFormat.language = LanguageTag.ENGLISH;
-			
-			fractionFontFormat.id = "fractions";
-			//fractionFontFormat.features.addFeature(FeatureTag.NUMERATORS);
-			fractionFontFormat.features.addFeature(FeatureTag.FRACTIONS);
-			
-			var redFontFormat:HardwareTextFormat= new HardwareTextFormat();
-			redFontFormat.font = e.font;
-			//redFontFormat.scale = 13;
-			//redFontFormat.precision = 50;
-			redFontFormat.color = 0xFFFF0000;
-			
-			redFontFormat.script = ScriptTag.LATIN;
-			redFontFormat.language = LanguageTag.ENGLISH;
-			
-			redFontFormat.id = "red";
-			
-			var smallFontFormat:HardwareTextFormat= new HardwareTextFormat();
-			smallFontFormat.font = baseFont;
-			smallFontFormat.scale = 0.75;
-			smallFontFormat.color = 0xFF333333;
-			
-			smallFontFormat.script = ScriptTag.LATIN;
-			smallFontFormat.language = LanguageTag.ENGLISH;
-			
-			smallFontFormat.id = "small";
-			
-			var smallFontCenterFormat:HardwareTextFormat= new HardwareTextFormat();
-			smallFontCenterFormat.font = baseFont;
-			smallFontCenterFormat.scale = 0.75;
-			smallFontCenterFormat.textAlign = TextAlign.CENTER;
-			smallFontCenterFormat.color = 0xFF333333;
-			
-			smallFontCenterFormat.script = ScriptTag.LATIN;
-			smallFontCenterFormat.language = LanguageTag.ENGLISH;
-			
-			smallFontCenterFormat.id = "small_center";
-			
-			var smallFontRightFormat:HardwareTextFormat= new HardwareTextFormat();
-			smallFontRightFormat.font = baseFont;
-			smallFontRightFormat.scale = 0.75;
-			smallFontRightFormat.textAlign = TextAlign.RIGHT;
-			smallFontRightFormat.color = 0xFF333333;
-			
-			smallFontRightFormat.script = ScriptTag.LATIN;
-			smallFontRightFormat.language = LanguageTag.ENGLISH;
-			
-			smallFontRightFormat.id = "small_right";
-			
-			var firetypeFontFormat:HardwareTextFormat= new HardwareTextFormat();
-			firetypeFontFormat.font = firetypeFont;
-			firetypeFontFormat.scale = 1.5;
-			firetypeFontFormat.color = 0xFFFF6600;
-			
-			firetypeFontFormat.script = ScriptTag.LATIN;
-			firetypeFontFormat.language = LanguageTag.ENGLISH;
-			
-			firetypeFontFormat.id = "firetype";
-			
-			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
-			cache.textFormatMap.addTextFormat(hardwareFontFormat);
-			cache.textFormatMap.addTextFormat(redFontFormat);
-			cache.textFormatMap.addTextFormat(smallFontFormat);
-			cache.textFormatMap.addTextFormat(smallFontCenterFormat);
-			cache.textFormatMap.addTextFormat(smallFontRightFormat);
-			cache.textFormatMap.addTextFormat(fractionFontFormat);
-			cache.textFormatMap.addTextFormat(firetypeFontFormat);
-			
+			initialize();
+		}
+		
+		private function initialize():void
+		{	
 			hardwareText = new HardwareText(context3d, cache);
 			hardwareText.scaleX = hardwareText.scaleY = 0.15;
 			hardwareText.width = 40000;
 			
-			hardwareText.standardFormat = hardwareFontFormat;
+			var highlightFormat:HardwareTextFormat = new HardwareTextFormat();
+			highlightFormat.id = "highlight";
+			highlightFormat.font = highlightFont;
+			highlightFormat.color = 0xFFFF0000;
+			highlightFormat.scale = 1.2;
 			
-			hardwareText.text = "<format id=\"firetype\">firetype</format> by Max Did It\nis an Open Source Actionscript 3 library that can parse TrueType font files and render them via the GPU.\n\n"
-			hardwareText.text += "Hold the <format id=\"red\">left mouse button</format> and <format id=\"red\">drag</format> the text up and down.\n\n" 
-			hardwareText.text += "Each character in this text has been decoded from an OpenType font file containing TrueType outlines, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
+			cache.textFormatMap.addTextFormat(highlightFormat);
 			
-			if (e.font.fontFamily == "News Cycle")
+			highlightColor = new TextColor("highlight", 0xFFFF0000);
+			cache.textColorMap.addTextColor(highlightColor);
+			
+			hardwareText.text = "<format font='" + firetypeFont.uniqueIdentifier + "' scale='1.5' color='0xFFFF6600'>firetype</format> by Max Did It\nis an Open Source Actionscript 3 library that can parse TrueType font files and render them via the GPU.\n\n"
+			hardwareText.text += "Hold the <format scale='1.2' color='0xFFFF0000'>left mouse button</format> and <format color='0xFFFF6600'>drag</format> the text up and down.\n\n" 
+			hardwareText.text += "Each character in this text has been decoded from an <format id='" + highlightFormat.id + "' colorId='" + highlightColor.id + "'>OpenType</format> font file containing TrueType outlines, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
+			
+			if (hardwareText.standardFormat.font.fontFamily == "News Cycle")
 			{
-				hardwareText.text += "<format id=\"small\">This text uses the font <format id=\"red\">\"News Cycle\"</format>, Copyright ©2010-2011, Nathan Willis (nwillis@glyphography.com).\n\n" +
-									"The <format id=\"firetype\">firetype</format> logo uses the font <format id=\"red\">\"Archivo Narrow\"</format>, Copyright (c) 2012, Omnibus-Type (www.omnibus-type.com|omnibus.type@gmail.com).\n\n" +
+				hardwareText.text += "This text uses the font \"News Cycle\", Copyright ©2010-2011, Nathan Willis (nwillis@glyphography.com).\n\n" +
+									"The <format font='" + firetypeFont.uniqueIdentifier + "'>firetype</format> logo uses the font \"Archivo Narrow\", Copyright (c) 2012, Omnibus-Type (www.omnibus-type.com|omnibus.type@gmail.com).\n\n" +
 									"Both Font Softwares are licensed under the SIL Open Font License, Version 1.1. " +
 									"This license is available with a FAQ at:\n" +
-									"http://scripts.sil.org/OFL\n\n</format>";
+									"http://scripts.sil.org/OFL\n\n";
 			}
 			else
 			{
-				hardwareText.text += "This text is (mostly) displayed using the font <format id=\"red\">" + baseFont.fontFamily + " " + baseFont.fontSubFamily + "</format>.\n\n";
+				hardwareText.text += "This text is (mostly) displayed using the font " + hardwareText.standardFormat.font.fontFamily + " " + hardwareText.standardFormat.font.fontSubFamily + ".\n\n";
 			}
 			
-			hardwareText.text += "The font implements the following features for the script '" + hardwareFontFormat.script + "' and the language '" + hardwareFontFormat.language + "':\n\n";
-			var features:Vector.<FeatureRecord> = baseFont.getAdvancedFeatures(hardwareFontFormat.script, hardwareFontFormat.language);
+			hardwareText.text += "The font implements the following features for the script '" + hardwareText.standardFormat.scriptTag + "' and the language '" + hardwareText.standardFormat.languageTag + "':\n\n";
+			var features:Vector.<FeatureRecord> = hardwareText.standardFormat.font.getAdvancedFeatures(hardwareText.standardFormat.scriptTag, hardwareText.standardFormat.languageTag);
 			const l:uint = features.length;
 			for (var i:uint = 0; i < l; i++)
 			{
@@ -289,12 +218,22 @@ package de.maxdidit.hardware.font
 			}
 			hardwareText.text += "\n";
 			
-			hardwareText.text += "<format id=\"fractions\">12/8</format> <format id=\"fractions\">1/3</format> á â à Â f fi ffi 臥虎藏龍\n\n<format id=\"small\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet <format id=\"red\">sed commodo arcu</format> viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n</format><format id=\"small_center\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\n</format><format id=\"small_right\">Nunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.</format>";
+			hardwareText.text += " 12/8 1/3 á â à Â <format features='" + FeatureTag.STANDARD_LIGATURES.tag +", " + FeatureTag.REQUIRED_LIGATURES.tag + "'>f fi <format color=0xFFFF0000>ffi</format></format> 臥虎藏龍 <format scale=3 vertexDensity=2000>B80</format>\n\n" + //
+								"Text alignment: left;\n<format scale='0.75' color='0xFF666666'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. <format scale='1' color=0xFFFF0000>Praesent tincidunt euismod pulvinar</format>. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n" + //
+								"<format scale='1' color='0xFF000000'>Text alignment: center;\n</format><format textAlign='" + TextAlign.CENTER + "'>Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. <format id='" + highlightFormat.id + "'>Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque.</format> Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\n</format>" + //
+								"<format scale='1' color='0xFF000000'>Text alignment: right;\n</format><format textAlign='" + TextAlign.RIGHT + "'>Nunc aliquet nunc non mauris pretium at hendrerit dui volutpat. <format script=" + ScriptTag.CYRILLIC + " language=" + LanguageTag.RUSSIAN + ">Sed vitae condimentum nunc</format>. Nam eget est non augue egestas tincidunt vel consectetur felis. <format id='" + highlightFormat.id + "' color='0xFF0011FF'>Nulla facilisi. <format color='0xFF9999CC'>Praesent</format> quis purus <format scale='0.5'>sed</format> odio tincidunt iaculis.</format> Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.\n</format></format>";
 			//hardwareText.text = "藏";
+			
+			viewProjectionMtx = new Matrix3D();
+			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
+			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
+			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
+			viewProjectionMtx.append(perspectiveMtx);
 			
 			hardwareText.calculateTransformations(viewProjectionMtx, true);
 			
-			var font:HardwareFont = e.font;
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
+			stage.addEventListener(MouseEvent.MOUSE_UP, handleMouseUp);
 			
 			addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 		}
@@ -309,6 +248,9 @@ package de.maxdidit.hardware.font
 				hardwareText.y = textClickY - (stage.mouseY - mouseClickY) * 10;
 				hardwareText.calculateTransformations(viewProjectionMtx);
 			}
+			
+			highlightColor.colorVector[2] = Math.sin(getTimer() / 500) * 0.5 + 0.5;
+			highlightColor.colorVector[0] = Math.cos(getTimer() / 500) * 0.5 + 0.5;
 			
 			//hardwareText.standardFormat.colorVector[2] = Math.cos(getTimer() * 0.01) * 0.5 + 0.5;
 			//hardwareText.standardFormat.colorVector[1] = Math.cos(getTimer() * 0.003) * 0.5 + 0.5;

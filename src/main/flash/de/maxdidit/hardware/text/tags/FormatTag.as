@@ -1,5 +1,6 @@
 package de.maxdidit.hardware.text.tags 
 {
+	import de.maxdidit.hardware.text.format.HardwareFontFeatures;
 	/**
 	 * ...
 	 * @author Max Knoblich
@@ -11,6 +12,33 @@ package de.maxdidit.hardware.text.tags
 		///////////////////////
 		
 		private var _formatId:String;
+		private var _isFormatIdSet:Boolean = false;
+		
+		private var _fontId:String;
+		private var _isFontIdSet:Boolean;
+		
+		private var _scale:Number;
+		private var _isScaleSet:Boolean = false;
+		
+		private var _color:uint;
+		private var _isColorSet:Boolean = false;
+		
+		private var _textAlign:uint;
+		private var _isTextAlignSet:Boolean = false;
+		
+		private var _vertexDensity:Number;
+		private var _isVertexDensitySet:Boolean = false;
+		
+		private var _features:HardwareFontFeatures;
+		
+		private var _scriptTag:String;
+		private var _isScriptTagSet:Boolean = false;
+		
+		private var _languageTag:String;
+		private var _isLanguageTagSet:Boolean = false;
+		
+		private var _colorId:String;
+		private var _isColorIdSet:Boolean = false;
 		
 		///////////////////////
 		// Constructor
@@ -25,6 +53,11 @@ package de.maxdidit.hardware.text.tags
 		// Member Properties
 		///////////////////////
 		
+		public function get extendsReferencedFormat():Boolean
+		{
+			return _isColorIdSet || _isColorSet || _isScaleSet || _isLanguageTagSet || _isScaleSet || _isTextAlignSet || _isVertexDensitySet || _isFontIdSet;
+		}
+		
 		public function get formatId():String 
 		{
 			return _formatId;
@@ -33,6 +66,155 @@ package de.maxdidit.hardware.text.tags
 		public function set formatId(value:String):void 
 		{
 			_formatId = value;
+			_isFormatIdSet = true;
+		}
+		
+		public function get isFormatIdSet():Boolean 
+		{
+			return _isFormatIdSet;
+		}
+		
+		public function get scale():Number
+		{
+			return _scale;
+		}
+		
+		public function set scale(value:Number):void 
+		{
+			_scale = value;
+			_isScaleSet = true;
+		}
+		
+		public function get isScaleSet():Boolean 
+		{
+			return _isScaleSet;
+		}
+		
+		public function get color():uint 
+		{
+			return _color;
+		}
+		
+		public function set color(value:uint):void 
+		{
+			_color = value;
+			_isColorSet = true;
+		}
+		
+		public function get isColorSet():Boolean 
+		{
+			return _isColorSet;
+		}
+		
+		public function get textAlign():uint 
+		{
+			return _textAlign;
+		}
+		
+		public function set textAlign(value:uint):void 
+		{
+			_textAlign = value;
+			_isTextAlignSet = true;
+		}
+		
+		public function get isTextAlignSet():Boolean 
+		{
+			return _isTextAlignSet;
+		}
+		
+		public function get vertexDensity():Number 
+		{
+			return _vertexDensity;
+		}
+		
+		public function set vertexDensity(value:Number):void 
+		{
+			_vertexDensity = value;
+			_isVertexDensitySet = true;
+		}
+		
+		public function get isVertexDensitySet():Boolean 
+		{
+			return _isVertexDensitySet;
+		}
+		
+		public function get features():HardwareFontFeatures 
+		{
+			return _features;
+		}
+		
+		public function set features(value:HardwareFontFeatures):void 
+		{
+			_features = value;
+		}
+		
+		public function get areFeaturesSet():Boolean 
+		{
+			return _features != null;
+		}
+		
+		public function get scriptTag():String 
+		{
+			return _scriptTag;
+		}
+		
+		public function set scriptTag(value:String):void 
+		{
+			_scriptTag = value;
+			_isScriptTagSet = true;
+		}
+		
+		public function get languageTag():String 
+		{
+			return _languageTag;
+		}
+		
+		public function set languageTag(value:String):void 
+		{
+			_languageTag = value;
+			_isLanguageTagSet = true;
+		}
+		
+		public function get isScriptTagSet():Boolean 
+		{
+			return _isScriptTagSet;
+		}
+		
+		public function get isLanguageTagSet():Boolean 
+		{
+			return _isLanguageTagSet;
+		}
+		
+		public function get fontId():String 
+		{
+			return _fontId;
+		}
+		
+		public function set fontId(value:String):void 
+		{
+			_fontId = value;
+			_isFontIdSet = true;
+		}
+		
+		public function get isFontIdSet():Boolean 
+		{
+			return _isFontIdSet;
+		}
+		
+		public function get colorId():String 
+		{
+			return _colorId;
+		}
+		
+		public function set colorId(value:String):void 
+		{
+			_colorId = value;
+			_isColorIdSet = true;
+		}
+		
+		public function get isColorIdSet():Boolean 
+		{
+			return _isColorIdSet;
 		}
 		
 	}

@@ -13,14 +13,30 @@ package de.maxdidit.hardware.text.format
 		///////////////////////
 		
 		private var _featureMap:Object;
+		private var _parent:HardwareFontFeatures;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function HardwareFontFeatures() 
+		public function HardwareFontFeatures(parent:HardwareFontFeatures = null) 
 		{
 			_featureMap = new Object();
+			_parent = parent;
+		}
+		
+		///////////////////////
+		// Member Properties
+		///////////////////////
+		
+		public function get parent():HardwareFontFeatures 
+		{
+			return _parent;
+		}
+		
+		public function set parent(value:HardwareFontFeatures):void 
+		{
+			_parent = value;
 		}
 		
 		///////////////////////
@@ -52,7 +68,25 @@ package de.maxdidit.hardware.text.format
 		
 		public function hasFeatureTag(tag:String):Boolean
 		{
-			return _featureMap.hasOwnProperty(tag);
+			if (_featureMap.hasOwnProperty(tag))
+			{
+				return true;
+			}
+			
+			if (!_parent)
+			{
+				return false;
+			}
+			
+			return _parent.hasFeatureTag(tag);
+		}
+		
+		public function copyFrom(features:HardwareFontFeatures):void 
+		{
+			for (var tag:String in features._featureMap)
+			{
+				_featureMap[tag] = features._featureMap[tag];
+			}
 		}
 	}
 

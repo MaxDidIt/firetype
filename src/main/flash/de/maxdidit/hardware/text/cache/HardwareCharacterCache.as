@@ -3,6 +3,7 @@ package de.maxdidit.hardware.text.cache
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.format.TextColor;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler;
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
@@ -38,6 +39,8 @@ package de.maxdidit.hardware.text.cache
 		private var _clientTexts:Vector.<HardwareText>;
 		
 		private var _textFormatMap:HardwareTextFormatMap;
+		private var _textColorMap:TextColorMap;
+		private var _fontMap:HardwareFontMap;
 		
 		///////////////////////
 		// Constructor
@@ -52,6 +55,8 @@ package de.maxdidit.hardware.text.cache
 			_clientTexts = new Vector.<HardwareText>();
 			
 			_textFormatMap = new HardwareTextFormatMap();
+			_textColorMap = new TextColorMap();
+			_fontMap = new HardwareFontMap();
 		}
 		
 		///////////////////////
@@ -71,6 +76,16 @@ package de.maxdidit.hardware.text.cache
 		public function get textFormatMap():HardwareTextFormatMap 
 		{
 			return _textFormatMap;
+		}
+		
+		public function get textColorMap():TextColorMap 
+		{
+			return _textColorMap;
+		}
+		
+		public function get fontMap():HardwareFontMap 
+		{
+			return _fontMap;
 		}
 		
 		///////////////////////
@@ -104,10 +119,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, textFormat:HardwareTextFormat):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, vertexDensity:Number, color:TextColor):void 
 		{
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
-			section.registerGlyphInstance(hardwareGlyphInstance, textFormat);
+			section.registerGlyphInstance(hardwareGlyphInstance, vertexDensity, color);
 		}
 		
 		public function render():void 
@@ -122,7 +137,7 @@ package de.maxdidit.hardware.text.cache
 			for (i = 0; i < l; i++)
 			{
 				var section:HardwareCharacterCacheSection = _sections[i];
-				section.render(_textFormatMap);
+				section.render(_textColorMap);
 			}
 		}
 		

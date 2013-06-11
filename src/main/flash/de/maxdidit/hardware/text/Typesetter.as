@@ -6,6 +6,7 @@ package de.maxdidit.hardware.text
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureListTableData;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureRecord;
 	import de.maxdidit.hardware.font.data.tables.common.features.FeatureTable;
+	import de.maxdidit.hardware.font.data.tables.common.features.FeatureTag;
 	import de.maxdidit.hardware.font.data.tables.common.language.LanguageSystemTable;
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable;
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptTable;
@@ -52,6 +53,17 @@ package de.maxdidit.hardware.text
 		
 		public static const TAG_FORMAT:String = "format";
 		public static const TAG_FORMAT_CLOSE:String = "/format";
+		
+		public static const TAG_FORMAT_PARAMETER_FORMATID:String = "id";
+		public static const TAG_FORMAT_PARAMETER_SCALE:String = "scale";
+		static public const TAG_FORMAT_PARAMETER_COLOR:String = "color";
+		static public const TAG_FORMAT_PARAMETER_COLORID:String = "colorid";
+		static public const TAG_FORMAT_PARAMETER_TEXTALIGN:String = "textalign";
+		static public const TAG_FORMAT_PARAMETER_VERTEXDENSITY:String = "vertexdensity";
+		static public const TAG_FORMAT_PARAMETER_FEATURES:String = "features";
+		static public const TAG_FORMAT_PARAMETER_SCRIPT:String = "script";
+		static public const TAG_FORMAT_PARAMETER_LANGUAGE:String = "language";
+		static public const TAG_FORMAT_PARAMETER_FONT:String = "font";
 		
 		///////////////////////
 		// Member Fields
@@ -161,19 +173,22 @@ package de.maxdidit.hardware.text
 			{
 				// react to tag
 				if (switchFont)
-				{					
+				{
 					var currentFontFormat:HardwareTextFormat = (fontStack.lastElement as HardwareTextFormatListElement).hardwareTextFormat;
 					
-					var cmapData:CharacterIndexMappingTableData = currentFontFormat.font.data.retrieveTableData(TableNames.CHARACTER_INDEX_MAPPING) as CharacterIndexMappingTableData;
-					var glyfData:GlyphTableData = currentFontFormat.font.data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
-					
-					var currentSpan:TextSpan = new TextSpan();
-					currentSpan.textFormat = currentFontFormat;
-					
-					var currentCharacterInstances:LinkedList = new LinkedList();
-					currentSpan.characterInstances = currentCharacterInstances;
-					
-					result.push(currentSpan);
+					if (currentFontFormat)
+					{
+						var cmapData:CharacterIndexMappingTableData = currentFontFormat.font.data.retrieveTableData(TableNames.CHARACTER_INDEX_MAPPING) as CharacterIndexMappingTableData;
+						var glyfData:GlyphTableData = currentFontFormat.font.data.retrieveTableData(TableNames.GLYPH_DATA) as GlyphTableData;
+						
+						var currentSpan:TextSpan = new TextSpan();
+						currentSpan.textFormat = currentFontFormat;
+						
+						var currentCharacterInstances:LinkedList = new LinkedList();
+						currentSpan.characterInstances = currentCharacterInstances;
+						
+						result.push(currentSpan);
+					}
 					
 					switchFont = false;
 				}
@@ -193,8 +208,9 @@ package de.maxdidit.hardware.text
 							switch (textTag.id)
 							{
 								case TextTag.ID_FORMAT: 
-									var newTextFormat:HardwareTextFormat = cache.textFormatMap.getTextFormatById((textTag as FormatTag).formatId);
-									fontStack.addElement(new HardwareTextFormatListElement(newTextFormat));
+									var formatTag:FormatTag = textTag as FormatTag;
+									processFormatTag(formatTag, fontStack, cache);
+									
 									switchFont = true;
 									break;
 								
@@ -229,45 +245,119 @@ package de.maxdidit.hardware.text
 			return result;
 		}
 		
-		private function parseTagContent(tagContent:String):TextTag
+		private function processFormatTag(formatTag:FormatTag, fontStack:LinkedList, cache:HardwareCharacterCache):void
 		{
-			var tagElements:Array = tagContent.split(/ +/);
-			const l:uint = tagElements.length;
-			if (l < 1)
+			var parentFormat:HardwareTextFormat;
+			var newTextFormat:HardwareTextFormat;
+			if (formatTag.isFormatIdSet)
 			{
-				return null;
+				newTextFormat = cache.textFormatMap.getTextFormatById(formatTag.formatId);
+				
+				if (formatTag.extendsReferencedFormat || !newTextFormat)
+				{
+					// create new text format with the referenced format as parent
+					parentFormat = newTextFormat;
+					newTextFormat = new HardwareTextFormat(parentFormat);
+				}
+			}
+			else
+			{
+				parentFormat = (fontStack.lastElement as HardwareTextFormatListElement).hardwareTextFormat;
+				newTextFormat = new HardwareTextFormat(parentFormat);
 			}
 			
-			var tagName:String = tagElements[0].toLowerCase();
+			// pass on values
+			if (formatTag.isColorIdSet)
+			{
+				if (cache.textColorMap.hasTextColorId(formatTag.colorId))
+				{
+					newTextFormat.textColor = cache.textColorMap.getTextColorById(formatTag.colorId);
+				}
+			}
+			else if (formatTag.isColorSet)
+			{
+				newTextFormat.color = formatTag.color;
+				if (!cache.textColorMap.hasTextColorId(newTextFormat.textColor.id))
+				{
+					cache.textColorMap.addTextColor(newTextFormat.textColor);
+				}
+			}
+			
+			if (formatTag.isScaleSet)
+			{
+				newTextFormat.scale = formatTag.scale;
+			}
+			
+			if (formatTag.isTextAlignSet)
+			{
+				newTextFormat.textAlign = formatTag.textAlign;
+			}
+			
+			if (formatTag.isVertexDensitySet)
+			{
+				newTextFormat.vertexDensity = formatTag.vertexDensity;
+			}
+			
+			if (formatTag.areFeaturesSet)
+			{
+				newTextFormat.features.copyFrom(formatTag.features);
+			}
+			if (parentFormat)
+			{
+				newTextFormat.features.parent = parentFormat.features;
+			}
+			
+			if (formatTag.isScriptTagSet)
+			{
+				newTextFormat.scriptTag = formatTag.scriptTag;
+			}
+			
+			if (formatTag.isLanguageTagSet)
+			{
+				newTextFormat.languageTag = formatTag.languageTag;
+			}
+			
+			if (formatTag.isFontIdSet)
+			{
+				if (cache.fontMap.hasFontId(formatTag.fontId))
+				{
+					var font:HardwareFont = cache.fontMap.getFontById(formatTag.fontId);
+					newTextFormat.font = font;
+				}
+			}
+			
+			fontStack.addElement(new HardwareTextFormatListElement(newTextFormat));
+		}
+		
+		private function parseTagContent(tagContent:String):TextTag
+		{
+			//var tagElements:Array = tagContent.split(/ +/);
+			//const l:uint = tagElements.length;
+			//if (l < 1)
+			//{
+			//return null;
+			//}
+			
+			var spaceIndex:int = tagContent.indexOf(" ");
+			
+			var tagName:String;
+			var tagParameters:String;
+			
+			if (spaceIndex != -1)
+			{
+				tagName = tagContent.substring(0, spaceIndex);
+				tagParameters = tagContent.substring(spaceIndex + 1);
+			}
+			else
+			{
+				tagName = tagContent;
+			}
+			
 			switch (tagName)
 			{
 				// Parse the format tag.
 				case TAG_FORMAT: 
-					if (l < 2)
-					{
-						return null;
-					}
-					
-					var parameter:String = tagElements[1];
-					var parameterElements:Array = parameter.split("=");
-					
-					if (parameterElements.length < 2)
-					{
-						return null;
-					}
-					
-					if (parameterElements[0] != "id")
-					{
-						return null;
-					}
-					
-					var id:String = (parameterElements[1] as String);
-					id = id.replace(/[(\\")']/g, "");
-					
-					var formatTag:FormatTag = new FormatTag();
-					formatTag.id = TextTag.ID_FORMAT;
-					formatTag.formatId = id;
-					
+					var formatTag:FormatTag = parseTagFormatParameters(tagParameters);
 					return formatTag;
 				
 				case TAG_FORMAT_CLOSE: 
@@ -277,6 +367,110 @@ package de.maxdidit.hardware.text
 			}
 			
 			return null;
+		}
+		
+		private function parseTagFormatParameters(tagParameters:String):FormatTag
+		{
+			var parameters:Array = tagParameters.match(/([\w]+=["']?[-\w\s,.:]+["']?)/g);
+			const l:uint = parameters.length;
+			
+			var formatTag:FormatTag = new FormatTag();
+			
+			for (var i:uint = 0; i < l; i++)
+			{
+				var parameter:String = parameters[i];
+				parseFormatParameter(parameter, formatTag);
+			}
+			
+			return formatTag;
+		}
+		
+		private function parseFormatParameter(parameter:String, formatTag:FormatTag):void
+		{
+			var indexOfEqualSign:int = parameter.indexOf("=");
+			if (indexOfEqualSign == -1)
+			{
+				return;
+			}
+			
+			var parameterName:String = parameter.substring(0, indexOfEqualSign).toLowerCase();
+			var parameterValue:String = parameter.substr(indexOfEqualSign + 1);
+			parameterValue = parameterValue.replace(/[(\\")']/g, "");
+			
+			switch (parameterName)
+			{	
+				case TAG_FORMAT_PARAMETER_SCALE: 
+					var number:Number = Number(parameterValue);
+					formatTag.scale = number;
+					
+					break;
+				
+				case TAG_FORMAT_PARAMETER_COLOR: 
+					var unsignedInt:uint = uint(parameterValue);
+					formatTag.color = unsignedInt;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_TEXTALIGN: 
+					unsignedInt = uint(parameterValue);
+					formatTag.textAlign = unsignedInt;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_VERTEXDENSITY: 
+					unsignedInt = uint(parameterValue);
+					formatTag.vertexDensity = unsignedInt;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_FEATURES:
+					var array:Array = parameterValue.split(/,\s*/g);
+					var fontFeatures:HardwareFontFeatures = new HardwareFontFeatures();
+					
+					unsignedInt = array.length;
+					for (var i:uint = 0; i < unsignedInt; i++)
+					{
+						var featureTag:FeatureTag = FeatureTag.getFeatureTag(array[i]);
+						if (featureTag)
+						{
+							fontFeatures.addFeature(featureTag);
+						}
+					}
+					
+					formatTag.features = fontFeatures;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_SCRIPT:
+					var string:String = parameterValue;
+					formatTag.scriptTag = string;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_LANGUAGE:
+					string = parameterValue;
+					formatTag.languageTag = string;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_FONT:
+					string = parameterValue;
+					formatTag.fontId = string;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_FORMATID:
+					string = parameterValue;
+					formatTag.formatId = string;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_COLORID:
+					string = parameterValue;
+					formatTag.colorId = string;
+					
+					break;
+			}
 		}
 	}
 

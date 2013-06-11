@@ -4,8 +4,10 @@ package de.maxdidit.hardware.text.renderer
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.font.triangulation.ITriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
+	import de.maxdidit.hardware.text.cache.TextColorMap;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
+	import de.maxdidit.hardware.text.format.TextColor;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
@@ -201,7 +203,7 @@ package de.maxdidit.hardware.text.renderer
 			}
 		}
 		
-		public function render(instanceMap:Object, textFormatMap:HardwareTextFormatMap):void
+		public function render(instanceMap:Object, textColorMap:TextColorMap):void
 		{
 			if (_buffersDirty)
 			{
@@ -214,45 +216,49 @@ package de.maxdidit.hardware.text.renderer
 				_buffersDirty = false;
 			}
 			
+			var fallbackTextColor:TextColor = new TextColor();
+			var textColor:TextColor = textColor;
 			_context3d.setProgram(programPair);
-			
-			var color:Vector.<Number> = new Vector.<Number>();
-			color.push(0, 0, 0, 1);
-			_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, color, 1);
 			
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_1);
 			
-			for (var formatId:String in instanceMap)
+			for each (var vertexDensity:Object in instanceMap)
 			{
-				var format:Object = instanceMap[formatId];
-				
-				if (!textFormatMap.hasTextFormatId(formatId))
+				for (var colorId:String in vertexDensity)
 				{
-					throw new Error("There is no text format with the ID \"" + formatId + "\" registered in the character cache. Please register the respective text format with the character cache.");
-				}
-				
-				var textFormat:HardwareTextFormat = textFormatMap.getTextFormatById(formatId);
-				_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textFormat.colorVector, 1);
-				
-				for each (var instances:Vector.<HardwareGlyphInstance>in format)
-				{
-					var l:uint = instances.length;
-					var i:uint = 0;
-					var b:uint = 0;
+					var color:Object = vertexDensity[colorId];
 					
-					while (i < l)
+					if (textColorMap.hasTextColorId(colorId))
 					{
-						var currentInstance:HardwareGlyphInstance = instances[i];
-						_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
+						textColor = textColorMap.getTextColorById(colorId);
+					}
+					else
+					{
+						textColor = fallbackTextColor;
+					}
+					
+					_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
+					
+					for each (var instances:Vector.<HardwareGlyphInstance> in color)
+					{
+						var l:uint = instances.length;
+						var i:uint = 0;
+						var b:uint = 0;
 						
-						b++;
-						i++;
-						
-						if (b == DRAW_CALLS_PER_BATCH || i == l)
+						while (i < l)
 						{
-							_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
-							b = 0;
+							var currentInstance:HardwareGlyphInstance = instances[i];
+							_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
+							
+							b++;
+							i++;
+							
+							if (b == DRAW_CALLS_PER_BATCH || i == l)
+							{
+								_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
+								b = 0;
+							}
 						}
 					}
 				}
