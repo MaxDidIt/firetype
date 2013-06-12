@@ -107,16 +107,48 @@ package de.maxdidit.hardware.font.triangulation
 		{
 			var currentElement:UnsignedIntegerListElement = startElement;
 			
+			// calculate ad-hoc bounding box of triangle
+			var biggestX:Number = vertexA.x > vertexB.x ? vertexA.x : vertexB.x;
+			biggestX = biggestX > vertexC.x ? biggestX : vertexC.x;
+			
+			var biggestY:Number = vertexA.y > vertexB.y ? vertexA.y : vertexB.y;
+			biggestY = biggestY > vertexC.y ? biggestY : vertexC.y;
+			
+			var smallestX:Number = vertexA.x < vertexB.x ? vertexA.x : vertexB.x;
+			smallestX = smallestX < vertexC.x ? smallestX : vertexC.x;
+			
+			var smallestY:Number = vertexA.y < vertexB.y ? vertexA.y : vertexB.y;
+			smallestY = smallestY < vertexC.y ? smallestY : vertexC.y;
+			
 			while (currentElement != endElement)
 			{
 				var currentVertex:Vertex = path[currentElement.value];
+				currentElement = currentElement.next as UnsignedIntegerListElement;
+				
+				if (currentVertex.x > biggestX)
+				{
+					continue;
+				}
+				
+				if (currentVertex.y > biggestY)
+				{
+					continue;
+				}
+				
+				if (currentVertex.x < smallestX)
+				{
+					continue;
+				}
+				
+				if (currentVertex.y < smallestY)
+				{
+					continue;
+				}
 				
 				if (isInsideTriangle(currentVertex, vertexA, vertexB, vertexC))
 				{
 					return true;
 				}
-				
-				currentElement = currentElement.next as UnsignedIntegerListElement;
 			}
 			
 			return false;
@@ -126,19 +158,28 @@ package de.maxdidit.hardware.font.triangulation
 		{
 			// source: http://www.blackpawn.com/texts/pointinpoly/
 			// test if currentVertex coincides with one of the triangle vertices.
-			if (currentVertex.x == vertexA.x && currentVertex.y == vertexA.y)
+			if (currentVertex.x == vertexA.x)
 			{
-				return false;
+				if (currentVertex.y == vertexA.y)
+				{
+					return false;
+				}
 			}
 			
-			if (currentVertex.x == vertexB.x && currentVertex.y == vertexB.y)
+			if (currentVertex.x == vertexB.x)
 			{
-				return false;
+				if (currentVertex.y == vertexB.y)
+				{
+					return false;
+				}
 			}
 			
-			if (currentVertex.x == vertexC.x && currentVertex.y == vertexC.y)
+			if (currentVertex.x == vertexC.x)
 			{
-				return false;
+				if (currentVertex.y == vertexC.y)
+				{
+					return false;
+				}
 			}
 			
 			const v1_x:Number = currentVertex.x - vertexB.x;

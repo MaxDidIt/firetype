@@ -65,6 +65,9 @@ package de.maxdidit.hardware.text
 		static public const TAG_FORMAT_PARAMETER_LANGUAGE:String = "language";
 		static public const TAG_FORMAT_PARAMETER_FONT:String = "font";
 		
+		static public const TAG_FORMAT_PARAMETER_SHEARX:String = "shearx";
+		static public const TAG_FORMAT_PARAMETER_SHEARY:String = "sheary";
+		
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -163,6 +166,10 @@ package de.maxdidit.hardware.text
 		{
 			var fontStack:LinkedList = new LinkedList();
 			fontStack.addElement(new HardwareTextFormatListElement(standardTextFormat));
+			if (!cache.textColorMap.hasTextColorId(standardTextFormat.textColor.id))
+			{
+				cache.textColorMap.addTextColor(standardTextFormat.textColor);
+			}
 			
 			var result:Vector.<TextSpan> = new Vector.<TextSpan>();
 			
@@ -277,10 +284,11 @@ package de.maxdidit.hardware.text
 			else if (formatTag.isColorSet)
 			{
 				newTextFormat.color = formatTag.color;
-				if (!cache.textColorMap.hasTextColorId(newTextFormat.textColor.id))
-				{
-					cache.textColorMap.addTextColor(newTextFormat.textColor);
-				}
+			}
+			
+			if (!cache.textColorMap.hasTextColorId(newTextFormat.textColor.id))
+			{
+				cache.textColorMap.addTextColor(newTextFormat.textColor);
 			}
 			
 			if (formatTag.isScaleSet)
@@ -324,6 +332,16 @@ package de.maxdidit.hardware.text
 					var font:HardwareFont = cache.fontMap.getFontById(formatTag.fontId);
 					newTextFormat.font = font;
 				}
+			}
+			
+			if (formatTag.isShearXSet)
+			{
+				newTextFormat.shearX = formatTag.shearX;
+			}
+			
+			if (formatTag.isShearYSet)
+			{
+				newTextFormat.shearY = formatTag.shearY;
 			}
 			
 			fontStack.addElement(new HardwareTextFormatListElement(newTextFormat));
@@ -398,7 +416,7 @@ package de.maxdidit.hardware.text
 			parameterValue = parameterValue.replace(/[(\\")']/g, "");
 			
 			switch (parameterName)
-			{	
+			{
 				case TAG_FORMAT_PARAMETER_SCALE: 
 					var number:Number = Number(parameterValue);
 					formatTag.scale = number;
@@ -410,20 +428,20 @@ package de.maxdidit.hardware.text
 					formatTag.color = unsignedInt;
 					
 					break;
-					
+				
 				case TAG_FORMAT_PARAMETER_TEXTALIGN: 
 					unsignedInt = uint(parameterValue);
 					formatTag.textAlign = unsignedInt;
 					
 					break;
-					
+				
 				case TAG_FORMAT_PARAMETER_VERTEXDENSITY: 
 					unsignedInt = uint(parameterValue);
 					formatTag.vertexDensity = unsignedInt;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_FEATURES:
+				
+				case TAG_FORMAT_PARAMETER_FEATURES: 
 					var array:Array = parameterValue.split(/,\s*/g);
 					var fontFeatures:HardwareFontFeatures = new HardwareFontFeatures();
 					
@@ -440,34 +458,46 @@ package de.maxdidit.hardware.text
 					formatTag.features = fontFeatures;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_SCRIPT:
+				
+				case TAG_FORMAT_PARAMETER_SCRIPT: 
 					var string:String = parameterValue;
 					formatTag.scriptTag = string;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_LANGUAGE:
+				
+				case TAG_FORMAT_PARAMETER_LANGUAGE: 
 					string = parameterValue;
 					formatTag.languageTag = string;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_FONT:
+				
+				case TAG_FORMAT_PARAMETER_FONT: 
 					string = parameterValue;
 					formatTag.fontId = string;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_FORMATID:
+				
+				case TAG_FORMAT_PARAMETER_FORMATID: 
 					string = parameterValue;
 					formatTag.formatId = string;
 					
 					break;
-					
-				case TAG_FORMAT_PARAMETER_COLORID:
+				
+				case TAG_FORMAT_PARAMETER_COLORID: 
 					string = parameterValue;
 					formatTag.colorId = string;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_SHEARX: 
+					number = Number(parameterValue);
+					formatTag.shearX = number;
+					
+					break;
+					
+				case TAG_FORMAT_PARAMETER_SHEARY: 
+					number = Number(parameterValue);
+					formatTag.shearY = number;
 					
 					break;
 			}

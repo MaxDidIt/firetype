@@ -161,6 +161,7 @@ package de.maxdidit.hardware.text
 		{
 			if (_textDirty)
 			{
+				loseAllChildren();
 				parseText();
 				calculateTransformations();
 				_textDirty = false;

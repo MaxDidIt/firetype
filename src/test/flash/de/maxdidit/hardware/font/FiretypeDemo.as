@@ -102,7 +102,7 @@ package de.maxdidit.hardware.font
 			
 			hardwareParser = new OpenTypeParser();
 			
-			cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3d, new EarClippingTriangulator()));
+			cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(context3d, new EarClippingTriangulator()));
 			
 			hardwareParser.loadFont("ArchivoNarrow-BoldItalic.ttf").addEventListener(FontEvent.FONT_PARSED, handleFiretypeFontParsed);
 			
@@ -186,6 +186,7 @@ package de.maxdidit.hardware.font
 			highlightFormat.font = highlightFont;
 			highlightFormat.color = 0xFFFF0000;
 			highlightFormat.scale = 1.2;
+			highlightFormat.shearX = -0.4;
 			
 			cache.textFormatMap.addTextFormat(highlightFormat);
 			
@@ -193,13 +194,13 @@ package de.maxdidit.hardware.font
 			cache.textColorMap.addTextColor(highlightColor);
 			
 			hardwareText.text = "<format font='" + firetypeFont.uniqueIdentifier + "' scale='1.5' color='0xFFFF6600'>firetype</format> by Max Did It\nis an Open Source Actionscript 3 library that can parse TrueType font files and render them via the GPU.\n\n"
-			hardwareText.text += "Hold the <format scale='1.2' color='0xFFFF0000'>left mouse button</format> and <format color='0xFFFF6600'>drag</format> the text up and down.\n\n" 
+			hardwareText.text += "Hold the <format scale='1.2' shearX='0.5' color='0xFFFF0000'>left mouse button</format> and <format color='0xFFFF6600'>drag</format> the text up and down.\n\n" 
 			hardwareText.text += "Each character in this text has been decoded from an <format id='" + highlightFormat.id + "' colorId='" + highlightColor.id + "'>OpenType</format> font file containing TrueType outlines, converted into polygon geometry and is rendered via the 3D graphics card.\n\n" 
 			
 			if (hardwareText.standardFormat.font.fontFamily == "News Cycle")
 			{
 				hardwareText.text += "This text uses the font \"News Cycle\", Copyright ©2010-2011, Nathan Willis (nwillis@glyphography.com).\n\n" +
-									"The <format font='" + firetypeFont.uniqueIdentifier + "'>firetype</format> logo uses the font \"Archivo Narrow\", Copyright (c) 2012, Omnibus-Type (www.omnibus-type.com|omnibus.type@gmail.com).\n\n" +
+									"The <format font='" + firetypeFont.uniqueIdentifier + "'>firetype</format> logo uses the font \"Archivo Narrow\", Copyright ©2012, Omnibus-Type (www.omnibus-type.com|omnibus.type@gmail.com).\n\n" +
 									"Both Font Softwares are licensed under the SIL Open Font License, Version 1.1. " +
 									"This license is available with a FAQ at:\n" +
 									"http://scripts.sil.org/OFL\n\n";
@@ -218,7 +219,7 @@ package de.maxdidit.hardware.font
 			}
 			hardwareText.text += "\n";
 			
-			hardwareText.text += " 12/8 1/3 á â à Â <format features='" + FeatureTag.STANDARD_LIGATURES.tag +", " + FeatureTag.REQUIRED_LIGATURES.tag + "'>f fi <format color=0xFFFF0000>ffi</format></format> 臥虎藏龍 <format scale=3 vertexDensity=2000>B80</format>\n\n" + //
+			hardwareText.text += "12/8 1/3 á â à Â <format features='" + FeatureTag.STANDARD_LIGATURES.tag +", " + FeatureTag.REQUIRED_LIGATURES.tag + "'>f fi <format color=0xFFFF0000>ffi</format></format> 臥虎藏龍 <format scale=3 vertexDensity=2000>B80</format>\n\n" + //
 								"Text alignment: left;\n<format scale='0.75' color='0xFF666666'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ipsum mi, commodo eget lacinia eget, condimentum porta nisi. <format scale='1' color=0xFFFF0000>Praesent tincidunt euismod pulvinar</format>. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n" + //
 								"<format scale='1' color='0xFF000000'>Text alignment: center;\n</format><format textAlign='" + TextAlign.CENTER + "'>Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. <format id='" + highlightFormat.id + "'>Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque.</format> Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. Quisque suscipit pulvinar arcu, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\n</format>" + //
 								"<format scale='1' color='0xFF000000'>Text alignment: right;\n</format><format textAlign='" + TextAlign.RIGHT + "'>Nunc aliquet nunc non mauris pretium at hendrerit dui volutpat. <format script=" + ScriptTag.CYRILLIC + " language=" + LanguageTag.RUSSIAN + ">Sed vitae condimentum nunc</format>. Nam eget est non augue egestas tincidunt vel consectetur felis. <format id='" + highlightFormat.id + "' color='0xFF0011FF'>Nulla facilisi. <format color='0xFF9999CC'>Praesent</format> quis purus <format scale='0.5'>sed</format> odio tincidunt iaculis.</format> Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus.\n</format></format>";
@@ -240,8 +241,8 @@ package de.maxdidit.hardware.font
 		
 		private function handleEnterFrame(e:Event):void 
 		{
-			//cache.clearHardwareGlyphCache();
-			//hardwareText.text = "<format id=\"fractions\">12/8</format> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <format id=\"red\">Donec ipsum mi</format>, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n<format id=\"small\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. <format id=\"red\">Quisque suscipit pulvinar arcu</format>, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100) + "</format>";
+			cache.clearHardwareGlyphCache();
+			hardwareText.text = "<format id=\"fractions\">12/8</format> Lorem ipsum dolor sit amet, consectetur adipiscing elit. <format id=\"red\">Donec ipsum mi</format>, commodo eget lacinia eget, condimentum porta nisi. Praesent tincidunt euismod pulvinar. Nam aliquam odio nec justo laoreet sed commodo arcu viverra. Vestibulum sodales ultricies sollicitudin. Aenean felis urna, auctor et elementum interdum, hendrerit eget orci. Morbi aliquet, nunc vitae vehicula tempor, massa nulla imperdiet lectus, eu vehicula dolor massa non nisl. Duis cursus lobortis facilisis. Sed in tortor lacus, vel rutrum elit. Morbi vulputate mi vel elit pellentesque gravida. Quisque gravida neque nec nunc malesuada pharetra. Aliquam enim massa, vulputate ut faucibus vel, adipiscing vel tortor. Pellentesque malesuada ipsum eu diam fringilla molestie.\n\n<format id=\"small\">Aenean hendrerit velit a massa scelerisque pulvinar bibendum velit iaculis. Sed id enim eget augue hendrerit laoreet et quis est. Donec placerat dignissim leo dignissim imperdiet. Integer pharetra enim non risus porttitor dignissim et vel libero. Aenean blandit feugiat leo interdum tincidunt. Ut in diam non purus venenatis scelerisque. Integer eleifend varius porta. Morbi sollicitudin convallis tortor, non egestas mi imperdiet at. Maecenas eget felis a eros hendrerit luctus. Vestibulum accumsan viverra lorem id vestibulum. <format id=\"red\">Quisque suscipit pulvinar arcu</format>, ut faucibus ligula aliquam nec. Sed commodo tempus velit, varius laoreet diam consequat eu. Sed molestie dignissim metus ac tempor. Maecenas non neque vitae odio laoreet vulputate ultricies et elit. Nulla nunc nulla, bibendum eu volutpat in, luctus at augue.\n\nNunc aliquet nunc non mauris pretium at hendrerit dui volutpat. Sed vitae condimentum nunc. Nam eget est non augue egestas tincidunt vel consectetur felis. Nulla facilisi. Praesent quis purus sed odio tincidunt iaculis. Nullam vulputate nisi vitae augue congue gravida. Phasellus magna metus, elementum nec adipiscing eget, interdum eu lorem. Nulla ornare lacinia ante at rhoncus." + int(Math.random() * 100) + "</format>";
 			
 			if (mouseDown)
 			{

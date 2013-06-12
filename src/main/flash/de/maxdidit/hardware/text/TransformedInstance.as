@@ -183,9 +183,9 @@ package de.maxdidit.hardware.text
 			if (_isDirty)
 			{
 				_rawLocalData[0] = _scaleX;
-				_rawLocalData[1] = _shearX;
+				_rawLocalData[1] = _shearY * _scaleX;
 				
-				_rawLocalData[4] = _shearY;
+				_rawLocalData[4] = _shearX * _scaleX;
 				_rawLocalData[5] = _scaleY;
 				
 				_rawLocalData[12] = _x;

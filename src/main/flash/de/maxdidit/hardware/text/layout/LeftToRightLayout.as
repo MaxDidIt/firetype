@@ -178,11 +178,13 @@ package de.maxdidit.hardware.text.layout
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
-				cache.registerGlyphInstance(glyphInstance, printhead.textFormat.vertexDensity, printhead.textFormat.textColor);
+				cache.registerGlyphInstance(glyphInstance, printhead.textFormat.font, printhead.textFormat.vertexDensity, printhead.textFormat.textColor);
 				currentCharacter.addChild(glyphInstance);
 			}
 			
 			currentCharacter.scaleX = currentCharacter.scaleY = printhead.textFormat.scale;
+			currentCharacter.shearX = printhead.textFormat.shearX;
+			currentCharacter.shearY = printhead.textFormat.shearY;
 			
 			printhead.currentWord.addChild(currentCharacter);
 		}

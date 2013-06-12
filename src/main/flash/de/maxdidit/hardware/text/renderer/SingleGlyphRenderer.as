@@ -116,6 +116,7 @@ package de.maxdidit.hardware.text.renderer
 				return null;
 			}
 			
+			// triangulate paths
 			var vertexOffset:uint = _vertexData.length / FIELDS_PER_VERTEX;
 			var indexOffset:uint = _indexData.length;
 			
@@ -206,38 +207,50 @@ package de.maxdidit.hardware.text.renderer
 			var textColor:TextColor = textColor;
 			_context3d.setProgram(programPair);
 			
-			_context3d.setProgram(programPair);
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-			for each (var vertexDensity:Object in instanceMap)
+			
+			for each (var font:Object in instanceMap)
 			{
-				for (var colorId:String in vertexDensity)
+				for each (var vertexDensity:Object in font)
 				{
-					var color:Object = vertexDensity[colorId];
-					
-					if (textColorMap.hasTextColorId(colorId))
+					for (var colorId:String in vertexDensity)
 					{
-						textColor = textColorMap.getTextColorById(colorId);
-					}
-					else
-					{
-						textColor = fallbackTextColor;
-					}
-					
-					_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
-					
-					for each (var instances:Vector.<HardwareGlyphInstance>in color)
-					{
-						var l:uint = instances.length;
-						for (var i:uint = 0; i < l; i++)
+						var color:Object = vertexDensity[colorId];
+						
+						if (textColorMap.hasTextColorId(colorId))
 						{
-							var currentInstance:HardwareGlyphInstance = instances[i];
-							
-							_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
-							_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
+							textColor = textColorMap.getTextColorById(colorId);
+						}
+						else
+						{
+							textColor = fallbackTextColor;
+						}
+						
+						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
+						
+						for each (var instances:Vector.<HardwareGlyphInstance>in color)
+						{
+							var l:uint = instances.length;
+							for (var i:uint = 0; i < l; i++)
+							{
+								var currentInstance:HardwareGlyphInstance = instances[i];
+								
+								_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, currentInstance.globalTransformation, true);
+								_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles);
+							}
 						}
 					}
 				}
 			}
+		}
+		
+		public function clear():void 
+		{
+			_vertexData.length = 0;
+			_indexData.length = 0;
+			
+			_vertexBuffer.dispose();
+			_indexBuffer.dispose();
 		}
 	}
 

@@ -119,10 +119,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, vertexDensity:Number, color:TextColor):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDensity:Number, color:TextColor):void 
 		{
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
-			section.registerGlyphInstance(hardwareGlyphInstance, vertexDensity, color);
+			section.registerGlyphInstance(hardwareGlyphInstance, font, vertexDensity, color);
 		}
 		
 		public function render():void 
@@ -223,6 +223,13 @@ package de.maxdidit.hardware.text.cache
 		public function clearHardwareGlyphCache():void 
 		{
 			_glyphCache = new Object();
+			
+			const l:uint = _sections.length;
+			for (var i:uint = 0; i < l; i++)
+			{
+				_sections[i].clear();
+			}
+			
 			dirtyAllClientTexts();
 		}
 		

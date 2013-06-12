@@ -158,6 +158,7 @@ package de.maxdidit.hardware.text.renderer
 			var index:uint = _indexData.length;
 			const newLength:uint = index + l * DRAW_CALLS_PER_BATCH;
 			
+			_indexData.length = newLength;
 			var indexOffset:uint = 0;
 			
 			for (var i:uint = 0; i < DRAW_CALLS_PER_BATCH; i++)
@@ -165,7 +166,6 @@ package de.maxdidit.hardware.text.renderer
 				for (var j:uint = 0; j < l; j++)
 				{
 					_indexData[index++] = indices[j] + indexOffset;
-						//_indexData.push(indices[j] + indexOffset);
 				}
 				
 				indexOffset += numVertices;
@@ -223,46 +223,58 @@ package de.maxdidit.hardware.text.renderer
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
 			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_1);
 			
-			for each (var vertexDensity:Object in instanceMap)
+			for each (var font:Object in instanceMap)
 			{
-				for (var colorId:String in vertexDensity)
+				for each (var vertexDensity:Object in font)
 				{
-					var color:Object = vertexDensity[colorId];
-					
-					if (textColorMap.hasTextColorId(colorId))
+					for (var colorId:String in vertexDensity)
 					{
-						textColor = textColorMap.getTextColorById(colorId);
-					}
-					else
-					{
-						textColor = fallbackTextColor;
-					}
-					
-					_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
-					
-					for each (var instances:Vector.<HardwareGlyphInstance> in color)
-					{
-						var l:uint = instances.length;
-						var i:uint = 0;
-						var b:uint = 0;
+						var color:Object = vertexDensity[colorId];
 						
-						while (i < l)
+						if (textColorMap.hasTextColorId(colorId))
 						{
-							var currentInstance:HardwareGlyphInstance = instances[i];
-							_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
+							textColor = textColorMap.getTextColorById(colorId);
+						}
+						else
+						{
+							textColor = fallbackTextColor;
+						}
+						
+						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1);
+						
+						for each (var instances:Vector.<HardwareGlyphInstance>in color)
+						{
+							var l:uint = instances.length;
+							var i:uint = 0;
+							var b:uint = 0;
 							
-							b++;
-							i++;
-							
-							if (b == DRAW_CALLS_PER_BATCH || i == l)
+							while (i < l)
 							{
-								_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
-								b = 0;
+								var currentInstance:HardwareGlyphInstance = instances[i];
+								_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, b * 4, currentInstance.globalTransformation, true);
+								
+								b++;
+								i++;
+								
+								if (b == DRAW_CALLS_PER_BATCH || i == l)
+								{
+									_context3d.drawTriangles(_indexBuffer, currentInstance.hardwareGlyph.indexOffset, currentInstance.hardwareGlyph.numTriangles * b);
+									b = 0;
+								}
 							}
 						}
 					}
 				}
 			}
+		}
+		
+		public function clear():void 
+		{
+			_vertexData.length = 0;
+			_indexData.length = 0;
+			
+			_vertexBuffer.dispose();
+			_indexBuffer.dispose();
 		}
 	
 	}

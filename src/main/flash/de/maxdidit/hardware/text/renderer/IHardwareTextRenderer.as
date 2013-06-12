@@ -12,6 +12,8 @@ package de.maxdidit.hardware.text.renderer
 	{
 		function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph;
 		function render(instanceMap:Object, textColorMap:TextColorMap):void;
+		
+		function clear():void;
 	}
 	
 }

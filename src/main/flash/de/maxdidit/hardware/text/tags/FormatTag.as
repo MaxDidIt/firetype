@@ -40,6 +40,12 @@ package de.maxdidit.hardware.text.tags
 		private var _colorId:String;
 		private var _isColorIdSet:Boolean = false;
 		
+		private var _shearX:Number;
+		private var _isShearXSet:Boolean = false;
+		
+		private var _shearY:Number;
+		private var _isShearYSet:Boolean = false;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -55,7 +61,7 @@ package de.maxdidit.hardware.text.tags
 		
 		public function get extendsReferencedFormat():Boolean
 		{
-			return _isColorIdSet || _isColorSet || _isScaleSet || _isLanguageTagSet || _isScaleSet || _isTextAlignSet || _isVertexDensitySet || _isFontIdSet;
+			return _isColorIdSet || _isColorSet || _isScaleSet || _isLanguageTagSet || _isScaleSet || _isTextAlignSet || _isVertexDensitySet || _isFontIdSet || _isShearXSet || _isShearYSet;
 		}
 		
 		public function get formatId():String 
@@ -215,6 +221,38 @@ package de.maxdidit.hardware.text.tags
 		public function get isColorIdSet():Boolean 
 		{
 			return _isColorIdSet;
+		}
+		
+		public function get shearX():Number 
+		{
+			return _shearX;
+		}
+		
+		public function set shearX(value:Number):void 
+		{
+			_shearX = value;
+			_isShearXSet = true;
+		}
+		
+		public function get shearY():Number 
+		{
+			return _shearY;
+		}
+		
+		public function set shearY(value:Number):void 
+		{
+			_shearY = value;
+			_isShearYSet = true;
+		}
+		
+		public function get isShearXSet():Boolean 
+		{
+			return _isShearXSet;
+		}
+		
+		public function get isShearYSet():Boolean 
+		{
+			return _isShearYSet;
 		}
 		
 	}

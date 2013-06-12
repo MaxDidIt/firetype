@@ -1,6 +1,7 @@
 package de.maxdidit.hardware.text.cache 
 {
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.HardwareGlyph;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance;
 	import de.maxdidit.hardware.text.format.HardwareTextFormat;
@@ -47,9 +48,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, vertexDensity:Number, color:TextColor):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDensity:Number, color:TextColor):void 
 		{
-			var cachedColorsForDensity:Object = retrieveProperty(_instanceMap, String(vertexDensity));
+			var cachedDensitiesForFonts:Object = retrieveProperty(_instanceMap, font.uniqueIdentifier);
+			var cachedColorsForDensity:Object = retrieveProperty(cachedDensitiesForFonts, String(vertexDensity));
 			var cachedInstancesForColor:Object = retrieveProperty(cachedColorsForDensity, color.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;
@@ -80,6 +82,7 @@ package de.maxdidit.hardware.text.cache
 		public function clear():void 
 		{
 			deleteMap(_instanceMap);
+			_renderer.clear();
 		}
 		
 		private function deleteMap(map:Object):void 

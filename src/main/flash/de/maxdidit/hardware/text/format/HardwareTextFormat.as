@@ -69,6 +69,14 @@ package de.maxdidit.hardware.text.format
 		private var _languageTag:String = LanguageTag.ENGLISH;
 		private var _isLanguageTagSet:Boolean;
 		
+		// shearX
+		private var _shearX:Number = 0;
+		private var _isShearXSet:Boolean = false;
+		
+		// shearY
+		private var _shearY:Number = 0;
+		private var _isShearYSet:Boolean = false;
+		
 		private var _id:String;
 		
 		private var _parentFormat:HardwareTextFormat;
@@ -289,6 +297,38 @@ package de.maxdidit.hardware.text.format
 		public function get isTextAlignSet():Boolean 
 		{
 			return _isTextAlignSet;
+		}
+		
+		public function get shearX():Number 
+		{
+			if (_isShearXSet || !_parentFormat)
+			{
+				return _shearX;
+			}
+			
+			return _parentFormat.shearX;
+		}
+		
+		public function set shearX(value:Number):void 
+		{
+			_shearX = value;
+			_isShearXSet = true;
+		}
+		
+		public function get shearY():Number 
+		{
+			if (_isShearYSet || !_parentFormat)
+			{
+				return _shearY;
+			}
+			
+			return _parentFormat.shearY;
+		}
+		
+		public function set shearY(value:Number):void 
+		{
+			_shearY = value;
+			_isShearYSet = true;
 		}
 	
 		///////////////////////
