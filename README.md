@@ -147,11 +147,13 @@ _hardwareText.cache.textFormatMap.addTextFormat(textFormatEmphasis);
 
 We can now reference the text format in any `format` tag by using the `id` attribute.
 
+```ActionScript
 _hardwareText.text = "Lorem ipsum dolor sit amet, <format id='emphasis'>consectetur</format> adipiscing " + 
 					"elit. Sed facilisis <format id='emphasis'>lacus nec sollicitudin</format> fermentum. " + 
 					"Vivamus urna mi, fringilla eu diam ac, lobortis bibendum mi. " + 
 					"<format id='emphasis'>Vestibulum laoreet</format> augue id ligula ullamcorper, " + 
 					"sit amet malesuada diam tincidunt.";
+```
 
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial3.png)
 					
