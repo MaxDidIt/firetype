@@ -234,7 +234,7 @@ var openTypeParser:OpenTypeParser = new OpenTypeParser();
 var font:HardwareFont = openTypeParser.parseFont(new fontNewsCycleBoldData() as ByteArray);
 ```
 
-Then, you can simply 
+Then, you can simply pass the font to the `standardFormat` property or use it in a `format` tag as described in [How Can I Set The Font of a Text?](#how-can-i-set-the-font-of-a-text).
 
 ### How Do I Control the Level of Detail of Characters?
 
@@ -256,3 +256,15 @@ _hardwareText.text = "You can make characters appear\n<format scale='1.5' vertex
 					"Lower vertexDistance values will have an impact on performance.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result4.png)
+
+### How Should I Handle Longer Texts?
+
+Characters rendered after one draw call:
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_1.png)
+Characters rendered after two draw calls:
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_2.png)
+Characters rendered after three draw calls:
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_3.png)
+
+Characters rendered after one draw call:
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6b.png)
