@@ -77,32 +77,43 @@ You can apply different colors, sizes or alignments to sections of text by using
 * `scale`
 * `shearX`
 * `shearY`
-* `vertexDistance`
 * `textAlign`
+	
+The values of attributes have to be put either into single or double quotation marks.
 
-You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).
+You can find an implementation of this tutorial at [FiretypeTutorial2.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).
 
-```ActionScript
-_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.";
-```
-![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result1.png)
-
+You can change the text color with the **color** attribute. The value is either passed as a RGB or ARGB hexadecimal number.
 ```ActionScript
 _hardwareText.text = "You can <format color='0xFF6611'>change the text color</format> with the <format color='0xFF0000'>color</format> attribute.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result2.png)
 
+You can scale sections of a text with the **scale** attribute. The value is expected to be a floating point number.
+```ActionScript
+_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result1.png)
+
+You can slant a portion of text with the **shearX** attribute. You can slant individual characters along the Y axis with the **shearY** attributes. Both attributes expect floating point numbers as values.
 ```ActionScript
 _hardwareText.text = "You can <format shearX='0.3'>slant a portion of a text</format> with the <format color='0xFF0000'>shearX</format> attribute.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result3.png)
 
 ```ActionScript
-_hardwareText.text = "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> (vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> (vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. Lower vertexDistance values will have an impact on performance.";
-```
-![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result4.png)
-
-```ActionScript
 _hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set the text alignment with the <format color='0xFF0000'>textAlign</format> attribute. You should use the constants of the TextAlign class as values for the attribute.\n</format>";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result5.png)
+
+### How Do I Control the Level of Detail of Characters?
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision400.png)
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision200.png)
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision100.png)
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision50.png)
+
+```ActionScript
+_hardwareText.text = "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> (vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> (vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. Lower vertexDistance values will have an impact on performance.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result4.png)
