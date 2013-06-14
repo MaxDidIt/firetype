@@ -23,7 +23,7 @@ package de.maxdidit.hardware.text
 		
 		protected var _children:Vector.<TransformedInstance>;
 		
-		private var _isDirty:Boolean = true;
+		protected var _isDirty:Boolean = true;
 		private var _localTransformation:Matrix3D;
 		private var _globalTransformation:Matrix3D;
 		
@@ -40,10 +40,10 @@ package de.maxdidit.hardware.text
 			_globalTransformation = new Matrix3D();
 			
 			_rawLocalData = new Vector.<Number>();
-			_rawLocalData.push(	1, 0, 0, 0, //
-								0, 1, 0, 0, //
-								0, 0, 1, 0, //
-								0, 0, 0, 1);
+			_rawLocalData.push(1, 0, 0, 0, //
+				0, 1, 0, 0, //
+				0, 0, 1, 0, //
+				0, 0, 0, 1);
 		}
 		
 		///////////////////////
@@ -94,19 +94,19 @@ package de.maxdidit.hardware.text
 			return _localTransformation;
 		}
 		
-		public function get globalTransformation():Matrix3D 
+		public function get globalTransformation():Matrix3D
 		{
 			return _globalTransformation;
 		}
 		
 		// scaleX
 		
-		public function get scaleX():Number 
+		public function get scaleX():Number
 		{
 			return _scaleX;
 		}
 		
-		public function set scaleX(value:Number):void 
+		public function set scaleX(value:Number):void
 		{
 			if (_scaleX != value)
 			{
@@ -117,12 +117,12 @@ package de.maxdidit.hardware.text
 		
 		// scaleY
 		
-		public function get scaleY():Number 
+		public function get scaleY():Number
 		{
 			return _scaleY;
 		}
 		
-		public function set scaleY(value:Number):void 
+		public function set scaleY(value:Number):void
 		{
 			if (_scaleY != value)
 			{
@@ -133,12 +133,12 @@ package de.maxdidit.hardware.text
 		
 		// shearX
 		
-		public function get shearX():Number 
+		public function get shearX():Number
 		{
 			return _shearX;
 		}
 		
-		public function set shearX(value:Number):void 
+		public function set shearX(value:Number):void
 		{
 			if (_shearX != value)
 			{
@@ -149,18 +149,28 @@ package de.maxdidit.hardware.text
 		
 		// shearY
 		
-		public function get shearY():Number 
+		public function get shearY():Number
 		{
 			return _shearY;
 		}
 		
-		public function set shearY(value:Number):void 
+		public function set shearY(value:Number):void
 		{
 			if (_shearY != value)
 			{
 				_shearY = value;
 				_isDirty = true;
 			}
+		}
+		
+		public function get children():Vector.<TransformedInstance>
+		{
+			return _children;
+		}
+		
+		public function get isFlaggedForUpdate():Boolean
+		{
+			return _isDirty;
 		}
 		
 		///////////////////////
@@ -225,6 +235,11 @@ package de.maxdidit.hardware.text
 			result.y = _y;
 			
 			return result;
+		}
+		
+		public function flagForUpdate():void
+		{
+			_isDirty = true;
 		}
 	}
 

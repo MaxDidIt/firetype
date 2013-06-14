@@ -25,6 +25,8 @@ package de.maxdidit.hardware.text
 		private var _cache:HardwareCharacterCache;
 		private var _text:String;
 		
+		private var _textContainer:TransformedInstance;
+		
 		private var _width:Number;
 		private var _fixedWidth:Boolean;
 		private var _actualWidth:Number;
@@ -44,6 +46,9 @@ package de.maxdidit.hardware.text
 		public function HardwareText(context3D:Context3D, cache:HardwareCharacterCache = null, layout:ILayout = null, typesetter:Typesetter = null) 
 		{
 			_standardFormat = new HardwareTextFormat();
+			
+			_textContainer = new TransformedInstance();
+			super.addChild(_textContainer);
 			
 			this._cache = cache;
 			if (!_cache)
@@ -120,14 +125,6 @@ package de.maxdidit.hardware.text
 			_fixedWidth = true;
 		}
 		
-		// scaleX
-		
-		override public function set scaleX(value:Number):void 
-		{
-			super.scaleX = value;
-			_actualWidth = _width / scaleX;
-		}
-		
 		// standardFormat
 		
 		public function get standardFormat():HardwareTextFormat 
@@ -155,9 +152,75 @@ package de.maxdidit.hardware.text
 			return _actualWidth;
 		}
 		
+		override public function get x():Number 
+		{
+			return _textContainer.x;
+		}
+		
+		override public function set x(value:Number):void 
+		{
+			_textContainer.x = value;
+		}
+		
+		override public function get y():Number 
+		{
+			return _textContainer.y;
+		}
+		
+		override public function set y(value:Number):void 
+		{
+			_textContainer.y = value;
+		}
+		
+		override public function get shearX():Number 
+		{
+			return _textContainer.shearX;
+		}
+		
+		override public function set shearX(value:Number):void 
+		{
+			_textContainer.shearX = value;
+		}
+		
+		override public function get shearY():Number 
+		{
+			return _textContainer.shearY;
+		}
+		
+		override public function set shearY(value:Number):void 
+		{
+			_textContainer.shearY = value;
+		}
+		
+		override public function get scaleX():Number 
+		{
+			return _textContainer.scaleX;
+		}
+		
+		override public function set scaleX(value:Number):void 
+		{
+			_textContainer.scaleX = value;
+			_actualWidth = _width / scaleX;
+		}
+		
+		override public function get scaleY():Number 
+		{
+			return _textContainer.scaleY;
+		}
+		
+		override public function set scaleY(value:Number):void 
+		{
+			_textContainer.scaleY = value;
+		}
+		
 		///////////////////////
 		// Member Functions
 		///////////////////////
+		
+		override public function addChild(child:TransformedInstance):void 
+		{
+			_textContainer.addChild(child);
+		}
 		
 		public function registerFont(font:HardwareFont):void
 		{
@@ -175,10 +238,10 @@ package de.maxdidit.hardware.text
 		override public function loseAllChildren():void 
 		{
 			// clean up instances
-			const l:uint = _children.length;
+			const l:uint = _textContainer.numChildren;
 			for (var i:uint = 0; i < l; i++)
 			{
-				var line:HardwareLine = _children.shift() as HardwareLine;
+				var line:HardwareLine = _textContainer.children.shift() as HardwareLine;
 				line.loseAllChildren();
 			}
 		}
@@ -189,12 +252,18 @@ package de.maxdidit.hardware.text
 			{
 				loseAllChildren();
 				parseText();
-				calculateTransformations();
+				
+				_textContainer.flagForUpdate();
 				_textDirty = false;
+			}
+			
+			if (_textContainer.isFlaggedForUpdate)
+			{
+				calculateTransformations();
 			}
 		}
 		
-		public function dirty():void 
+		public override function flagForUpdate():void 
 		{
 			_textDirty = true;
 		}

@@ -25,6 +25,7 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 * [How Do I Apply Formatting to Texts?](#how-do-i-apply-formatting-to-texts)
 * [How Can I Define a Text Format And Use It Several Times?](#how-can-i-define-a-text-format-and-use-it-several-times)
 * [How Can I Set The Font of a Text?](#how-can-i-set-the-font-of-a-text)
+* [How Can I Embed a Font?](#how-can-i-embed-a-font)
 * [How Do I Control the Level of Detail of Characters?](#how-do-i-control-the-level-of-detail-of-characters)
 
 ### Preliminaries
@@ -85,6 +86,7 @@ Running this code should result in an image similar to this:
 
 You can apply different colors, sizes or alignments to your text in two ways.
 You can set a property globally via the `standardFormat` property of the `HardwareText`:
+If you change any property of the `standardFormat` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes.
 
 ```ActionScript
 _hardwareText.standardFormat.color = 0x333333;
@@ -135,7 +137,7 @@ _hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set th
 
 ### How Can I Define a Text Format And Use It Several Times?
 
-Instead of duplicating the same format attributes over and over again, you can define a `HardwareTextFormat` object once and set the properties there.
+Instead of duplicating the same format attributes over and over again, you can define a `HardwareTextFormat` object once and set the properties there. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial3.as).
 
 ```ActionScript
 var textFormatEmphasis:HardwareTextFormat = new HardwareTextFormat();
@@ -167,9 +169,54 @@ _hardwareText.text = "Lorem ipsum dolor sit amet, <format id='emphasis'>consecte
 					
 You can also use the usual attributes in a `format` tag referencing an `id`. The attributes will override the respective properties of the referenced `HardwareTextFormat`.
 
+If you change any property of the `HardwareText` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes.
+
 ### How Can I Set The Font of a Text?
 
+Before you can use a different font than the default, you will have to load and parse an OpenType font file. In *firetype*, you will use the `OpenTypeParser` class for this.
 
+```ActionScript
+var openTypeParser:OpenTypeParser = new OpenTypeParser();
+openTypeParser.loadFont("newscycle-bold.ttf").addEventListener(FontEvent.FONT_PARSED, handleFontParsed);
+```
+
+`OpenTypeParser` will consecutively load and parse font files passed to it. You can add the event listener reacting to a completed font at two points:
+* To the `IEventDispatcher` object returned by the `loadFont` function. The event handler will only be called when this specific font is completed.
+* To the `OpenTypeParser` object itself. In this case, the event handler will be called for each font that the parser completes.
+
+In the event handler, we can assign the loaded font to the `standardFormat` property to apply it to the entire text.
+
+```ActionScript
+private function handleFontParsed(e:FontEvent):void 
+{
+	_hardwareText.standardFormat.font = e.font;
+	_hardwareText.flagForUpdate();
+}
+```
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial4.png)
+
+If the the `text` property of the `HardwareText` object had been set before this, you will need to call the `flagForUpdate` method to apply the changes in the `standardFormat` property.
+
+You can also change the font in certain sections of text. To do that, you will have to register the font with the cache used by the `HardwareText` object first.
+
+```ActionScript
+_hardwareText.cache.fontMap.addFont(e.font);
+```
+
+Then, you can set the `font` attribute in the `format` tag to reference the loaded font file. The value of the `format` attribute has to be the same as the `uniqueIdentifier` property of the referenced font. The easiest way to do this is to directly include the `uniqueIdentifier` value in the string.
+
+```ActionScript
+_hardwareText.text = "Lorem ipsum dolor sit amet, <format font='" + e.font.uniqueIdentifier + "'>consectetur adipiscing " + 
+					"elit</format>. Sed facilisis lacus nec sollicitudin fermentum. Vivamus urna mi, fringilla eu diam " +
+					"ac, lobortis bibendum mi. <format font='" + e.font.uniqueIdentifier + "'>Vestibulum laoreet " + 
+					"augue</format> id ligula ullamcorper, sit amet <format font='" + e.font.uniqueIdentifier + "'>" + 
+					"malesuada diam</format> tincidunt.";
+```
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial4a.png)
+
+### How Can I Embed a Font?
 
 ### How Do I Control the Level of Detail of Characters?
 

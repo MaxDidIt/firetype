@@ -150,7 +150,7 @@ package de.maxdidit.hardware.text.cache
 				section.clearInstances();
 			}
 			
-			dirtyAllClientTexts();
+			flagAllClientTextsForUpdate();
 		}
 		
 		public function addClient(hardwareText:HardwareText):void 
@@ -230,15 +230,15 @@ package de.maxdidit.hardware.text.cache
 				_sections[i].clearBufferData();
 			}
 			
-			dirtyAllClientTexts();
+			flagAllClientTextsForUpdate();
 		}
 		
-		private function dirtyAllClientTexts():void
+		private function flagAllClientTextsForUpdate():void
 		{
 			const l:uint = _clientTexts.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				_clientTexts[i].dirty();
+				_clientTexts[i].flagForUpdate();
 			}
 		}
 		
