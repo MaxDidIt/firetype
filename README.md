@@ -86,7 +86,7 @@ Running this code should result in an image similar to this:
 
 You can apply different colors, sizes or alignments to your text in two ways.
 You can set a property globally via the `standardFormat` property of the `HardwareText`:
-If you change any property of the `standardFormat` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes.
+If you change any property of the `standardFormat` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes. The only property you don't have to do this for is the `color` property.
 
 ```ActionScript
 _hardwareText.standardFormat.color = 0x333333;
@@ -169,11 +169,11 @@ _hardwareText.text = "Lorem ipsum dolor sit amet, <format id='emphasis'>consecte
 					
 You can also use the usual attributes in a `format` tag referencing an `id`. The attributes will override the respective properties of the referenced `HardwareTextFormat`.
 
-If you change any property of the `HardwareText` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes.
+If you change any property of the `HardwareText` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes. The only property you don't have to do this for is the `color` property.
 
 ### How Can I Set The Font of a Text?
 
-Before you can use a different font than the default, you will have to load and parse an OpenType font file. In *firetype*, you will use the `OpenTypeParser` class for this.
+Before you can use a different font than the default, you will have to load and parse an OpenType font file. In *firetype*, you will use the `OpenTypeParser` class for this. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial4.as).
 
 ```ActionScript
 var openTypeParser:OpenTypeParser = new OpenTypeParser();
@@ -217,6 +217,24 @@ _hardwareText.text = "Lorem ipsum dolor sit amet, <format font='" + e.font.uniqu
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial4a.png)
 
 ### How Can I Embed a Font?
+
+You can embed font files as byte arrays and directly parse them with `OpenTypeParser` instead of loading them from a remote location. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial5.as).
+
+When embedding the font file, make sure that you set the `mimeType` to *"application/octet-stream"*;
+
+```ActionScript
+[Embed(source="../../../../../resources/fonts/newscycle/newscycle-bold.ttf", mimeType="application/octet-stream")]
+private static const fontNewsCycleBoldData : Class;
+```
+
+You can then instantiate the embedded data as a byte array and pass it to the `parseFont` function of an `OpenTypeParser` object.
+
+```ActionScript
+var openTypeParser:OpenTypeParser = new OpenTypeParser();
+var font:HardwareFont = openTypeParser.parseFont(new fontNewsCycleBoldData() as ByteArray);
+```
+
+Then, you can simply 
 
 ### How Do I Control the Level of Detail of Characters?
 
