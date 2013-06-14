@@ -55,9 +55,6 @@ package de.maxdidit.hardware.font
 			
 			var viewProjection:Matrix3D = new Matrix3D(viewProjectionRawData);
 			
-			// Zoom out
-			viewProjection.prependScale(0.02, 0.02, 0.02);
-			
 			_hardwareText.calculateTransformations(viewProjection, true);
 		}
 		
@@ -65,7 +62,9 @@ package de.maxdidit.hardware.font
 		{
 			_hardwareText = new HardwareText(_context3d);
 			_hardwareText.text = "Hello World!\nThis text is being rendered using firetype!";
-			_hardwareText.x = -16000;
+			
+			_hardwareText.scaleX = _hardwareText.scaleY = 0.02;
+			_hardwareText.x = -320;
 		}
 		
 		///////////////////////

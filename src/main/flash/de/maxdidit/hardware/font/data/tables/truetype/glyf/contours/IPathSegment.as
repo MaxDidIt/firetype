@@ -13,7 +13,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		function get anchorB():Vertex;
 		function set anchorB(anchor:Vertex):void;
 		
-		function addVerticesToList(list:Vector.<Vertex>, vertexDensity:Number, addBackwards:Boolean):void;
+		function addVerticesToList(list:Vector.<Vertex>, vertexDistance:Number, addBackwards:Boolean):void;
 	}
 	
 }

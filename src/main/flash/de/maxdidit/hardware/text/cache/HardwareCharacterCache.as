@@ -119,10 +119,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDensity:Number, color:TextColor):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDistance:Number, color:TextColor):void 
 		{
 			var section:HardwareCharacterCacheSection = _sections[hardwareGlyphInstance.hardwareGlyph.cacheSectionIndex];
-			section.registerGlyphInstance(hardwareGlyphInstance, font, vertexDensity, color);
+			section.registerGlyphInstance(hardwareGlyphInstance, font, vertexDistance, color);
 		}
 		
 		public function render():void 
@@ -192,7 +192,7 @@ package de.maxdidit.hardware.text.cache
 			return hardwareGlyph;
 		}
 		
-		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, vertexDensity:uint, glyphID:uint):HardwareGlyph 
+		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, vertexDistance:uint, glyphID:uint):HardwareGlyph 
 		{
 			const l:uint = _sections.length;
 			
@@ -203,7 +203,7 @@ package de.maxdidit.hardware.text.cache
 				{
 					// cache glyph
 					glyph.cacheSectionIndex = i;
-					addHardwareGlyphToCache(glyph, font, vertexDensity, glyphID);
+					addHardwareGlyphToCache(glyph, font, vertexDistance, glyphID);
 					return glyph;
 				}
 			}
@@ -213,7 +213,7 @@ package de.maxdidit.hardware.text.cache
 			
 			glyph = section.addPathsToSection(paths);
 			glyph.cacheSectionIndex = _sections.length;
-			addHardwareGlyphToCache(glyph, font, vertexDensity, glyphID);
+			addHardwareGlyphToCache(glyph, font, vertexDistance, glyphID);
 			
 			_sections.push(section);
 			
@@ -242,10 +242,10 @@ package de.maxdidit.hardware.text.cache
 			}
 		}
 		
-		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, vertexDensity:uint, glyphID:uint):void 
+		private function addHardwareGlyphToCache(glyph:HardwareGlyph, font:HardwareFont, vertexDistance:uint, glyphID:uint):void 
 		{
 			var subdivisionsInFont:Object = retrieveProperty(_glyphCache, font.uniqueIdentifier);
-			var glyphsInSubdivisions:Object = retrieveProperty(subdivisionsInFont, String(vertexDensity));
+			var glyphsInSubdivisions:Object = retrieveProperty(subdivisionsInFont, String(vertexDistance));
 			
 			glyphsInSubdivisions[String(glyphID)] = glyph;
 		}

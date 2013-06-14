@@ -14,6 +14,7 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 
 * [Preliminaries](#preliminaries)
 * [How Do I Display Text With *firetype*?](#how-do-i-display-text-with-firetype)
+* [How Do I Apply Formatting to Texts?](#how-do-i-apply-formatting-to-texts)
 
 ### Preliminaries
 
@@ -26,7 +27,7 @@ You can get a quick overview of a basic document class using *firetype* by looki
 
 ### How Do I Display Text With *firetype*?
 
-These are the basic steps needed to display text using *firetype*. You can find a document class implementing this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial1.as).
+These are the basic steps needed to display text using *firetype*. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial1.as).
 
 Create a `HardwareText` object and pass it the `Context3D` object in the constructor.
 
@@ -34,27 +35,38 @@ Create a `HardwareText` object and pass it the `Context3D` object in the constru
 _hardwareText = new HardwareText(_context3d);
 ```
 
+- - -
+
 You can assign a `String` via the `text` property.
 
 ```ActionScript
 _hardwareText.text = "Hello World!\nThis text is being rendered using firetype!";
 ```
 
-You can set the position of the `HardwareText` object via the `x` and `y` properties.
+- - -
+
+You can set the position of the `HardwareText` object via the `x` and `y` properties. You can set the scale of the `HardwareText` with the `scaleX` and `scaleY` properties.
 
 ```ActionScript
-_hardwareText.x = -16000;
+_hardwareText.scaleX = _hardwareText.scaleY = 0.02;
+_hardwareText.x = -320;
 ```
 
-In order to be rendered properly, the `HardwareText` object needs a projection matrix. The second parameter needs to be `true` to signal the `HardwareText` that it needs to recalculate it's transformations based on the matrix passed to it.
+**Note:** *firetype* makes no assumptions about the scale you want to render the text in. It renders the characters with their original measurements, as they are stored in the font file. Because of this, a character is usually 500-1500 units tall. You will probably need to either scale down the `HardwareText` via the `scaleX` and `scaleY` properties or zoom out via the view/projection matrix.
+
+- - -
+
+In order to be rendered properly, the `HardwareText` object needs a projection matrix.
 
 ```ActionScript
 _hardwareText.calculateTransformations(viewProjection, true);
 ```
 
+The second parameter needs to be `true` to signal the `HardwareText` that it needs to recalculate it's transformations based on the matrix passed to it.
+
 This function needs to be called everytime the view or projection changes.
 
-**Note:** *firetype* makes no assumptions about the scale you need to render the text in. It renders the characters with their original measurements, as they are stored in the font file. This means that a character is usually 500-1500 units tall. Because of this, you will probably need to either scale down the `HardwareText` via the `scaleX` and `scaleY` properties or zoom out via the view/projection matrix.
+- - -
 
 Finally, we can render the text via the `HardwareCharacterCache` object stored in the `HardwareText`.
 
@@ -65,3 +77,9 @@ _hardwareText.cache.render();
 Running this code should result in an image similar to this:
 
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial1_result.png)
+
+### How Do I Apply Formatting to Texts?
+
+You can apply different colors, sizes or alignments to sections of text by using the `<format>` tag.
+
+You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).

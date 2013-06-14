@@ -89,7 +89,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		// Member Functions
 		///////////////////////
 		
-		public function addVerticesToList(list:Vector.<Vertex>, vertexDensity:Number, addBackwards:Boolean):void 
+		public function addVerticesToList(list:Vector.<Vertex>, vertexDistance:Number, addBackwards:Boolean):void 
 		{
 			const n:uint = _controlPoints.length - 1;
 			
@@ -102,7 +102,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			var derivation_Y:Number = -2 * _controlPoints[0].y + 2 * _controlPoints[1].y + _controlPoints[2].y;
 			var derivation:Number = Math.sqrt(derivation_X * derivation_X + derivation_Y * derivation_Y);
 			
-			t += vertexDensity / derivation;
+			t += vertexDistance / derivation;
 			
 			while (t < 1)
 			{
@@ -116,7 +116,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 				derivation_Y = -2 * it * _controlPoints[0].y + (2 * it - 2 * t) * _controlPoints[1].y + 2 * t * _controlPoints[2].y;
 				derivation = Math.sqrt(derivation_X * derivation_X + derivation_Y * derivation_Y);
 				
-				t += vertexDensity / derivation;
+				t += vertexDistance / derivation;
 				
 				if (addBackwards)
 				{

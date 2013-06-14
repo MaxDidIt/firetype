@@ -48,10 +48,10 @@ package de.maxdidit.hardware.text.cache
 			return result;
 		}
 		
-		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDensity:Number, color:TextColor):void 
+		public function registerGlyphInstance(hardwareGlyphInstance:HardwareGlyphInstance, font:HardwareFont, vertexDistance:Number, color:TextColor):void 
 		{
 			var cachedDensitiesForFonts:Object = retrieveProperty(_instanceMap, font.uniqueIdentifier);
-			var cachedColorsForDensity:Object = retrieveProperty(cachedDensitiesForFonts, String(vertexDensity));
+			var cachedColorsForDensity:Object = retrieveProperty(cachedDensitiesForFonts, String(vertexDistance));
 			var cachedInstancesForColor:Object = retrieveProperty(cachedColorsForDensity, color.id);
 			
 			var instances:Vector.<HardwareGlyphInstance>;

@@ -211,11 +211,11 @@ package de.maxdidit.hardware.text.renderer
 			
 			for each (var font:Object in instanceMap)
 			{
-				for each (var vertexDensity:Object in font)
+				for each (var vertexDistance:Object in font)
 				{
-					for (var colorId:String in vertexDensity)
+					for (var colorId:String in vertexDistance)
 					{
-						var color:Object = vertexDensity[colorId];
+						var color:Object = vertexDistance[colorId];
 						
 						if (textColorMap.hasTextColorId(colorId))
 						{

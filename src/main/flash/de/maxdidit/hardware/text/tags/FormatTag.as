@@ -26,8 +26,8 @@ package de.maxdidit.hardware.text.tags
 		private var _textAlign:uint;
 		private var _isTextAlignSet:Boolean = false;
 		
-		private var _vertexDensity:Number;
-		private var _isVertexDensitySet:Boolean = false;
+		private var _vertexDistance:Number;
+		private var _isVertexDistanceSet:Boolean = false;
 		
 		private var _features:HardwareFontFeatures;
 		
@@ -61,7 +61,7 @@ package de.maxdidit.hardware.text.tags
 		
 		public function get extendsReferencedFormat():Boolean
 		{
-			return _isColorIdSet || _isColorSet || _isScaleSet || _isLanguageTagSet || _isScaleSet || _isTextAlignSet || _isVertexDensitySet || _isFontIdSet || _isShearXSet || _isShearYSet;
+			return _isColorIdSet || _isColorSet || _isScaleSet || _isLanguageTagSet || _isScaleSet || _isTextAlignSet || _isVertexDistanceSet || _isFontIdSet || _isShearXSet || _isShearYSet;
 		}
 		
 		public function get formatId():String 
@@ -128,20 +128,20 @@ package de.maxdidit.hardware.text.tags
 			return _isTextAlignSet;
 		}
 		
-		public function get vertexDensity():Number 
+		public function get vertexDistance():Number 
 		{
-			return _vertexDensity;
+			return _vertexDistance;
 		}
 		
-		public function set vertexDensity(value:Number):void 
+		public function set vertexDistance(value:Number):void 
 		{
-			_vertexDensity = value;
-			_isVertexDensitySet = true;
+			_vertexDistance = value;
+			_isVertexDistanceSet = true;
 		}
 		
-		public function get isVertexDensitySet():Boolean 
+		public function get isVertexDistanceSet():Boolean 
 		{
-			return _isVertexDensitySet;
+			return _isVertexDistanceSet;
 		}
 		
 		public function get features():HardwareFontFeatures 

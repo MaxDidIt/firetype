@@ -59,7 +59,7 @@ package de.maxdidit.hardware.text
 		static public const TAG_FORMAT_PARAMETER_COLOR:String = "color";
 		static public const TAG_FORMAT_PARAMETER_COLORID:String = "colorid";
 		static public const TAG_FORMAT_PARAMETER_TEXTALIGN:String = "textalign";
-		static public const TAG_FORMAT_PARAMETER_VERTEXDENSITY:String = "vertexdensity";
+		static public const TAG_FORMAT_PARAMETER_VERTEXDISTANCE:String = "vertexdistance";
 		static public const TAG_FORMAT_PARAMETER_FEATURES:String = "features";
 		static public const TAG_FORMAT_PARAMETER_SCRIPT:String = "script";
 		static public const TAG_FORMAT_PARAMETER_LANGUAGE:String = "language";
@@ -301,9 +301,9 @@ package de.maxdidit.hardware.text
 				newTextFormat.textAlign = formatTag.textAlign;
 			}
 			
-			if (formatTag.isVertexDensitySet)
+			if (formatTag.isVertexDistanceSet)
 			{
-				newTextFormat.vertexDensity = formatTag.vertexDensity;
+				newTextFormat.vertexDistance = formatTag.vertexDistance;
 			}
 			
 			if (formatTag.areFeaturesSet)
@@ -435,9 +435,9 @@ package de.maxdidit.hardware.text
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_VERTEXDENSITY: 
+				case TAG_FORMAT_PARAMETER_VERTEXDISTANCE: 
 					unsignedInt = uint(parameterValue);
-					formatTag.vertexDensity = unsignedInt;
+					formatTag.vertexDistance = unsignedInt;
 					
 					break;
 				

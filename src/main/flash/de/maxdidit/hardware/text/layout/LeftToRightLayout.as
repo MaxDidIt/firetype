@@ -170,15 +170,15 @@ package de.maxdidit.hardware.text.layout
 			for (i = 0; i < il; i++)
 			{
 				var glyphInstance:HardwareGlyphInstance = printhead.glyphInstances[i];
-				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.vertexDensity, glyphInstance.glyph.header.index);
+				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.vertexDistance, glyphInstance.glyph.header.index);
 				if (!hardwareGlyph)
 				{
-					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.vertexDensity);
-					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.vertexDensity, glyphInstance.glyph.header.index);
+					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.vertexDistance);
+					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.vertexDistance, glyphInstance.glyph.header.index);
 				}
 				glyphInstance.hardwareGlyph = hardwareGlyph;
 				
-				cache.registerGlyphInstance(glyphInstance, printhead.textFormat.font, printhead.textFormat.vertexDensity, printhead.textFormat.textColor);
+				cache.registerGlyphInstance(glyphInstance, printhead.textFormat.font, printhead.textFormat.vertexDistance, printhead.textFormat.textColor);
 				currentCharacter.addChild(glyphInstance);
 			}
 			
@@ -201,8 +201,9 @@ package de.maxdidit.hardware.text.layout
 		{
 			if (printhead.currentWord)
 			{
-				if (printhead.lineX + printhead.wordX > hardwareText.width)
+				if (hardwareText.fixedWidth && printhead.lineX + printhead.wordX > hardwareText.actualWidth)
 				{
+					// implicit line break
 					startNewLine(hardwareText, printhead);
 				}
 				
@@ -222,8 +223,9 @@ package de.maxdidit.hardware.text.layout
 		{
 			if (hardwareText.numChildren > 0)
 			{
-				printhead.y -= printhead.currentLine.ascender - printhead.currentLine.descender;
+				printhead.y += printhead.currentLine.descender;
 			}
+			printhead.y += -printhead.currentLine.ascender
 			printhead.currentLine.y = printhead.y;
 			
 			switch (printhead.textFormat.textAlign)
@@ -233,11 +235,11 @@ package de.maxdidit.hardware.text.layout
 					break;
 					
 				case TextAlign.CENTER: 
-					printhead.currentLine.x = (hardwareText.width - printhead.lineX) / 2;
+					printhead.currentLine.x = (hardwareText.actualWidth - printhead.lineX) / 2;
 					break;
 					
 				case TextAlign.RIGHT: 
-					printhead.currentLine.x = hardwareText.width - printhead.lineX;
+					printhead.currentLine.x = hardwareText.actualWidth - printhead.lineX;
 					break;
 			}
 			

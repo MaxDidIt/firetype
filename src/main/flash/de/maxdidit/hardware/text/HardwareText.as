@@ -25,8 +25,10 @@ package de.maxdidit.hardware.text
 		private var _cache:HardwareCharacterCache;
 		private var _text:String;
 		
-		private var _fixedWidth:Boolean;
 		private var _width:Number;
+		private var _fixedWidth:Boolean;
+		private var _actualWidth:Number;
+		
 		private var _height:Number;
 		
 		private var _standardFormat:HardwareTextFormat;
@@ -114,7 +116,16 @@ package de.maxdidit.hardware.text
 		public function set width(value:Number):void 
 		{
 			_width = value;
+			_actualWidth = _width / scaleX;
 			_fixedWidth = true;
+		}
+		
+		// scaleX
+		
+		override public function set scaleX(value:Number):void 
+		{
+			super.scaleX = value;
+			_actualWidth = _width / scaleX;
 		}
 		
 		// standardFormat
@@ -127,6 +138,21 @@ package de.maxdidit.hardware.text
 		public function set standardFormat(value:HardwareTextFormat):void 
 		{
 			_standardFormat = value;
+		}
+		
+		public function get fixedWidth():Boolean 
+		{
+			return _fixedWidth;
+		}
+		
+		public function set fixedWidth(value:Boolean):void 
+		{
+			_fixedWidth = value;
+		}
+		
+		public function get actualWidth():Number 
+		{
+			return _actualWidth;
 		}
 		
 		///////////////////////

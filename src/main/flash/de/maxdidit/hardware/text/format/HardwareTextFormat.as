@@ -55,8 +55,8 @@ package de.maxdidit.hardware.text.format
 		private var _isTextAlignSet:Boolean = false;
 		
 		// vertex density
-		private var _vertexDensity:uint = 100;
-		private var _isVertexDensitySet:Boolean;
+		private var _vertexDistance:uint = 100;
+		private var _isVertexDistanceSet:Boolean;
 		
 		// features
 		private var _features:HardwareFontFeatures;
@@ -158,20 +158,20 @@ package de.maxdidit.hardware.text.format
 		
 		// subdivisions
 		
-		public function get vertexDensity():Number
+		public function get vertexDistance():Number
 		{
-			if (_isVertexDensitySet || !_parentFormat)
+			if (_isVertexDistanceSet || !_parentFormat)
 			{
-				return _vertexDensity;
+				return _vertexDistance;
 			}
 			
-			return _parentFormat.vertexDensity;
+			return _parentFormat.vertexDistance;
 		}
 		
-		public function set vertexDensity(value:Number):void
+		public function set vertexDistance(value:Number):void
 		{
-			_vertexDensity = value;
-			_isVertexDensitySet = true;
+			_vertexDistance = value;
+			_isVertexDistanceSet = true;
 		}
 		
 		// scriptTag
@@ -279,9 +279,9 @@ package de.maxdidit.hardware.text.format
 			_isColorSet = true;
 		}
 		
-		public function get isVertexDensitySet():Boolean 
+		public function get isVertexDistanceSet():Boolean 
 		{
-			return _isVertexDensitySet;
+			return _isVertexDistanceSet;
 		}
 		
 		public function get isScriptTagSet():Boolean 
