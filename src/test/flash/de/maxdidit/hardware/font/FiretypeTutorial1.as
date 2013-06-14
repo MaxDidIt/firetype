@@ -33,9 +33,6 @@ package de.maxdidit.hardware.font
 			// stage properties
 			this.stage.frameRate = 60;
 			
-			// react to resizing the stage
-			this.stage.addEventListener(Event.RESIZE, handleResize);
-			
 			// init stage3d
 			var stage3d:Stage3D = this.stage.stage3Ds[0];
 			stage3d.addEventListener(Event.CONTEXT3D_CREATE, handleContextCreated);
@@ -84,6 +81,9 @@ package de.maxdidit.hardware.font
 			
 			initializeText();
 			initializeView();
+			
+			// react to resizing the stage
+			this.stage.addEventListener(Event.RESIZE, handleResize);
 			
 			// Set up the update loop.
 			addEventListener(Event.ENTER_FRAME, update);
