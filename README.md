@@ -16,6 +16,8 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 
 ## What Does *firetype* Do?
 
+*firetype*
+
 ## How Do I Use *firetype*?
 
 ### Table of Contents
