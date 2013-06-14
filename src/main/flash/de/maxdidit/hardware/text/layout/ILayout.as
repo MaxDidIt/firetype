@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,19 +20,19 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.text.layout 
-{
-	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
-	import de.maxdidit.hardware.text.components.TextSpan;
-	import de.maxdidit.hardware.text.HardwareText;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public interface ILayout 
-	{
-		function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void
-	}
-	
-}
+package de.maxdidit.hardware.text.layout  
+{ 
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache; 
+	import de.maxdidit.hardware.text.components.TextSpan; 
+	import de.maxdidit.hardware.text.HardwareText; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public interface ILayout  
+	{ 
+		function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void 
+	} 
+	 
+} 

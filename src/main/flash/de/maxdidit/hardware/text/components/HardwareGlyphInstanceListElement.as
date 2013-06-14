@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,44 +20,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.text.components 
-{
-	import de.maxdidit.list.LinkedListElement;
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class HardwareGlyphInstanceListElement extends LinkedListElement
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _glyphInstance:HardwareGlyphInstance;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function HardwareGlyphInstanceListElement(glyphInstance:HardwareGlyphInstance) 
-		{
-			_glyphInstance = glyphInstance;
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get hardwareGlyphInstance():HardwareGlyphInstance 
-		{
-			return _glyphInstance;
-		}
-		
-		public function set hardwareGlyphInstance(value:HardwareGlyphInstance):void 
-		{
-			_glyphInstance = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.text.components  
+{ 
+	import de.maxdidit.list.LinkedListElement; 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class HardwareGlyphInstanceListElement extends LinkedListElement 
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _glyphInstance:HardwareGlyphInstance; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function HardwareGlyphInstanceListElement(glyphInstance:HardwareGlyphInstance)  
+		{ 
+			_glyphInstance = glyphInstance; 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get hardwareGlyphInstance():HardwareGlyphInstance  
+		{ 
+			return _glyphInstance; 
+		} 
+		 
+		public function set hardwareGlyphInstance(value:HardwareGlyphInstance):void  
+		{ 
+			_glyphInstance = value; 
+		} 
+		 
+	} 
+} 

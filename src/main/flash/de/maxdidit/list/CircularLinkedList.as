@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,40 +20,39 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.list 
-{
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.VertexListElement;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
-	import de.maxdidit.list.elements.UnsignedIntegerListElement;
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class CircularLinkedList extends LinkedList
-	{
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function CircularLinkedList() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Functions
-		///////////////////////
-		
-		override public function addElement(element:ILinkedListElement):void 
-		{
-			super.addElement(element);
-			
-			// close the circle
-			_lastElement.next = _firstElement;
-			_firstElement.previous = _lastElement;
-		}
-		
-	}
-
-}
+package de.maxdidit.list  
+{ 
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.VertexListElement; 
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex; 
+	import de.maxdidit.list.elements.UnsignedIntegerListElement; 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class CircularLinkedList extends LinkedList 
+	{ 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function CircularLinkedList()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		override public function addElement(element:ILinkedListElement):void  
+		{ 
+			super.addElement(element); 
+			 
+			// close the circle 
+			_lastElement.next = _firstElement; 
+			_firstElement.previous = _lastElement; 
+		} 
+		 
+	} 
+} 

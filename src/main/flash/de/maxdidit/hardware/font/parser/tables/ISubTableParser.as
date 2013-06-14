@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,17 +20,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.parser.tables 
-{
-	import flash.utils.ByteArray;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public interface ISubTableParser 
-	{
-		function parseTable(data:ByteArray, offset:uint):*;
-	}
-	
-}
+package de.maxdidit.hardware.font.parser.tables  
+{ 
+	import flash.utils.ByteArray; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public interface ISubTableParser  
+	{ 
+		function parseTable(data:ByteArray, offset:uint):*; 
+	} 
+	 
+} 

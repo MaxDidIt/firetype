@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,56 +20,55 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive 
-{
-	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
-	import de.maxdidit.list.LinkedList;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class CursiveAttachmentPositioningLookup implements IGlyphLookup 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _entryExitRecord:EntryExitRecord;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function CursiveAttachmentPositioningLookup() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get entryExitRecord():EntryExitRecord 
-		{
-			return _entryExitRecord;
-		}
-		
-		public function set entryExitRecord(value:EntryExitRecord):void 
-		{
-			_entryExitRecord = value;
-		}
-		
-		///////////////////////
-		// Member Functions
-		///////////////////////
-		
-		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup */
-		
-		public function performLookup(characterInstances:LinkedList):void 
-		{
-			throw new Error("Not yet implemented.");
-		}
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.cursive  
+{ 
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup; 
+	import de.maxdidit.list.LinkedList; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class CursiveAttachmentPositioningLookup implements IGlyphLookup  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _entryExitRecord:EntryExitRecord; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function CursiveAttachmentPositioningLookup()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get entryExitRecord():EntryExitRecord  
+		{ 
+			return _entryExitRecord; 
+		} 
+		 
+		public function set entryExitRecord(value:EntryExitRecord):void  
+		{ 
+			_entryExitRecord = value; 
+		} 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup */ 
+		 
+		public function performLookup(characterInstances:LinkedList):void  
+		{ 
+			throw new Error("Not yet implemented."); 
+		} 
+	} 
+} 

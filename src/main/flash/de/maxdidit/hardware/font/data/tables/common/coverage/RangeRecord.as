@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,73 +20,72 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.common.coverage 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class RangeRecord 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _start:uint;
-		private var _end:uint;
-		private var _startCoverageIndex:uint;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function RangeRecord() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// start
-		
-		public function get start():uint 
-		{
-			return _start;
-		}
-		
-		public function set start(value:uint):void 
-		{
-			_start = value;
-		}
-		
-		// end
-		
-		public function get end():uint
-		{
-			return _end;
-		}
-		
-		public function set end(value:uint):void 
-		{
-			_end = value;
-		}
-		
-		// startCoverageIndex
-		
-		public function get startCoverageIndex():uint 
-		{
-			return _startCoverageIndex;
-		}
-		
-		public function set startCoverageIndex(value:uint):void 
-		{
-			_startCoverageIndex = value;
-		}
-		
-		
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.common.coverage  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class RangeRecord  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _start:uint; 
+		private var _end:uint; 
+		private var _startCoverageIndex:uint; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function RangeRecord()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// start 
+		 
+		public function get start():uint  
+		{ 
+			return _start; 
+		} 
+		 
+		public function set start(value:uint):void  
+		{ 
+			_start = value; 
+		} 
+		 
+		// end 
+		 
+		public function get end():uint 
+		{ 
+			return _end; 
+		} 
+		 
+		public function set end(value:uint):void  
+		{ 
+			_end = value; 
+		} 
+		 
+		// startCoverageIndex 
+		 
+		public function get startCoverageIndex():uint  
+		{ 
+			return _startCoverageIndex; 
+		} 
+		 
+		public function set startCoverageIndex(value:uint):void  
+		{ 
+			_startCoverageIndex = value; 
+		} 
+		 
+		 
+		 
+	} 
+} 

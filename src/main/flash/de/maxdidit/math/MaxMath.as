@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,53 +20,52 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.math 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class MaxMath 
-	{
-		///////////////////////
-		// Static Functions
-		///////////////////////
-		
-		public static function calculateBinomialCoefficients(n:uint):Vector.<Number> 
-		{
-			var result:Vector.<Number> = new Vector.<Number>(n);
-			
-			var factorialN:Number = factorial(n);
-			
-			for (var i:uint = 0; i <= n; i++)
-			{
-				result[i] = factorialN / (factorial(i) * factorial(n - i));
-			}
-			
-			return result;
-		}
-		
-		public static function factorial(n:uint):Number
-		{
-			var result:Number = 1;
-			
-			for (var i:uint = 1; i <= n; i++)
-			{
-				result *= i;
-			}
-			
-			return result;
-		}
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function MaxMath() 
-		{
-			throw new Error("This class should not be instantiated");
-		}
-		
-	}
-
-}
+package de.maxdidit.math  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class MaxMath  
+	{ 
+		/////////////////////// 
+		// Static Functions 
+		/////////////////////// 
+		 
+		public static function calculateBinomialCoefficients(n:uint):Vector.<Number>  
+		{ 
+			var result:Vector.<Number> = new Vector.<Number>(n); 
+			 
+			var factorialN:Number = factorial(n); 
+			 
+			for (var i:uint = 0; i <= n; i++) 
+			{ 
+				result[i] = factorialN / (factorial(i) * factorial(n - i)); 
+			} 
+			 
+			return result; 
+		} 
+		 
+		public static function factorial(n:uint):Number 
+		{ 
+			var result:Number = 1; 
+			 
+			for (var i:uint = 1; i <= n; i++) 
+			{ 
+				result *= i; 
+			} 
+			 
+			return result; 
+		} 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function MaxMath()  
+		{ 
+			throw new Error("This class should not be instantiated"); 
+		} 
+		 
+	} 
+} 

@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,24 +20,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.required.cmap.sub
-{
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public interface ICharacterIndexMappingSubtableData
-	{
-		function get format():uint;
-		
-		function get length():uint;
-		function set length(value:uint):void;
-		
-		function get language():uint;
-		function set language(value:uint):void;
-		
-		function getGlyphIndex(charCode:Number):int;
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.required.cmap.sub 
+{ 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public interface ICharacterIndexMappingSubtableData 
+	{ 
+		function get format():uint; 
+		 
+		function get length():uint; 
+		function set length(value:uint):void; 
+		 
+		function get language():uint; 
+		function set language(value:uint):void; 
+		 
+		function getGlyphIndex(charCode:Number):int; 
+	} 
+} 

@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,45 +20,44 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours 
-{
-	import de.maxdidit.list.LinkedListElement;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class VertexListElement extends LinkedListElement 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _vertex:Vertex;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function VertexListElement($vertex:Vertex) 
-		{
-			this.vertex = $vertex;
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get vertex():Vertex 
-		{
-			return _vertex;
-		}
-		
-		public function set vertex(value:Vertex):void 
-		{
-			_vertex = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours  
+{ 
+	import de.maxdidit.list.LinkedListElement; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class VertexListElement extends LinkedListElement  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _vertex:Vertex; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function VertexListElement($vertex:Vertex)  
+		{ 
+			this.vertex = $vertex; 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get vertex():Vertex  
+		{ 
+			return _vertex; 
+		} 
+		 
+		public function set vertex(value:Vertex):void  
+		{ 
+			_vertex = value; 
+		} 
+		 
+	} 
+} 

@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,31 +20,30 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.text.format 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class TextAlign 
-	{
-		///////////////////////
-		// Constants
-		///////////////////////
-		
-		public static const LEFT:uint = 0;
-		public static const CENTER:uint = 1;
-		public static const RIGHT:uint = 2;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function TextAlign() 
-		{
-			throw new Error("This class is not intended for instantiation.");
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.text.format  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class TextAlign  
+	{ 
+		/////////////////////// 
+		// Constants 
+		/////////////////////// 
+		 
+		public static const LEFT:uint = 0; 
+		public static const CENTER:uint = 1; 
+		public static const RIGHT:uint = 2; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function TextAlign()  
+		{ 
+			throw new Error("This class is not intended for instantiation."); 
+		} 
+		 
+	} 
+} 

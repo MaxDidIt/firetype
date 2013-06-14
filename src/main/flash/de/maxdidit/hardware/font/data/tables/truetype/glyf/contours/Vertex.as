@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,35 +20,34 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class Vertex 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		public var x:Number;
-		public var y:Number;
-		
-		public var onCurve:Boolean;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function Vertex($x:Number = 0, $y:Number = 0, $onCurve:Boolean = true) 
-		{
-			x = $x;
-			y = $y;
-			
-			onCurve = $onCurve;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class Vertex  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		public var x:Number; 
+		public var y:Number; 
+		 
+		public var onCurve:Boolean; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function Vertex($x:Number = 0, $y:Number = 0, $onCurve:Boolean = true)  
+		{ 
+			x = $x; 
+			y = $y; 
+			 
+			onCurve = $onCurve; 
+		} 
+		 
+	} 
+} 

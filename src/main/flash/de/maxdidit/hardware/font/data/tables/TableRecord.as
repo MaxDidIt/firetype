@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,84 +20,83 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class TableRecord 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _tag:String;
-		private var _checkSum:uint;
-		private var _offset:uint;
-		private var _length:uint;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function TableRecord()
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// tag
-		
-		public function get tag():String 
-		{
-			return _tag;
-		}
-		
-		public function set tag(value:String):void 
-		{
-			_tag = value;
-		}
-		
-		// checkSum
-		
-		public function get checkSum():uint 
-		{
-			return _checkSum;
-		}
-		
-		public function set checkSum(value:uint):void 
-		{
-			_checkSum = value;
-		}
-		
-		// offset
-		
-		public function get offset():uint 
-		{
-			return _offset;
-		}
-		
-		public function set offset(value:uint):void 
-		{
-			_offset = value;
-		}
-		
-		// length
-		
-		public function get length():uint 
-		{
-			return _length;
-		}
-		
-		public function set length(value:uint):void 
-		{
-			_length = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class TableRecord  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _tag:String; 
+		private var _checkSum:uint; 
+		private var _offset:uint; 
+		private var _length:uint; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function TableRecord() 
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// tag 
+		 
+		public function get tag():String  
+		{ 
+			return _tag; 
+		} 
+		 
+		public function set tag(value:String):void  
+		{ 
+			_tag = value; 
+		} 
+		 
+		// checkSum 
+		 
+		public function get checkSum():uint  
+		{ 
+			return _checkSum; 
+		} 
+		 
+		public function set checkSum(value:uint):void  
+		{ 
+			_checkSum = value; 
+		} 
+		 
+		// offset 
+		 
+		public function get offset():uint  
+		{ 
+			return _offset; 
+		} 
+		 
+		public function set offset(value:uint):void  
+		{ 
+			_offset = value; 
+		} 
+		 
+		// length 
+		 
+		public function get length():uint  
+		{ 
+			return _length; 
+		} 
+		 
+		public function set length(value:uint):void  
+		{ 
+			_length = value; 
+		} 
+		 
+	} 
+} 

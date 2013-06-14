@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,54 +20,53 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class BaseArray 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _baseCount:uint;
-		private var _baseRecords:Vector.<BaseRecord>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function BaseArray() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get baseCount():uint 
-		{
-			return _baseCount;
-		}
-		
-		public function set baseCount(value:uint):void 
-		{
-			_baseCount = value;
-		}
-		
-		public function get baseRecords():Vector.<BaseRecord> 
-		{
-			return _baseRecords;
-		}
-		
-		public function set baseRecords(value:Vector.<BaseRecord>):void 
-		{
-			_baseRecords = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.marktobase  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class BaseArray  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _baseCount:uint; 
+		private var _baseRecords:Vector.<BaseRecord>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function BaseArray()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get baseCount():uint  
+		{ 
+			return _baseCount; 
+		} 
+		 
+		public function set baseCount(value:uint):void  
+		{ 
+			_baseCount = value; 
+		} 
+		 
+		public function get baseRecords():Vector.<BaseRecord>  
+		{ 
+			return _baseRecords; 
+		} 
+		 
+		public function set baseRecords(value:Vector.<BaseRecord>):void  
+		{ 
+			_baseRecords = value; 
+		} 
+		 
+	} 
+} 

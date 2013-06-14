@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,45 +20,44 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class ControlValueTableData 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _fwords:Vector.<int>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function ControlValueTableData() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// fwords
-		
-		public function get fwords():Vector.<int> 
-		{
-			return _fwords;
-		}
-		
-		public function set fwords(value:Vector.<int>):void 
-		{
-			_fwords = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.truetype  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class ControlValueTableData  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _fwords:Vector.<int>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function ControlValueTableData()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// fwords 
+		 
+		public function get fwords():Vector.<int>  
+		{ 
+			return _fwords; 
+		} 
+		 
+		public function set fwords(value:Vector.<int>):void  
+		{ 
+			_fwords = value; 
+		} 
+		 
+	} 
+} 

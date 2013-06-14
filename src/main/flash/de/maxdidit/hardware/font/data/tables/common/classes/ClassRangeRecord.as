@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,71 +20,70 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.common.classes 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class ClassRangeRecord 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _start:uint;
-		private var _end:uint;
-		private var _classValue:uint;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function ClassRangeRecord() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		// start
-		
-		public function get start():uint 
-		{
-			return _start;
-		}
-		
-		public function set start(value:uint):void 
-		{
-			_start = value;
-		}
-		
-		// end
-		
-		public function get end():uint 
-		{
-			return _end;
-		}
-		
-		public function set end(value:uint):void 
-		{
-			_end = value;
-		}
-		
-		// classValue
-		
-		public function get classValue():uint 
-		{
-			return _classValue;
-		}
-		
-		public function set classValue(value:uint):void 
-		{
-			_classValue = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.common.classes  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class ClassRangeRecord  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _start:uint; 
+		private var _end:uint; 
+		private var _classValue:uint; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function ClassRangeRecord()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		// start 
+		 
+		public function get start():uint  
+		{ 
+			return _start; 
+		} 
+		 
+		public function set start(value:uint):void  
+		{ 
+			_start = value; 
+		} 
+		 
+		// end 
+		 
+		public function get end():uint  
+		{ 
+			return _end; 
+		} 
+		 
+		public function set end(value:uint):void  
+		{ 
+			_end = value; 
+		} 
+		 
+		// classValue 
+		 
+		public function get classValue():uint  
+		{ 
+			return _classValue; 
+		} 
+		 
+		public function set classValue(value:uint):void  
+		{ 
+			_classValue = value; 
+		} 
+		 
+	} 
+} 

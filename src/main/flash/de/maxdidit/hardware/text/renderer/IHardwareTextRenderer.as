@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,22 +20,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.text.renderer 
-{
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex;
-	import de.maxdidit.hardware.font.HardwareGlyph;
-	import de.maxdidit.hardware.text.cache.TextColorMap;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public interface IHardwareTextRenderer 
-	{
-		function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph;
-		function render(instanceMap:Object, textColorMap:TextColorMap):void;
-		
-		function clear():void;
-	}
-	
-}
+package de.maxdidit.hardware.text.renderer  
+{ 
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex; 
+	import de.maxdidit.hardware.font.HardwareGlyph; 
+	import de.maxdidit.hardware.text.cache.TextColorMap; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public interface IHardwareTextRenderer  
+	{ 
+		function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph; 
+		function render(instanceMap:Object, textColorMap:TextColorMap):void; 
+		 
+		function clear():void; 
+	} 
+	 
+} 

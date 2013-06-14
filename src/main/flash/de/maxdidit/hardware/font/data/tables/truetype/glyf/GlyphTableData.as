@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,59 +20,58 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype.glyf 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class GlyphTableData 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _glyphs:Vector.<Glyph>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function GlyphTableData() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// glyphs
-		
-		public function get glyphs():Vector.<Glyph> 
-		{
-			return _glyphs;
-		}
-		
-		public function set glyphs(value:Vector.<Glyph>):void 
-		{
-			_glyphs = value;
-		}
-		
-		///////////////////////
-		// Member Functions
-		///////////////////////
-		
-		public function retrieveGlyph(id:uint):Glyph 
-		{
-			if (id >= _glyphs.length)
-			{
-				return null;
-			}
-			
-			return _glyphs[id];
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.truetype.glyf  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class GlyphTableData  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _glyphs:Vector.<Glyph>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function GlyphTableData()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// glyphs 
+		 
+		public function get glyphs():Vector.<Glyph>  
+		{ 
+			return _glyphs; 
+		} 
+		 
+		public function set glyphs(value:Vector.<Glyph>):void  
+		{ 
+			_glyphs = value; 
+		} 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		public function retrieveGlyph(id:uint):Glyph  
+		{ 
+			if (id >= _glyphs.length) 
+			{ 
+				return null; 
+			} 
+			 
+			return _glyphs[id]; 
+		} 
+		 
+	} 
+} 

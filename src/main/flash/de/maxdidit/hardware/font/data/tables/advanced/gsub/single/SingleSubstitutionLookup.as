@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,58 +20,57 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gsub.single 
-{
-	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup;
-	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph;
-	import de.maxdidit.hardware.text.components.HardwareCharacterInstance;
-	import de.maxdidit.list.LinkedList;
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class SingleSubstitutionLookup implements IGlyphLookup 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _substitutionGlyph:Glyph;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function SingleSubstitutionLookup() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get substitutionGlyph():Glyph 
-		{
-			return _substitutionGlyph;
-		}
-		
-		public function set substitutionGlyph(value:Glyph):void 
-		{
-			_substitutionGlyph = value;
-		}
-		
-		///////////////////////
-		// Member Functions
-		///////////////////////
-		
-		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup */
-		
-		public function performLookup(characterInstances:LinkedList):void
-		{
-			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstance);
-			currentCharacter.glyph = _substitutionGlyph;
-		}
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gsub.single  
+{ 
+	import de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup; 
+	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph; 
+	import de.maxdidit.hardware.text.components.HardwareCharacterInstance; 
+	import de.maxdidit.list.LinkedList; 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class SingleSubstitutionLookup implements IGlyphLookup  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _substitutionGlyph:Glyph; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function SingleSubstitutionLookup()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get substitutionGlyph():Glyph  
+		{ 
+			return _substitutionGlyph; 
+		} 
+		 
+		public function set substitutionGlyph(value:Glyph):void  
+		{ 
+			_substitutionGlyph = value; 
+		} 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		/* INTERFACE de.maxdidit.hardware.font.data.tables.common.lookup.IGlyphLookup */ 
+		 
+		public function performLookup(characterInstances:LinkedList):void 
+		{ 
+			var currentCharacter:HardwareCharacterInstance = (characterInstances.currentElement as HardwareCharacterInstance); 
+			currentCharacter.glyph = _substitutionGlyph; 
+		} 
+	} 
+} 

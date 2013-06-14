@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,54 +20,53 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class PairSet 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _pairValueCount:uint;
-		private var _pairValueRecords:Vector.<PairValueRecord>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function PairSet() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get pairValueCount():uint 
-		{
-			return _pairValueCount;
-		}
-		
-		public function set pairValueCount(value:uint):void 
-		{
-			_pairValueCount = value;
-		}
-		
-		public function get pairValueRecords():Vector.<PairValueRecord> 
-		{
-			return _pairValueRecords;
-		}
-		
-		public function set pairValueRecords(value:Vector.<PairValueRecord>):void 
-		{
-			_pairValueRecords = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gpos.pair  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class PairSet  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _pairValueCount:uint; 
+		private var _pairValueRecords:Vector.<PairValueRecord>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function PairSet()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get pairValueCount():uint  
+		{ 
+			return _pairValueCount; 
+		} 
+		 
+		public function set pairValueCount(value:uint):void  
+		{ 
+			_pairValueCount = value; 
+		} 
+		 
+		public function get pairValueRecords():Vector.<PairValueRecord>  
+		{ 
+			return _pairValueRecords; 
+		} 
+		 
+		public function set pairValueRecords(value:Vector.<PairValueRecord>):void  
+		{ 
+			_pairValueRecords = value; 
+		} 
+		 
+	} 
+} 

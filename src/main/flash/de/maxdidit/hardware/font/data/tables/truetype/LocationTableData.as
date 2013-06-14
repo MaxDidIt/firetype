@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,45 +20,44 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class LocationTableData 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _offsets:Vector.<uint>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function LocationTableData() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// offsets
-		
-		public function get offsets():Vector.<uint> 
-		{
-			return _offsets;
-		}
-		
-		public function set offsets(value:Vector.<uint>):void 
-		{
-			_offsets = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.truetype  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class LocationTableData  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _offsets:Vector.<uint>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function LocationTableData()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// offsets 
+		 
+		public function get offsets():Vector.<uint>  
+		{ 
+			return _offsets; 
+		} 
+		 
+		public function set offsets(value:Vector.<uint>):void  
+		{ 
+			_offsets = value; 
+		} 
+		 
+	} 
+} 

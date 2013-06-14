@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,65 +20,64 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class ChainSubRuleSet 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _chainSubRuleCount:uint;
-		private var _chainSubRuleOffsets:Vector.<uint>;
-		private var _chainSubRules:Vector.<ChainSubRule>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function ChainSubRuleSet() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get chainSubRuleCount():uint 
-		{
-			return _chainSubRuleCount;
-		}
-		
-		public function set chainSubRuleCount(value:uint):void 
-		{
-			_chainSubRuleCount = value;
-		}
-		
-		public function get chainSubRuleOffsets():Vector.<uint> 
-		{
-			return _chainSubRuleOffsets;
-		}
-		
-		public function set chainSubRuleOffsets(value:Vector.<uint>):void 
-		{
-			_chainSubRuleOffsets = value;
-		}
-		
-		public function get chainSubRules():Vector.<ChainSubRule> 
-		{
-			return _chainSubRules;
-		}
-		
-		public function set chainSubRules(value:Vector.<ChainSubRule>):void 
-		{
-			_chainSubRules = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gsub.chaining  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class ChainSubRuleSet  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _chainSubRuleCount:uint; 
+		private var _chainSubRuleOffsets:Vector.<uint>; 
+		private var _chainSubRules:Vector.<ChainSubRule>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function ChainSubRuleSet()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get chainSubRuleCount():uint  
+		{ 
+			return _chainSubRuleCount; 
+		} 
+		 
+		public function set chainSubRuleCount(value:uint):void  
+		{ 
+			_chainSubRuleCount = value; 
+		} 
+		 
+		public function get chainSubRuleOffsets():Vector.<uint>  
+		{ 
+			return _chainSubRuleOffsets; 
+		} 
+		 
+		public function set chainSubRuleOffsets(value:Vector.<uint>):void  
+		{ 
+			_chainSubRuleOffsets = value; 
+		} 
+		 
+		public function get chainSubRules():Vector.<ChainSubRule>  
+		{ 
+			return _chainSubRules; 
+		} 
+		 
+		public function set chainSubRules(value:Vector.<ChainSubRule>):void  
+		{ 
+			_chainSubRules = value; 
+		} 
+		 
+	} 
+} 

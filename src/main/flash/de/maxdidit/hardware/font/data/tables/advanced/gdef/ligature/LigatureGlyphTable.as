@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,72 +20,71 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature 
-{
-	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.ICaretValue;
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class LigatureGlyphTable 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _caretCount:uint;
-		private var _caretValueOffsets:Vector.<uint>;
-		private var _caretValues:Vector.<ICaretValue>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function LigatureGlyphTable() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// caretCount
-		
-		public function get caretCount():uint 
-		{
-			return _caretCount;
-		}
-		
-		public function set caretCount(value:uint):void 
-		{
-			_caretCount = value;
-		}
-		
-		// caretValueOffsets
-		
-		public function get caretValueOffsets():Vector.<uint> 
-		{
-			return _caretValueOffsets;
-		}
-		
-		public function set caretValueOffsets(value:Vector.<uint>):void 
-		{
-			_caretValueOffsets = value;
-		}
-		
-		// caretValues
-		
-		public function get caretValues():Vector.<ICaretValue> 
-		{
-			return _caretValues;
-		}
-		
-		public function set caretValues(value:Vector.<ICaretValue>):void 
-		{
-			_caretValues = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature  
+{ 
+	import de.maxdidit.hardware.font.data.tables.advanced.gdef.caret.ICaretValue; 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class LigatureGlyphTable  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _caretCount:uint; 
+		private var _caretValueOffsets:Vector.<uint>; 
+		private var _caretValues:Vector.<ICaretValue>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function LigatureGlyphTable()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// caretCount 
+		 
+		public function get caretCount():uint  
+		{ 
+			return _caretCount; 
+		} 
+		 
+		public function set caretCount(value:uint):void  
+		{ 
+			_caretCount = value; 
+		} 
+		 
+		// caretValueOffsets 
+		 
+		public function get caretValueOffsets():Vector.<uint>  
+		{ 
+			return _caretValueOffsets; 
+		} 
+		 
+		public function set caretValueOffsets(value:Vector.<uint>):void  
+		{ 
+			_caretValueOffsets = value; 
+		} 
+		 
+		// caretValues 
+		 
+		public function get caretValues():Vector.<ICaretValue>  
+		{ 
+			return _caretValues; 
+		} 
+		 
+		public function set caretValues(value:Vector.<ICaretValue>):void  
+		{ 
+			_caretValues = value; 
+		} 
+		 
+	} 
+} 

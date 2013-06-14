@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,65 +20,64 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gsub.context 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class SubRuleSetTable 
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _subRuleCount:uint;
-		private var _subRuleOffsets:Vector.<uint>;
-		private var _subRules:Vector.<SubRuleTable>;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function SubRuleSetTable() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		public function get subRuleCount():uint 
-		{
-			return _subRuleCount;
-		}
-		
-		public function set subRuleCount(value:uint):void 
-		{
-			_subRuleCount = value;
-		}
-		
-		public function get subRuleOffsets():Vector.<uint> 
-		{
-			return _subRuleOffsets;
-		}
-		
-		public function set subRuleOffsets(value:Vector.<uint>):void 
-		{
-			_subRuleOffsets = value;
-		}
-		
-		public function get subRules():Vector.<SubRuleTable> 
-		{
-			return _subRules;
-		}
-		
-		public function set subRules(value:Vector.<SubRuleTable>):void 
-		{
-			_subRules = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gsub.context  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class SubRuleSetTable  
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _subRuleCount:uint; 
+		private var _subRuleOffsets:Vector.<uint>; 
+		private var _subRules:Vector.<SubRuleTable>; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function SubRuleSetTable()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		public function get subRuleCount():uint  
+		{ 
+			return _subRuleCount; 
+		} 
+		 
+		public function set subRuleCount(value:uint):void  
+		{ 
+			_subRuleCount = value; 
+		} 
+		 
+		public function get subRuleOffsets():Vector.<uint>  
+		{ 
+			return _subRuleOffsets; 
+		} 
+		 
+		public function set subRuleOffsets(value:Vector.<uint>):void  
+		{ 
+			_subRuleOffsets = value; 
+		} 
+		 
+		public function get subRules():Vector.<SubRuleTable>  
+		{ 
+			return _subRules; 
+		} 
+		 
+		public function set subRules(value:Vector.<SubRuleTable>):void  
+		{ 
+			_subRules = value; 
+		} 
+		 
+	} 
+} 

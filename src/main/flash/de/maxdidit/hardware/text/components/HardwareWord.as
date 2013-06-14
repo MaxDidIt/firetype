@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,55 +20,54 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.text.components
-{
-	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
-	import de.maxdidit.hardware.text.components.HardwareCharacterInstance;
-	import de.maxdidit.hardware.text.format.HardwareTextFormat;
-	import de.maxdidit.hardware.text.TransformedInstance;
-	import de.maxdidit.math.AxisAlignedBoundingBox;
-	
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class HardwareWord extends TransformedInstance
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		public var ascender:Number;
-		public var descender:Number;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function HardwareWord()
-		{
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		///////////////////////
-		// Member Functions
-		///////////////////////
-		
-		override public function loseAllChildren():void 
-		{
-			// clean up instances
-			const l:uint = _children.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				var character:HardwareCharacterInstance = _children.shift() as HardwareCharacterInstance;
-				character.loseAllChildren();
-				HardwareCharacterInstance.returnHardwareCharacterInstance(character);
-			}
-		}
-	
-	}
-
-}
+package de.maxdidit.hardware.text.components 
+{ 
+	import de.maxdidit.hardware.text.cache.HardwareCharacterCache; 
+	import de.maxdidit.hardware.text.components.HardwareCharacterInstance; 
+	import de.maxdidit.hardware.text.format.HardwareTextFormat; 
+	import de.maxdidit.hardware.text.TransformedInstance; 
+	import de.maxdidit.math.AxisAlignedBoundingBox; 
+	 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class HardwareWord extends TransformedInstance 
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		public var ascender:Number; 
+		public var descender:Number; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function HardwareWord() 
+		{ 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		override public function loseAllChildren():void  
+		{ 
+			// clean up instances 
+			const l:uint = _children.length; 
+			for (var i:uint = 0; i < l; i++) 
+			{ 
+				var character:HardwareCharacterInstance = _children.shift() as HardwareCharacterInstance; 
+				character.loseAllChildren(); 
+				HardwareCharacterInstance.returnHardwareCharacterInstance(character); 
+			} 
+		} 
+	 
+	} 
+} 

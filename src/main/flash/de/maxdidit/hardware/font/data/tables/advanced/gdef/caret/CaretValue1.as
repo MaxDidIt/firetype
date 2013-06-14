@@ -1,5 +1,8 @@
 /* 
+'firetype' is an ActionScript 3 library which loads font files and renders characters via the GPU. 
 Copyright ©2013 Max Knoblich 
+www.maxdid.it 
+me@maxdid.it 
  
 This file is part of 'firetype' by Max Did It. 
   
@@ -17,53 +20,52 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.advanced.gdef.caret 
-{
-	/**
-	 * ...
-	 * @author Max Knoblich
-	 */
-	public class CaretValue1 implements ICaretValue
-	{
-		///////////////////////
-		// Member Fields
-		///////////////////////
-		
-		private var _format:uint;
-		private var _coordinate:int;
-		
-		///////////////////////
-		// Constructor
-		///////////////////////
-		
-		public function CaretValue1() 
-		{
-			
-		}
-		
-		///////////////////////
-		// Member Properties
-		///////////////////////
-		
-		// format
-		
-		public function get format():uint 
-		{
-			return 1;
-		}
-		
-		// coordinate
-		
-		public function get coordinate():int 
-		{
-			return _coordinate;
-		}
-		
-		public function set coordinate(value:int):void 
-		{
-			_coordinate = value;
-		}
-		
-	}
-
-}
+package de.maxdidit.hardware.font.data.tables.advanced.gdef.caret  
+{ 
+	/** 
+	 * ... 
+	 * @author Max Knoblich 
+	 */ 
+	public class CaretValue1 implements ICaretValue 
+	{ 
+		/////////////////////// 
+		// Member Fields 
+		/////////////////////// 
+		 
+		private var _format:uint; 
+		private var _coordinate:int; 
+		 
+		/////////////////////// 
+		// Constructor 
+		/////////////////////// 
+		 
+		public function CaretValue1()  
+		{ 
+			 
+		} 
+		 
+		/////////////////////// 
+		// Member Properties 
+		/////////////////////// 
+		 
+		// format 
+		 
+		public function get format():uint  
+		{ 
+			return 1; 
+		} 
+		 
+		// coordinate 
+		 
+		public function get coordinate():int  
+		{ 
+			return _coordinate; 
+		} 
+		 
+		public function set coordinate(value:int):void  
+		{ 
+			_coordinate = value; 
+		} 
+		 
+	} 
+} 
