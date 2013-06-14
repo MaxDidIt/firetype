@@ -207,11 +207,11 @@ _hardwareText.cache.fontMap.addFont(e.font);
 Then, you can set the `font` attribute in the `format` tag to reference the loaded font file. The value of the `format` attribute has to be the same as the `uniqueIdentifier` property of the referenced font. The easiest way to do this is to directly include the `uniqueIdentifier` value in the string.
 
 ```ActionScript
-_hardwareText.text = "Lorem ipsum dolor sit amet, <format font='" + e.font.uniqueIdentifier + "'>consectetur adipiscing " + 
-					"elit</format>. Sed facilisis lacus nec sollicitudin fermentum. Vivamus urna mi, fringilla eu diam " +
-					"ac, lobortis bibendum mi. <format font='" + e.font.uniqueIdentifier + "'>Vestibulum laoreet " + 
-					"augue</format> id ligula ullamcorper, sit amet <format font='" + e.font.uniqueIdentifier + "'>" + 
-					"malesuada diam</format> tincidunt.";
+_hardwareText.text = "Lorem ipsum dolor sit amet, <format font='" + e.font.uniqueIdentifier + "'>consectetur " + 
+					"adipiscing elit</format>. Sed facilisis lacus nec sollicitudin fermentum. Vivamus urna mi, " + 
+					"fringilla eu diam ac, lobortis bibendum mi. <format font='" + e.font.uniqueIdentifier + "'>" +
+					"Vestibulum laoreet augue</format> id ligula ullamcorper, sit amet " + 
+					"<format font='" + e.font.uniqueIdentifier + "'> malesuada diam</format> tincidunt.";
 ```
 
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial4a.png)
