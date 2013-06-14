@@ -31,8 +31,6 @@ package de.maxdidit.hardware.font
 		public function FiretypeTutorial1() 
 		{
 			// stage properties
-			this.stage.scaleMode = StageScaleMode.NO_SCALE;
-			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.frameRate = 60;
 			
 			// react to resizing the stage
@@ -45,10 +43,11 @@ package de.maxdidit.hardware.font
 			stage3d.requestContext3D(Context3DRenderMode.AUTO);
 		}
 		
-		private function initializeBackbuffer():void 
+		private function initializeView():void 
 		{
 			_context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 8, false);
 			
+			// Create very basic, orthogonal projection matrix.
 			var viewProjectionRawData:Vector.<Number> = new Vector.<Number>();
 			viewProjectionRawData.push(	2 / stage.stageWidth, 0, 0, 0, //
 										0, 2 / stage.stageHeight, 0, 0, //
@@ -56,6 +55,8 @@ package de.maxdidit.hardware.font
 										0, 0, 0, 1);
 			
 			var viewProjection:Matrix3D = new Matrix3D(viewProjectionRawData);
+			
+			// Zoom out
 			viewProjection.prependScale(0.02, 0.02, 0.02);
 			
 			_hardwareText.calculateTransformations(viewProjection, true);
@@ -82,18 +83,21 @@ package de.maxdidit.hardware.font
 			_context3d = (e.target as Stage3D).context3D;
 			
 			initializeText();
-			initializeBackbuffer();
+			initializeView();
 			
+			// Set up the update loop.
 			addEventListener(Event.ENTER_FRAME, update);
 		}
 		
 		private function handleResize(e:Event):void 
 		{
-			initializeBackbuffer();
+			// The view has been scaled, re-initialize the backbuffer and the projection matrix.
+			initializeView();
 		}
 		
 		private function update(e:Event):void 
 		{
+			// Clear the backbuffer, render the text and then display it.
 			_context3d.clear(1, 1, 1);
 			_hardwareText.cache.render();
 			_context3d.present();
