@@ -15,6 +15,8 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 * [Preliminaries](#preliminaries)
 * [How Do I Display Text With *firetype*?](#how-do-i-display-text-with-firetype)
 * [How Do I Apply Formatting to Texts?](#how-do-i-apply-formatting-to-texts)
+* [How Can I Define a Text Format And Use It Several Times?](#how-can-i-define-a-text-format-and-use-it-several-times)
+* [How Can I Set The Font of a Text?](#how-can-i-set-the-font-of-a-text)
 * [How Do I Control the Level of Detail of Characters?](#how-do-i-control-the-level-of-detail-of-characters)
 
 ### Preliminaries
@@ -24,7 +26,7 @@ As with any Stage3D project, you will need to set up a couple of things first. B
 1. A [`Context3D`](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/display3D/Context3D.html) object.
 1. A [`Matrix3D`](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/geom/Matrix3D.html) object containing a view/projection matrix.
 
-You can get a quick overview of a basic document class using *firetype* by looking at [the code of the first firetype tutorial](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial1.as).
+You can get a quick overview of a basic document class setting up Stage3D and using *firetype* by looking at [the code of the first firetype tutorial](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial1.as).
 
 ### How Do I Display Text With *firetype*?
 
@@ -77,14 +79,14 @@ You can apply different colors, sizes or alignments to your text in two ways.
 You can set a property globally via the `standardFormat` property of the `HardwareText`:
 
 ```ActionScript
-_hardwareText.standardFormat.color = 0x666666;
+_hardwareText.standardFormat.color = 0x333333;
 ```
 
 Or you can change the appeareance of sections of your text by using the `<format>` tag. 
 ```Actionscript
 _hardwareText.text = "Just <format color='0x666666'>like</format> this.";
 ```
-The values of attributes have to be put either into single or double quotation marks.
+The `<format>` tag can be nested into other `<format>` tags. The attributes used in the tag will override the respective values of the `standardFormat` or of the enclosing `<format>` tag. The values of attributes have to be put either into single or double quotation marks.
 
 The basic format attributes are
 * `color`
@@ -95,7 +97,7 @@ The basic format attributes are
 
 You can find an implementation of this tutorial at [FiretypeTutorial2.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).
 
-You can change the text color with the **color** attribute. The value is either passed as a RGB or ARGB hexadecimal number.
+You can change the text color with the **color** attribute. The value is either passed as an RGB or ARGB hexadecimal number.
 ```ActionScript
 _hardwareText.text = "You can <format color='0xFF6611'>change the text color</format> with the " + 
 					"<format color='0xFF0000'>color</format> attribute.";
@@ -122,6 +124,42 @@ _hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set th
 					"the constants of the TextAlign class as values for the attribute.\n</format>";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result5.png)
+
+### How Can I Define a Text Format And Use It Several Times?
+
+Instead of duplicating the same format attributes over and over again, you can define a `HardwareTextFormat` object once and set the properties there.
+
+```ActionScript
+var textFormatEmphasis:HardwareTextFormat = new HardwareTextFormat();
+textFormatEmphasis.color = 0xFF0000;
+textFormatEmphasis.shearX = 0.3;
+textFormatEmphasis.scale = 1.1;
+textFormatEmphasis.id = "emphasis";
+```
+
+The most important property here is `id`. This value must be set in order to use the text format in the `format` tag.
+
+In order to use this text format, we need to register it with the cache of the `HardwareText`.
+
+```ActionScript
+_hardwareText.cache.textFormatMap.addTextFormat(textFormatEmphasis);
+```
+
+We can now reference the text format in any `format` tag by using the `id` attribute.
+
+_hardwareText.text = "Lorem ipsum dolor sit amet, <format id='emphasis'>consectetur</format> adipiscing " + 
+					"elit. Sed facilisis <format id='emphasis'>lacus nec sollicitudin</format> fermentum. " + 
+					"Vivamus urna mi, fringilla eu diam ac, lobortis bibendum mi. " + 
+					"<format id='emphasis'>Vestibulum laoreet</format> augue id ligula ullamcorper, " + 
+					"sit amet malesuada diam tincidunt.";
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial3.png)
+					
+You can also use the usual attributes in a `format` tag referencing an `id`. The attributes will override the respective properties of the referenced `HardwareTextFormat`.
+
+### How Can I Set The Font of a Text?
+
+
 
 ### How Do I Control the Level of Detail of Characters?
 

@@ -1,5 +1,7 @@
 package de.maxdidit.hardware.font 
 {
+	import de.maxdidit.hardware.text.cache.HardwareTextFormatMap;
+	import de.maxdidit.hardware.text.format.HardwareTextFormat;
 	import de.maxdidit.hardware.text.format.TextAlign;
 	import de.maxdidit.hardware.text.HardwareText;
 	import flash.display.Sprite;
@@ -16,7 +18,7 @@ package de.maxdidit.hardware.font
 	 * ...
 	 * @author Max Knoblich
 	 */
-	public class FiretypeTutorial2 extends Sprite 
+	public class FiretypeTutorial3 extends Sprite 
 	{
 		///////////////////////
 		// Member Fields
@@ -29,7 +31,7 @@ package de.maxdidit.hardware.font
 		// Constructor
 		///////////////////////
 		
-		public function FiretypeTutorial2() 
+		public function FiretypeTutorial3() 
 		{
 			// stage properties
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -65,16 +67,18 @@ package de.maxdidit.hardware.font
 			
 			_hardwareText.scaleX = _hardwareText.scaleY = 0.013;
 			_hardwareText.x = -320;
-			_hardwareText.y = 325;
+			_hardwareText.y = 100;
 			_hardwareText.width = 640;
 			
-			_hardwareText.standardFormat.color = 0x333333;
+			var textFormatEmphasis:HardwareTextFormat = new HardwareTextFormat();
+			textFormatEmphasis.color = 0xFF0000;
+			textFormatEmphasis.shearX = 0.3;
+			textFormatEmphasis.scale = 1.1;
+			textFormatEmphasis.id = "emphasis";
 			
-			_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.\n\n";
-			_hardwareText.text += "You can <format color='0xFF6611'>change the text color</format> with the <format color='0xFF0000'>color</format> attribute.\n\n";
-			_hardwareText.text += "You can <format shearX='0.3'>slant a portion of a text</format> with the <format color='0xFF0000'>shearX</format> attribute.\n\n";
-			_hardwareText.text += "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> (vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> (vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. Lower vertexDistance values will have an impact on performance.\n\n";
-			_hardwareText.text += "<format textAlign='" + TextAlign.RIGHT + "'>You can set the text alignment with the <format color='0xFF0000'>textAlign</format> attribute. You should use the constants of the TextAlign class as values for the attribute.\n</format>\n";
+			_hardwareText.cache.textFormatMap.addTextFormat(textFormatEmphasis);
+			
+			_hardwareText.text = "Lorem ipsum dolor sit amet, <format id='emphasis'>consectetur</format> adipiscing elit. Sed facilisis <format id='emphasis'>lacus nec sollicitudin</format> fermentum. Vivamus urna mi, fringilla eu diam ac, lobortis bibendum mi. <format id='emphasis'>Vestibulum laoreet</format> augue id ligula ullamcorper, sit amet malesuada diam tincidunt.";
 		}
 		
 		///////////////////////
