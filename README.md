@@ -1,5 +1,11 @@
 # firetype
 
+## Table of Contents
+
+* [Goals](#goals)
+* [What Does *firetype* Do?](#what-does-firetype-do)
+* [How Do I Use *firetype*?](#how-do-i-use-firetype)
+
 ## Goals
 
 *firetype* is an Open Source Actionscript 3 library that parses OpenType fonts, converts the contained vector glyphs into polygon shapes and renders them using Stage3D via the GPU.
@@ -8,7 +14,9 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 
 *firetype* aims to make similar functionality available for Actionscript 3 developers using Stage3D.
 
-## How To Use *firetype*
+## What Does *firetype* Do?
+
+## How Do I Use *firetype*?
 
 ### Table of Contents
 
