@@ -8,6 +8,27 @@ package de.maxdidit.hardware.text.tags
 	public class FormatTag extends TextTag 
 	{
 		///////////////////////
+		// Constants
+		///////////////////////
+		
+		public static const TAG:String = "format";
+		public static const TAG_CLOSE:String = "/format";
+		
+		public static const ATTRIBUTE_FORMATID:String = "id";
+		public static const ATTRIBUTE_SCALE:String = "scale";
+		static public const ATTRIBUTE_COLOR:String = "color";
+		static public const ATTRIBUTE_COLORID:String = "colorid";
+		static public const ATTRIBUTE_TEXTALIGN:String = "textalign";
+		static public const ATTRIBUTE_VERTEXDISTANCE:String = "vertexdistance";
+		static public const ATTRIBUTE_FEATURES:String = "features";
+		static public const ATTRIBUTE_SCRIPT:String = "script";
+		static public const ATTRIBUTE_LANGUAGE:String = "language";
+		static public const ATTRIBUTE_FONT:String = "font";
+		
+		static public const ATTRIBUTE_SHEARX:String = "shearx";
+		static public const ATTRIBUTE_SHEARY:String = "sheary";
+		
+		///////////////////////
 		// Member Fields
 		///////////////////////
 		

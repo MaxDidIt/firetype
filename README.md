@@ -35,15 +35,11 @@ Create a `HardwareText` object and pass it the `Context3D` object in the constru
 _hardwareText = new HardwareText(_context3d);
 ```
 
-- - -
-
 You can assign a `String` via the `text` property.
 
 ```ActionScript
 _hardwareText.text = "Hello World!\nThis text is being rendered using firetype!";
 ```
-
-- - -
 
 You can set the position of the `HardwareText` object via the `x` and `y` properties. You can set the scale of the `HardwareText` with the `scaleX` and `scaleY` properties.
 
@@ -54,8 +50,6 @@ _hardwareText.x = -320;
 
 **Note:** *firetype* makes no assumptions about the scale you want to render the text in. It renders the characters with their original measurements, as they are stored in the font file. Because of this, a character is usually 500-1500 units tall. You will probably need to either scale down the `HardwareText` via the `scaleX` and `scaleY` properties or zoom out via the view/projection matrix.
 
-- - -
-
 In order to be rendered properly, the `HardwareText` object needs a projection matrix.
 
 ```ActionScript
@@ -65,8 +59,6 @@ _hardwareText.calculateTransformations(viewProjection, true);
 The second parameter needs to be `true` to signal the `HardwareText` that it needs to recalculate it's transformations based on the matrix passed to it.
 
 This function needs to be called everytime the view or projection changes.
-
-- - -
 
 Finally, we can render the text via the `HardwareCharacterCache` object stored in the `HardwareText`.
 
@@ -80,6 +72,37 @@ Running this code should result in an image similar to this:
 
 ### How Do I Apply Formatting to Texts?
 
-You can apply different colors, sizes or alignments to sections of text by using the `<format>` tag.
+You can apply different colors, sizes or alignments to sections of text by using the `<format>` tag. The `<format>` accepts several attributes. The basic attributes are
+* `color`
+* `scale`
+* `shearX`
+* `shearY`
+* `vertexDistance`
+* `textAlign`
 
 You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).
+
+```ActionScript
+_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result1.png)
+
+```ActionScript
+_hardwareText.text = "You can <format color='0xFF6611'>change the text color</format> with the <format color='0xFF0000'>color</format> attribute.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result2.png)
+
+```ActionScript
+_hardwareText.text = "You can <format shearX='0.3'>slant a portion of a text</format> with the <format color='0xFF0000'>shearX</format> attribute.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result3.png)
+
+```ActionScript
+_hardwareText.text = "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> (vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> (vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. Lower vertexDistance values will have an impact on performance.";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result4.png)
+
+```ActionScript
+_hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set the text alignment with the <format color='0xFF0000'>textAlign</format> attribute. You should use the constants of the TextAlign class as values for the attribute.\n</format>";
+```
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result5.png)

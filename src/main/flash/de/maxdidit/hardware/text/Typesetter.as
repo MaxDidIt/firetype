@@ -51,23 +51,6 @@ package de.maxdidit.hardware.text
 		public static const CHAR_CODE_OPEN_ANGLE_BRACKET:uint = "<".charCodeAt(0);
 		public static const CHAR_CODE_CLOSED_ANGLE_BRACKET:uint = ">".charCodeAt(0);
 		
-		public static const TAG_FORMAT:String = "format";
-		public static const TAG_FORMAT_CLOSE:String = "/format";
-		
-		public static const TAG_FORMAT_PARAMETER_FORMATID:String = "id";
-		public static const TAG_FORMAT_PARAMETER_SCALE:String = "scale";
-		static public const TAG_FORMAT_PARAMETER_COLOR:String = "color";
-		static public const TAG_FORMAT_PARAMETER_COLORID:String = "colorid";
-		static public const TAG_FORMAT_PARAMETER_TEXTALIGN:String = "textalign";
-		static public const TAG_FORMAT_PARAMETER_VERTEXDISTANCE:String = "vertexdistance";
-		static public const TAG_FORMAT_PARAMETER_FEATURES:String = "features";
-		static public const TAG_FORMAT_PARAMETER_SCRIPT:String = "script";
-		static public const TAG_FORMAT_PARAMETER_LANGUAGE:String = "language";
-		static public const TAG_FORMAT_PARAMETER_FONT:String = "font";
-		
-		static public const TAG_FORMAT_PARAMETER_SHEARX:String = "shearx";
-		static public const TAG_FORMAT_PARAMETER_SHEARY:String = "sheary";
-		
 		///////////////////////
 		// Member Fields
 		///////////////////////
@@ -374,11 +357,11 @@ package de.maxdidit.hardware.text
 			switch (tagName)
 			{
 				// Parse the format tag.
-				case TAG_FORMAT: 
+				case FormatTag.TAG: 
 					var formatTag:FormatTag = parseTagFormatParameters(tagParameters);
 					return formatTag;
 				
-				case TAG_FORMAT_CLOSE: 
+				case FormatTag.TAG_CLOSE: 
 					var tag:TextTag = new FormatTag();
 					tag.id = TextTag.ID_FORMAT_CLOSED;
 					return tag;
@@ -417,31 +400,31 @@ package de.maxdidit.hardware.text
 			
 			switch (parameterName)
 			{
-				case TAG_FORMAT_PARAMETER_SCALE: 
+				case FormatTag.ATTRIBUTE_SCALE: 
 					var number:Number = Number(parameterValue);
 					formatTag.scale = number;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_COLOR: 
+				case FormatTag.ATTRIBUTE_COLOR: 
 					var unsignedInt:uint = uint(parameterValue);
 					formatTag.color = unsignedInt;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_TEXTALIGN: 
+				case FormatTag.ATTRIBUTE_TEXTALIGN: 
 					unsignedInt = uint(parameterValue);
 					formatTag.textAlign = unsignedInt;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_VERTEXDISTANCE: 
+				case FormatTag.ATTRIBUTE_VERTEXDISTANCE: 
 					unsignedInt = uint(parameterValue);
 					formatTag.vertexDistance = unsignedInt;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_FEATURES: 
+				case FormatTag.ATTRIBUTE_FEATURES: 
 					var array:Array = parameterValue.split(/,\s*/g);
 					var fontFeatures:HardwareFontFeatures = new HardwareFontFeatures();
 					
@@ -459,43 +442,43 @@ package de.maxdidit.hardware.text
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_SCRIPT: 
+				case FormatTag.ATTRIBUTE_SCRIPT: 
 					var string:String = parameterValue;
 					formatTag.scriptTag = string;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_LANGUAGE: 
+				case FormatTag.ATTRIBUTE_LANGUAGE: 
 					string = parameterValue;
 					formatTag.languageTag = string;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_FONT: 
+				case FormatTag.ATTRIBUTE_FONT: 
 					string = parameterValue;
 					formatTag.fontId = string;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_FORMATID: 
+				case FormatTag.ATTRIBUTE_FORMATID: 
 					string = parameterValue;
 					formatTag.formatId = string;
 					
 					break;
 				
-				case TAG_FORMAT_PARAMETER_COLORID: 
+				case FormatTag.ATTRIBUTE_COLORID: 
 					string = parameterValue;
 					formatTag.colorId = string;
 					
 					break;
 					
-				case TAG_FORMAT_PARAMETER_SHEARX: 
+				case FormatTag.ATTRIBUTE_SHEARX: 
 					number = Number(parameterValue);
 					formatTag.shearX = number;
 					
 					break;
 					
-				case TAG_FORMAT_PARAMETER_SHEARY: 
+				case FormatTag.ATTRIBUTE_SHEARY: 
 					number = Number(parameterValue);
 					formatTag.shearY = number;
 					
