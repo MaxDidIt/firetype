@@ -12,8 +12,8 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 
 ### Table of Contents
 
-[Preliminaries](#preliminaries)
-[How Do I Display Text With *firetype*?](#how-do-i-display-text-with-firetype)
+* [Preliminaries](#preliminaries)
+* [How Do I Display Text With *firetype*?](#how-do-i-display-text-with-firetype)
 
 ### Preliminaries
 
@@ -54,10 +54,14 @@ _hardwareText.calculateTransformations(viewProjection, true);
 
 This function needs to be called everytime the view or projection changes.
 
-**Note:** *firetype* makes no assumptions about the scale you need to render the text in. It renders the characters with their original measurements, as they are stored in the font file. This means that a character is usually 500-1500 units tall. Because of this, you will probably to either scale down the `HardwareText` via the `scaleX` and `scaleY` properties or zoom out via the view/projection matrix.
+**Note:** *firetype* makes no assumptions about the scale you need to render the text in. It renders the characters with their original measurements, as they are stored in the font file. This means that a character is usually 500-1500 units tall. Because of this, you will probably need to either scale down the `HardwareText` via the `scaleX` and `scaleY` properties or zoom out via the view/projection matrix.
 
 Finally, we can render the text via the `HardwareCharacterCache` object stored in the `HardwareText`.
 
 ```ActionScript
 _hardwareText.cache.render();
 ```
+
+Running this code should result in an image similar to this:
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial1_result.png)

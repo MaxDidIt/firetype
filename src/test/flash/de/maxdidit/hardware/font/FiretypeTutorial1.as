@@ -31,6 +31,8 @@ package de.maxdidit.hardware.font
 		public function FiretypeTutorial1() 
 		{
 			// stage properties
+			this.stage.scaleMode = StageScaleMode.NO_SCALE;
+			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.frameRate = 60;
 			
 			// init stage3d
