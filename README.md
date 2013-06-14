@@ -137,7 +137,7 @@ _hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set th
 
 ### How Can I Define a Text Format And Use It Several Times?
 
-Instead of duplicating the same format attributes over and over again, you can define a `HardwareTextFormat` object once and set the properties there. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial3.as).
+Instead of duplicating the same format attributes over and over again, you can define a `HardwareTextFormat` object once and set the properties there. You can find an implementation of this tutorial at [FiretypeTutorial3.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial3.as).
 
 ```ActionScript
 var textFormatEmphasis:HardwareTextFormat = new HardwareTextFormat();
@@ -173,7 +173,7 @@ If you change any property of the `HardwareText` object after `text` has been se
 
 ### How Can I Set The Font of a Text?
 
-Before you can use a different font than the default, you will have to load and parse an OpenType font file. In *firetype*, you will use the `OpenTypeParser` class for this. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial4.as).
+Before you can use a different font than the default, you will have to load and parse an OpenType font file. In *firetype*, you will use the `OpenTypeParser` class for this. You can find an implementation of this tutorial at [FiretypeTutorial4.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial4.as).
 
 ```ActionScript
 var openTypeParser:OpenTypeParser = new OpenTypeParser();
@@ -218,7 +218,7 @@ _hardwareText.text = "Lorem ipsum dolor sit amet, <format font='" + e.font.uniqu
 
 ### How Can I Embed a Font?
 
-You can embed font files as byte arrays and directly parse them with `OpenTypeParser` instead of loading them from a remote location. You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial5.as).
+You can embed font files as byte arrays and directly parse them with `OpenTypeParser` instead of loading them from a remote location. You can find an implementation of this tutorial at [FiretypeTutorial5.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial5.as).
 
 When embedding the font file, make sure that you set the `mimeType` to *"application/octet-stream"*;
 
@@ -259,7 +259,7 @@ _hardwareText.text = "You can make characters appear\n<format scale='1.5' vertex
 
 ### How Should I Handle Longer Texts?
 
-You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial6.as).
+You can find an implementation of this tutorial at [FiretypeTutorial6.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial6.as).
 
 *firetype* renders the characters of a text via it's `HardwareCharacterCache`, which is accessible via the `cache` property.
 
