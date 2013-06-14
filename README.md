@@ -27,6 +27,8 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 * [How Can I Set The Font of a Text?](#how-can-i-set-the-font-of-a-text)
 * [How Can I Embed a Font?](#how-can-i-embed-a-font)
 * [How Do I Control the Level of Detail of Characters?](#how-do-i-control-the-level-of-detail-of-characters)
+* [How Should I Handle Longer Texts?](#how-should-i-handle-longer-texts)
+* [How Should I Handle Multiple Texts?](#how-should-i-handle-multiple-texts)
 
 ### Preliminaries
 
@@ -289,3 +291,15 @@ _hardwareText = new HardwareText(null, cache);
 The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object and an ITriangulator object. *firetype* comes with the EarClippingTriangulator class, which implements the ITriangulator interface.
 
 The cache object is passed as a parameter to the `HardwareText` constructor. If you explictly pass a `HardwareCharacterCache` object to `HardwareText`, then the first parameter can be null.
+
+### How Should I Handle Multiple Texts?
+
+You can save considerable amounts of memory and even rendering time by using the same `HardwareCharacterCache` object for several texts, especially if the texts share fonts and vertex distance values. You can find an implementation of this tutorial at [FiretypeTutorial7.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial7.as).
+
+By assigning the same cache object to several objects you can prevent that the same characters are converted to polygon objects and stored in memory several times.
+
+```ActionScript
+_cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d, new EarClippingTriangulator()));
+_hardwareText1 = new HardwareText(null, _cache);
+_hardwareText2 = new HardwareText(null, _cache);
+```
