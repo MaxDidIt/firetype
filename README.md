@@ -259,6 +259,12 @@ _hardwareText.text = "You can make characters appear\n<format scale='1.5' vertex
 
 ### How Should I Handle Longer Texts?
 
+You can find an implementation of this tutorial at [FiretypeTutorial1.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial6.as).
+
+*firetype* renders the characters of a text via it's `HardwareCharacterCache`, which is accessible via the `cache` property.
+
+By default, the cache of a `HardwareText` object uses `SingleGlyphRenderer` objects to render it's contents. This type of renderer will use one draw call per character.
+
 Characters rendered after one draw call:
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_1.png)
 Characters rendered after two draw calls:
@@ -266,5 +272,20 @@ Characters rendered after two draw calls:
 Characters rendered after three draw calls:
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_3.png)
 
+It's advisable for longer texts with many characters in them to use a `BatchedGlyphRenderer`. This type of renderer will try to collect as many characters of the same type into one draw call.
+
 Characters rendered after one draw call:
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6b.png)
+
+This speeds up the render process considerably. However, the trade-off of this renderer is that it needs a several times the memory the `SingleGlyphRenderer` requires. Try to use this type of renderer only as often as you really need.
+
+To use the `BatchedGlyphRenderer`, you will have to initialize the `HardwareCharacterCache` yourself and pass it to the `HardwareText` object.
+
+```ActionScript
+var cache:HardwareCharacterCache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d, new EarClippingTriangulator()));
+_hardwareText = new HardwareText(null, cache);
+```
+
+The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object and an ITriangulator object. *firetype* comes with the EarClippingTriangulator class, which implements the ITriangulator interface.
+
+The cache object is passed as a parameter to the `HardwareText` constructor. If you explictly pass a `HardwareCharacterCache` object to `HardwareText`, then the first parameter can be null.

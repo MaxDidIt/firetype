@@ -64,7 +64,6 @@ package de.maxdidit.hardware.font
 		private function initializeText():void 
 		{
 			var cache:HardwareCharacterCache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d, new EarClippingTriangulator()));
-			
 			_hardwareText = new HardwareText(null, cache);
 			
 			_hardwareText.scaleX = _hardwareText.scaleY = 0.013;
