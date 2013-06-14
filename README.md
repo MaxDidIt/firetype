@@ -86,14 +86,16 @@ Running this code should result in an image similar to this:
 ### How Do I Apply Formatting to Texts?
 
 You can apply different colors, sizes or alignments to your text in two ways.
-You can set a property globally via the `standardFormat` property of the `HardwareText`:
+
+One way is to set a property globally via the `standardFormat` property of the `HardwareText`.
+
 If you change any property of the `standardFormat` object after `text` has been set, you will need to call the `flagForUpdate` method of the `HardwareText` object to apply the changes. The only property you don't have to do this for is the `color` property.
 
 ```ActionScript
 _hardwareText.standardFormat.color = 0x333333;
 ```
 
-Or you can change the appeareance of sections of your text by using the `<format>` tag. 
+The other way you can change the appeareance of sections of your text by using the `<format>` tag. 
 ```Actionscript
 _hardwareText.text = "Just <format color='0x666666'>like</format> this.";
 ```
