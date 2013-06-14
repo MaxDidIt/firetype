@@ -62,8 +62,8 @@ package de.maxdidit.hardware.font
 		private function initializeText():void 
 		{
 			_hardwareText = new HardwareText(_context3d);
-			_hardwareText.x = -16000;
 			_hardwareText.text = "Hello World!\nThis text is being rendered using firetype!";
+			_hardwareText.x = -16000;
 		}
 		
 		///////////////////////
@@ -99,7 +99,9 @@ package de.maxdidit.hardware.font
 		{
 			// Clear the backbuffer, render the text and then display it.
 			_context3d.clear(1, 1, 1);
+			
 			_hardwareText.cache.render();
+			
 			_context3d.present();
 		}
 	}
