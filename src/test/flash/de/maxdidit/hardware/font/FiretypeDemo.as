@@ -79,10 +79,11 @@ package de.maxdidit.hardware.font
 		
 		private function handleResize(e:Event):void 
 		{
-			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 4, false);
+			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 8, false);
 			
 			viewProjectionMtx = new Matrix3D();
-			viewProjectionMtx.appendTranslation(-3000, 2000, -2000);
+			viewProjectionMtx.appendTranslation( -3000, 2000, -2000);
+			
 			var perspectiveMtx:PerspectiveMatrix3D = new PerspectiveMatrix3D();
 			perspectiveMtx.perspectiveFieldOfViewRH(90, stage.stageWidth / stage.stageHeight, 1000, 3000);
 			viewProjectionMtx.append(perspectiveMtx);
@@ -97,7 +98,7 @@ package de.maxdidit.hardware.font
 		{
 			context3d = (e.target as Stage3D).context3D;
 			
-			context3d.enableErrorChecking = true;
+			context3d.enableErrorChecking = false;
 			context3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 8, false);
 			
 			hardwareParser = new OpenTypeParser();

@@ -274,7 +274,10 @@ package de.maxdidit.hardware.text.renderer
 			_indexData.length = 0;
 			
 			_vertexBuffer.dispose();
+			_vertexBuffer = null;
+			
 			_indexBuffer.dispose();
+			_vertexBuffer = null;
 		}
 	
 	}

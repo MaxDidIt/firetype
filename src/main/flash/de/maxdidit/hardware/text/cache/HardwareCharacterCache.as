@@ -147,7 +147,7 @@ package de.maxdidit.hardware.text.cache
 			for (var i:uint = 0; i < l; i++)
 			{
 				var section:HardwareCharacterCacheSection = _sections[i];
-				section.clear();
+				section.clearInstances();
 			}
 			
 			dirtyAllClientTexts();
@@ -227,7 +227,7 @@ package de.maxdidit.hardware.text.cache
 			const l:uint = _sections.length;
 			for (var i:uint = 0; i < l; i++)
 			{
-				_sections[i].clear();
+				_sections[i].clearBufferData();
 			}
 			
 			dirtyAllClientTexts();

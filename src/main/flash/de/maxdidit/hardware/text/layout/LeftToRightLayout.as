@@ -220,7 +220,10 @@ package de.maxdidit.hardware.text.layout
 		
 		private function startNewLine(hardwareText:HardwareText, printhead:Printhead):void
 		{
-			printhead.y -= printhead.currentLine.ascender - printhead.currentLine.descender;
+			if (hardwareText.numChildren > 0)
+			{
+				printhead.y -= printhead.currentLine.ascender - printhead.currentLine.descender;
+			}
 			printhead.currentLine.y = printhead.y;
 			
 			switch (printhead.textFormat.textAlign)

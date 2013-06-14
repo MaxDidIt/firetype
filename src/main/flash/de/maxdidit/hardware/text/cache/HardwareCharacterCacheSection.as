@@ -79,10 +79,14 @@ package de.maxdidit.hardware.text.cache
 			_renderer.render(_instanceMap, textColorMap);
 		}
 		
-		public function clear():void 
+		public function clearBufferData():void
+		{
+			_renderer.clear();
+		}
+		
+		public function clearInstances():void 
 		{
 			deleteMap(_instanceMap);
-			_renderer.clear();
 		}
 		
 		private function deleteMap(map:Object):void 
