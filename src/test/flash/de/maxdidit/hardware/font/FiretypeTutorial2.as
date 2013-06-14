@@ -68,6 +68,8 @@ package de.maxdidit.hardware.font
 			_hardwareText.y = 325;
 			_hardwareText.width = 640;
 			
+			_hardwareText.standardFormat.color = 0x666666;
+			
 			_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.\n\n";
 			_hardwareText.text += "You can <format color='0xFF6611'>change the text color</format> with the <format color='0xFF0000'>color</format> attribute.\n\n";
 			_hardwareText.text += "You can <format shearX='0.3'>slant a portion of a text</format> with the <format color='0xFF0000'>shearX</format> attribute.\n\n";

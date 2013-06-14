@@ -15,6 +15,7 @@ One of the examples for a similar technology would be [Scaleform](http://gamewar
 * [Preliminaries](#preliminaries)
 * [How Do I Display Text With *firetype*?](#how-do-i-display-text-with-firetype)
 * [How Do I Apply Formatting to Texts?](#how-do-i-apply-formatting-to-texts)
+* [How Do I Control the Level of Detail of Characters?](#how-do-i-control-the-level-of-detail-of-characters)
 
 ### Preliminaries
 
@@ -72,48 +73,73 @@ Running this code should result in an image similar to this:
 
 ### How Do I Apply Formatting to Texts?
 
-You can apply different colors, sizes or alignments to sections of text by using the `<format>` tag. The `<format>` accepts several attributes. The basic attributes are
+You can apply different colors, sizes or alignments to your text in two ways.
+You can set a property globally via the `standardFormat` property of the `HardwareText`:
+
+```ActionScript
+_hardwareText.standardFormat.color = 0x666666;
+```
+
+Or you can change the appeareance of sections of your text by using the `<format>` tag. 
+```Actionscript
+_hardwareText.text = "Just <format color='0x666666'>like</format> this.";
+```
+The values of attributes have to be put either into single or double quotation marks.
+
+The basic format attributes are
 * `color`
 * `scale`
 * `shearX`
 * `shearY`
 * `textAlign`
-	
-The values of attributes have to be put either into single or double quotation marks.
 
 You can find an implementation of this tutorial at [FiretypeTutorial2.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial2.as).
 
 You can change the text color with the **color** attribute. The value is either passed as a RGB or ARGB hexadecimal number.
 ```ActionScript
-_hardwareText.text = "You can <format color='0xFF6611'>change the text color</format> with the <format color='0xFF0000'>color</format> attribute.";
+_hardwareText.text = "You can <format color='0xFF6611'>change the text color</format> with the " + 
+					"<format color='0xFF0000'>color</format> attribute.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result2.png)
 
 You can scale sections of a text with the **scale** attribute. The value is expected to be a floating point number.
 ```ActionScript
-_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the <format color='0xFF0000'>scale</format> attribute.";
+_hardwareText.text = "You can <format scale='0.66'>scale sections of a text</format> with the " + 
+					"<format color='0xFF0000'>scale</format> attribute.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result1.png)
 
 You can slant a portion of text with the **shearX** attribute. You can slant individual characters along the Y axis with the **shearY** attributes. Both attributes expect floating point numbers as values.
 ```ActionScript
-_hardwareText.text = "You can <format shearX='0.3'>slant a portion of a text</format> with the <format color='0xFF0000'>shearX</format> attribute.";
+_hardwareText.text = "You can <format shearX='0.3'>slant a portion of a text</format> with the " + 
+					"<format color='0xFF0000'>shearX</format> attribute.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result3.png)
 
 ```ActionScript
-_hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set the text alignment with the <format color='0xFF0000'>textAlign</format> attribute. You should use the constants of the TextAlign class as values for the attribute.\n</format>";
+_hardwareText.text = "<format textAlign='" + TextAlign.RIGHT + "'>You can set the text alignment " +
+					"with the <format color='0xFF0000'>textAlign</format> attribute. You should use " + 
+					"the constants of the TextAlign class as values for the attribute.\n</format>";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result5.png)
 
 ### How Do I Control the Level of Detail of Characters?
+
+*firetype* converts the vector data of characters in a font to polygons. The `vertexDistance` attribute controls the amount of polygons that are generated to display the character. Higher values for `vertexDistance` will cause the vertices of the triangulated character to be further away from each other, resulting in fewer polgons. Lower values will result in more polygons and smoother edges.
 
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision400.png)
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision200.png)
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision100.png)
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/precision50.png)
 
+**Note:** Try to use as few different `vertexDistance` values as possible. Using many different values for larger text sections each will result in higher memory and graphics card memory requirements.
+
+You can use the `vertexDistance` attribute with `HardwareTextFormat` objects or with the `format` tag.
+
 ```ActionScript
-_hardwareText.text = "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> (vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> (vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. Lower vertexDistance values will have an impact on performance.";
+_hardwareText.text = "You can make characters appear\n<format scale='1.5' vertexDistance='3000'>edged</format> " + 
+					"(vertexDistance='3000') or\n<format scale='1.5' vertexDistance='50'>smooth</format> " +
+					"(vertexDistance='50') with the <format color='0xFF0000'>vertexDistance</format> attribute. " + 
+					"Lower vertexDistance values will have an impact on performance.";
 ```
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial2_result4.png)
