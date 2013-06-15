@@ -1,11 +1,7 @@
 # firetype
 
 Please help me to maintain *firetype*. If you found *firetype* useful or used it in one of your products, consider making a donation:
-<script src="http://www.maxdidit.com/paypal-button.min.js?merchant=6SV4V6FD2CB36"
-    data-button="donate"
-    data-name="firetype donation"
-    data-amount="1.00"
-></script>
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3JXFXD3YAVN42)
 
 ## Table of Contents
 
