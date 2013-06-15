@@ -1,5 +1,13 @@
 # firetype
 
+Please help me to maintain *firetype*. If you found *firetype* useful or used it in one of your products, consider making a donation:
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="7UCMNMXYVH5HJ">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+
 ## Table of Contents
 
 * [What Does *firetype* Do?](#what-does-firetype-do)
@@ -266,7 +274,7 @@ You can find an implementation of this tutorial at [FiretypeTutorial6.as](https:
 
 *firetype* renders the characters of a text via it's `HardwareCharacterCache`, which is accessible via the `cache` property.
 
-By default, the cache of a `HardwareText` object uses `SingleGlyphRenderer` objects to render it's contents. This type of renderer will use one draw call per character.
+By default, the cache of a `HardwareText` object uses `SingleGlyphRenderer` objects to render its contents. This type of renderer will use one draw call per character.
 
 Characters rendered after one draw call:
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial6a_1.png)
@@ -289,7 +297,7 @@ var cache:HardwareCharacterCache = new HardwareCharacterCache(new BatchedGlyphRe
 _hardwareText = new HardwareText(null, cache);
 ```
 
-The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object and an ITriangulator object. *firetype* comes with the EarClippingTriangulator class, which implements the ITriangulator interface.
+The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object and an `ITriangulator` object. *firetype* comes with the EarClippingTriangulator class, which implements the `ITriangulator` interface.
 
 The cache object is passed as a parameter to the `HardwareText` constructor. If you explictly pass a `HardwareCharacterCache` object to `HardwareText`, then the first parameter can be null.
 
