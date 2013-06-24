@@ -5,8 +5,13 @@ Please help me to maintain *firetype*. If you found *firetype* useful or used it
 
 ## Table of Contents
 
+* [Where Do I Get *firetype*?](#where-do-i-get-firetype)
 * [What Does *firetype* Do?](#what-does-firetype-do)
 * [How Do I Use *firetype*?](#how-do-i-use-firetype)
+
+## Where Do I Get *firetype*?
+
+[Download firetype-1.2.5.swc](http://www.max-did-it.de/projects/firetype/firetype-1.2.5.swc)
 
 ## What Does *firetype* Do?
 

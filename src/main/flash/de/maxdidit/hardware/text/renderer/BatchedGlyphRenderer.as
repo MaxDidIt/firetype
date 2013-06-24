@@ -74,6 +74,7 @@ package de.maxdidit.hardware.text.renderer
 		private var vertexAssembly:AGALMiniAssembler = new AGALMiniAssembler(); 
 		private var fragmentAssembly:AGALMiniAssembler = new AGALMiniAssembler(); 
 		private var programPair:Program3D; 
+		private var _fallbackTextColor:TextColor;
 		 
 		/////////////////////// 
 		// Constructor 
@@ -82,7 +83,9 @@ package de.maxdidit.hardware.text.renderer
 		public function BatchedGlyphRenderer($context3d:Context3D, $triangulator:ITriangulator) 
 		{ 
 			_triangulator = $triangulator; 
-			_context3d = $context3d; 
+			_context3d = $context3d;
+			
+			_fallbackTextColor = new TextColor(); 
 			 
 			// init shaders 
 			vertexAssembly.assemble(Context3DProgramType.VERTEX, VERTEX_SHADER); 
@@ -235,10 +238,12 @@ package de.maxdidit.hardware.text.renderer
 				_indexBuffer = _context3d.createIndexBuffer(_indexData.length); 
 				_indexBuffer.uploadFromVector(_indexData, 0, _indexData.length); 
 				 
+				_vertexData.length = 0;
+				_indexData.length = 0;
+				
 				_buffersDirty = false; 
 			} 
-			 
-			var fallbackTextColor:TextColor = new TextColor(); 
+			
 			var textColor:TextColor = textColor; 
 			_context3d.setProgram(programPair); 
 			 
@@ -259,7 +264,7 @@ package de.maxdidit.hardware.text.renderer
 						} 
 						else 
 						{ 
-							textColor = fallbackTextColor; 
+							textColor = _fallbackTextColor; 
 						} 
 						 
 						_context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, textColor.colorVector, 1); 

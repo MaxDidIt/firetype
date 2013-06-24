@@ -281,7 +281,7 @@ package de.maxdidit.hardware.text
 			 
 			if (_textContainer.isFlaggedForUpdate) 
 			{ 
-				calculateTransformations(); 
+				calculateTransformations();
 			} 
 		} 
 		 

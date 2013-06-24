@@ -255,8 +255,11 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			for (var i:uint = 0; i < header.numCountours; i++) 
 			{ 
 				endPointsOfContours[i] = _dataTypeParser.parseUnsignedShort(data); 
-			} 
-			result.endPointsOfContours = endPointsOfContours; 
+			}
+			CONFIG::debug
+			{
+				result.endPointsOfContours = endPointsOfContours; 
+			}
 			var numPoints:uint = endPointsOfContours[endPointsOfContours.length - 1] + 1; // Last field of the vector stores the index of the last point of the glyph. This value + 1 designates the total number of points. 
 			 
 			// instructions 
@@ -274,15 +277,24 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			var flagData:Vector.<uint> = new Vector.<uint>(); 
 			var flags:Vector.<SimpleGlyphFlags> = new Vector.<SimpleGlyphFlags>(); 
 			parseFlags(data, numPoints, flagData, flags); 
-			result.flagData = flagData; 
+			CONFIG::debug
+			{
+				result.flagData = flagData; 
+			}
 			result.flags = flags; 
 			 
 			// coordinates 
 			var xCoordinates:Vector.<int> = parseXCoordinates(data, flags); 
-			result.xCoordinates = xCoordinates 
+			CONFIG::debug
+			{
+				result.xCoordinates = xCoordinates 
+			}
 			 
 			var yCoordinates:Vector.<int> = parseYCoordinates(data, flags); 
-			result.yCoordinates = yCoordinates; 
+			CONFIG::debug
+			{
+				result.yCoordinates = yCoordinates; 
+			}
 			 
 			result.contours = _contourParser.parseContours(xCoordinates, yCoordinates, endPointsOfContours, flags); 
 			 

@@ -46,12 +46,18 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		 
 		private var _instructionLength:uint; 
 		private var _instructions:ByteArray; 
-		 
-		private var _flagData:Vector.<uint>; 
+		
+		CONFIG::debug
+		{
+			private var _flagData:Vector.<uint>; 
+		}
 		private var _flags:Vector.<SimpleGlyphFlags>; 
-		 
-		private var _xCoordinates:Vector.<int>; 
-		private var _yCoordinates:Vector.<int>; 
+		
+		CONFIG::debug
+		{
+			private var _xCoordinates:Vector.<int>; 
+			private var _yCoordinates:Vector.<int>; 
+		}
 		 
 		private var _contours:Vector.<Contour>; 
 		 
@@ -105,16 +111,19 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		} 
 		 
 		// flagData 
-		 
-		public function get flagData():Vector.<uint>  
-		{ 
-			return _flagData; 
-		} 
-		 
-		public function set flagData(value:Vector.<uint>):void  
-		{ 
-			_flagData = value; 
-		} 
+		
+		CONFIG::debug
+		{
+			public function get flagData():Vector.<uint>  
+			{ 
+				return _flagData; 
+			} 
+			 
+			public function set flagData(value:Vector.<uint>):void  
+			{ 
+				_flagData = value; 
+			}
+		}
 		 
 		// flags 
 		 
@@ -130,27 +139,30 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 		 
 		// xCoordinates 
 		 
-		public function get xCoordinates():Vector.<int>  
-		{ 
-			return _xCoordinates; 
-		} 
-		 
-		public function set xCoordinates(value:Vector.<int>):void  
-		{ 
-			_xCoordinates = value; 
-		} 
-		 
-		// yCoordinates 
-		 
-		public function get yCoordinates():Vector.<int>  
-		{ 
-			return _yCoordinates; 
-		} 
-		 
-		public function set yCoordinates(value:Vector.<int>):void  
-		{ 
-			_yCoordinates = value; 
-		} 
+		CONFIG::debug
+		{
+			public function get xCoordinates():Vector.<int>  
+			{ 
+				return _xCoordinates; 
+			} 
+			 
+			public function set xCoordinates(value:Vector.<int>):void  
+			{ 
+				_xCoordinates = value; 
+			} 
+			 
+			// yCoordinates 
+			 
+			public function get yCoordinates():Vector.<int>  
+			{ 
+				return _yCoordinates; 
+			} 
+			 
+			public function set yCoordinates(value:Vector.<int>):void  
+			{ 
+				_yCoordinates = value; 
+			}
+		}
 		 
 		// contours 
 		 
