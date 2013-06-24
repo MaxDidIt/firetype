@@ -1,15 +1,31 @@
-# firetype
+# ![firetype](http://www.max-did-it.com/wp-content/uploads/2013/06/logo.png)
 
 Please help me to maintain *firetype*. If you found *firetype* useful or used it in one of your products, consider making a donation:
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3JXFXD3YAVN42)
 
 ## Table of Contents
 
+* [License](#license)
 * [Where Do I Get *firetype*?](#where-do-i-get-firetype)
 * [What Does *firetype* Do?](#what-does-firetype-do)
 * [Advantages](#advantages)
 * [Drawbacks](#drawbacks)
 * [How Do I Use *firetype*?](#how-do-i-use-firetype)
+
+## License
+
+*firetype* is free software: you can redistribute it and/or modify 
+it under the terms of the GNU Lesser General Public License as published by 
+the Free Software Foundation, either version 3 of the License, or 
+(at your option) any later version. 
+  
+*firetype* is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+GNU Lesser General Public License for more details. 
+ 
+You can find a copy of the GNU Lesser General Public License 
+along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/). 
 
 ## Where Do I Get *firetype*?
 
