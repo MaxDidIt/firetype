@@ -7,6 +7,8 @@ Please help me to maintain *firetype*. If you found *firetype* useful or used it
 
 * [Where Do I Get *firetype*?](#where-do-i-get-firetype)
 * [What Does *firetype* Do?](#what-does-firetype-do)
+* [Advantage](#advantages)
+* [Drawbacks](#drawbacks)
 * [How Do I Use *firetype*?](#how-do-i-use-firetype)
 
 ## Where Do I Get *firetype*?
@@ -22,6 +24,48 @@ Please help me to maintain *firetype*. If you found *firetype* useful or used it
 One example for a similar technology would be [Scaleform](http://gameware.autodesk.com/scaleform) which is used in many big-budget productions to render hardware accelerated text and UI elements.
 
 *firetype* aims to make similar functionality available for Actionscript 3 developers using Stage3D.
+
+Check out the [**live demo**](http://www.max-did-it.com/projects/firetype/) showing firetype in action.
+	
+## Advantages
+
+### Resolution Independence
+
+One major advantage of using firetype is that it makes it easier to handle the resolutions of different versions of your Flash or AIR application.
+
+You can arbitrarily scale the texts without worrying about texture resolutions or the performance impact of software rendering on mobile devices.
+
+### Rendering Does Not Have Any Impact On CPU Performance</h3>
+
+Each character handled by firetype is rendered entirely on the graphics hardware. This makes it several magnitudes faster than classic software rendered text objects in Flash.
+
+This can be especially interesting for mobile devices, where rendering via the CPU can noticeably slow down performance.
+
+### Only Renders Pixels Actually Occupied By Characters</h3>
+
+When rendering texts with the help of textures, there are usually significant amounts of transparent space between lines and characters which still cause calls to the pixel shader and texture lookups for each pixel.
+
+This is not an issue with firetype. Since characters are polygon objects, only pixels actually covered by the triangles are rendered.
+
+## Drawbacks
+
+### Moving Texts Still Impacts CPU Performance
+
+While rendering does not cause any calculations on the processor, moving any text in firetype requires the transformation matrices of each character to be recalculated.
+
+In my experience, this still takes up only a fraction of your CPU budget in a frame. However, due to this firetype is basically on par with software rendered texts which have been cached as bitmaps.
+
+firetype still wins if you scale or rotate said texts.
+
+### Noticable Lag When Initializing the First Text
+
+firetype caches the polygon data of any character that has been already used.
+
+The first text that you render with a certain font and level of detail will cause firetype to cache each character it encounters for the first time.
+
+This can cause a short lag, which should be below a second in duration, but is still noticeable.
+
+Every subsequent text using the same font and level of detail should cause no lag at all.
 
 ## How Do I Use *firetype*?
 
