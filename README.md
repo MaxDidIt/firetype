@@ -7,7 +7,7 @@ Please help me to maintain *firetype*. If you found *firetype* useful or used it
 
 * [Where Do I Get *firetype*?](#where-do-i-get-firetype)
 * [What Does *firetype* Do?](#what-does-firetype-do)
-* [Advantage](#advantages)
+* [Advantages](#advantages)
 * [Drawbacks](#drawbacks)
 * [How Do I Use *firetype*?](#how-do-i-use-firetype)
 
