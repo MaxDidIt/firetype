@@ -43,75 +43,55 @@ package de.maxdidit.hardware.text.renderer
 	 * ... 
 	 * @author Max Knoblich 
 	 */ 
-	public class SingleGlyphRenderer implements IHardwareTextRenderer 
+	public class SingleGlyphRenderer extends HardwareTextRenderer implements IHardwareTextRenderer 
 	{ 
 		/////////////////////// 
 		// Constants 
 		/////////////////////// 
 		 
-		private const VERTEX_SHADER:String = "m44 op, va0, vc0" 
-		private const FRAGMENT_SHADER:String = "mov oc, fc0"; 
-		 
-		private const FIELDS_PER_VERTEX:uint = 3; 
-		private const MAX_VERTEXBUFFER_BYTES:uint = (256 << 9) << 9; 
-		private const MAX_INDEXBUFFER_BYTES:uint = (128 << 9) << 9; 
-		 
 		/////////////////////// 
 		// Member Fields 
-		/////////////////////// 
-		 
-		private var _vertexData:Vector.<Number> = new Vector.<Number>(); 
-		private var _indexData:Vector.<uint> = new Vector.<uint>(); 
-		 
-		private var _buffersDirty:Boolean = true; 
-		private var _vertexBuffer:VertexBuffer3D; 
-		private var _indexBuffer:IndexBuffer3D; 
-		 
-		private var _triangulator:ITriangulator; 
-		private var _context3d:Context3D; 
-		 
-		// shader 
-		 
-		private var vertexAssembly:AGALMiniAssembler = new AGALMiniAssembler(); 
-		private var fragmentAssembly:AGALMiniAssembler = new AGALMiniAssembler(); 
-		private var programPair:Program3D; 
+		///////////////////////
 		 
 		/////////////////////// 
 		// Constructor 
 		/////////////////////// 
 		 
 		public function SingleGlyphRenderer($context3d:Context3D, $triangulator:ITriangulator) 
-		{ 
-			_triangulator = $triangulator; 
-			_context3d = $context3d; 
-			 
-			// init shaders 
-			vertexAssembly.assemble(Context3DProgramType.VERTEX, VERTEX_SHADER); 
-			fragmentAssembly.assemble(Context3DProgramType.FRAGMENT, FRAGMENT_SHADER); 
-			 
-			programPair = _context3d.createProgram(); 
-			programPair.upload(vertexAssembly.agalcode, fragmentAssembly.agalcode); 
+		{
+			super($context3d, $triangulator)
 		} 
 		 
 		/////////////////////// 
 		// Member Properties 
 		/////////////////////// 
-		 
-		public function get triangulator():ITriangulator 
-		{ 
-			return _triangulator; 
-		} 
-		 
-		public function set triangulator(value:ITriangulator):void 
-		{ 
-			_triangulator = value; 
-		} 
+		
+		override protected function get fieldsPerVertex():uint 
+		{
+			return 3;
+		}
+		
+		override protected function get vertexShaderCode():String 
+		{
+			return "m44 op, va0, vc0";
+		}
+		
+		override protected function get fragmentShaderCode():String 
+		{
+			return "mov oc, fc0";
+		}
 		 
 		/////////////////////// 
 		// Member Functions 
-		/////////////////////// 
+		///////////////////////
+		
+		protected override function fitsIntoIndexBuffer(numberOfNewIndices:uint):Boolean 
+		{ 
+			var indexBufferSizeInBytes:uint = (_indexData.length + numberOfNewIndices) * 4; 
+			return indexBufferSizeInBytes <= HardwareTextRenderer.MAX_INDEXBUFFER_BYTES; 
+		}
 		 
-		private function fitsIntoVertexBuffer(paths:Vector.<Vector.<Vertex>>):Boolean 
+		protected override  function fitsIntoVertexBuffer(paths:Vector.<Vector.<Vertex>>):Boolean 
 		{ 
 			var numberOfVertices:uint = 0; 
 			const l:uint = paths.length; 
@@ -120,61 +100,11 @@ package de.maxdidit.hardware.text.renderer
 				numberOfVertices += paths[i].length; 
 			} 
 			 
-			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfVertices) * FIELDS_PER_VERTEX * 8; 
-			return vertexBufferSizeInBytes <= MAX_VERTEXBUFFER_BYTES; 
-		} 
+			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfVertices) * fieldsPerVertex * 8; 
+			return vertexBufferSizeInBytes <= HardwareTextRenderer.MAX_VERTEXBUFFER_BYTES; 
+		}
 		 
-		private function fitsIntoIndexBuffer(numberOfNewIndices:uint):Boolean 
-		{ 
-			var indexBufferSizeInBytes:uint = (_indexData.length + numberOfNewIndices) * 4; 
-			return indexBufferSizeInBytes <= MAX_INDEXBUFFER_BYTES; 
-		} 
-		 
-		public function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph 
-		{ 
-			// test if vertices would fit 
-			if (!fitsIntoVertexBuffer(paths)) 
-			{ 
-				return null; 
-			} 
-			 
-			// triangulate paths 
-			var vertexOffset:uint = _vertexData.length / FIELDS_PER_VERTEX; 
-			var indexOffset:uint = _indexData.length; 
-			 
-			var localIndexOffset:uint = 0; 
-			var numTriangles:uint = 0; 
-			 
-			var indices:Vector.<uint> = new Vector.<uint>(); 
-			 
-			const l:uint = paths.length; 
-			for (var i:uint = 0; i < l; i++) 
-			{ 
-				var path:Vector.<Vertex> = paths[i]; 
-				numTriangles += _triangulator.triangulatePath(path, indices, localIndexOffset + vertexOffset); 
-				 
-				localIndexOffset += path.length; 
-			} 
-			 
-			if (!fitsIntoIndexBuffer(indices.length)) 
-			{ 
-				return null; 
-			} 
-			 
-			addToIndexData(indices, localIndexOffset); 
-			addToVertexData(paths); 
-			 
-			var hardwareGlyph:HardwareGlyph = new HardwareGlyph(); 
-			hardwareGlyph.vertexOffset = vertexOffset; 
-			hardwareGlyph.indexOffset = indexOffset; 
-			hardwareGlyph.numTriangles = numTriangles; 
-			 
-			_buffersDirty = true; 
-			 
-			return hardwareGlyph; 
-		} 
-		 
-		private function addToIndexData(indices:Vector.<uint>, numVertices:uint):void 
+		protected override function addToIndexData(indices:Vector.<uint>, numVertices:uint):void 
 		{ 
 			const l:uint = indices.length; 
 			 
@@ -187,12 +117,12 @@ package de.maxdidit.hardware.text.renderer
 			} 
 		} 
 		 
-		private function addToVertexData(paths:Vector.<Vector.<Vertex>>):void 
+		protected override function addToVertexData(paths:Vector.<Vector.<Vertex>>, numVertices:uint):void 
 		{ 
 			const l:uint = paths.length; 
 			 
 			var index:uint = _vertexData.length; 
-			const newLength:uint = index + l * FIELDS_PER_VERTEX; 
+			const newLength:uint = index + l * fieldsPerVertex; 
 			 
 			_vertexData.length = newLength; 
 			 
@@ -212,12 +142,12 @@ package de.maxdidit.hardware.text.renderer
 			} 
 		} 
 		 
-		public function render(instanceMap:Object, textColorMap:TextColorMap):void 
+		public override function render(instanceMap:Object, textColorMap:TextColorMap):void 
 		{ 
 			if (_buffersDirty) 
 			{ 
-				_vertexBuffer = _context3d.createVertexBuffer(_vertexData.length / FIELDS_PER_VERTEX, FIELDS_PER_VERTEX); 
-				_vertexBuffer.uploadFromVector(_vertexData, 0, _vertexData.length / FIELDS_PER_VERTEX); 
+				_vertexBuffer = _context3d.createVertexBuffer(_vertexData.length / fieldsPerVertex, fieldsPerVertex); 
+				_vertexBuffer.uploadFromVector(_vertexData, 0, _vertexData.length / fieldsPerVertex); 
 				 
 				_indexBuffer = _context3d.createIndexBuffer(_indexData.length); 
 				_indexBuffer.uploadFromVector(_indexData, 0, _indexData.length); 
@@ -266,7 +196,7 @@ package de.maxdidit.hardware.text.renderer
 			} 
 		} 
 		 
-		public function clear():void  
+		public override function clear():void  
 		{ 
 			_vertexData.length = 0; 
 			_indexData.length = 0; 

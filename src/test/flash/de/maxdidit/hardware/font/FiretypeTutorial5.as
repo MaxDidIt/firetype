@@ -86,7 +86,7 @@ package de.maxdidit.hardware.font
 										0, 2 / stage.stageHeight, 0, 0, // 
 										0, 0, -2, -1, // 
 										0, 0, 0, 1); 
-			 
+			
 			var viewProjection:Matrix3D = new Matrix3D(viewProjectionRawData); 
 			 
 			_hardwareText.calculateTransformations(viewProjection, true); 
