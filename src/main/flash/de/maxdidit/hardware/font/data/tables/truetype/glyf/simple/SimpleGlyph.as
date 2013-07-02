@@ -188,17 +188,16 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.simple
 			instances.push(glyphInstance); 
 		} 
 		 
-		override public function retrievePaths(vertexDistance:Number):Vector.<Vector.<Vertex>> 
+		override public function retrievePaths(vertexDistance:Number, connectedPaths:Vector.<Vector.<Vertex>>, originalPaths:Vector.<Vector.<Vertex>>):void
 		{ 
 			const l:uint = _contours.length; 
-			var shapes:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>(l); 
+			connectedPaths.length = l; 
 			 
 			for (var i:uint = 0; i < l; i++) 
 			{ 
-				shapes[i] = _contours[i].retrievePath(vertexDistance); 
-			} 
-			 
-			return shapes; 
+				connectedPaths[i] = new Vector.<Vertex>();
+				_contours[i].retrievePath(vertexDistance, connectedPaths[i], originalPaths); 
+			}
 		} 
 		 
 		private function distributeHoles():void  

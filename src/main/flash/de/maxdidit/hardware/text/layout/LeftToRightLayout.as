@@ -195,8 +195,10 @@ package de.maxdidit.hardware.text.layout
 				var hardwareGlyph:HardwareGlyph = cache.getCachedHardwareGlyph(printhead.font.uniqueIdentifier, printhead.textFormat.vertexDistance, glyphInstance.glyph.header.index); 
 				if (!hardwareGlyph) 
 				{ 
-					var paths:Vector.<Vector.<Vertex>> = glyphInstance.glyph.retrievePaths(printhead.textFormat.vertexDistance); 
-					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, printhead.font, printhead.textFormat.vertexDistance, glyphInstance.glyph.header.index); 
+					var paths:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>();
+					var originalPaths:Vector.<Vector.<Vertex>> = new Vector.<Vector.<Vertex>>();
+					glyphInstance.glyph.retrievePaths(printhead.textFormat.vertexDistance, paths, originalPaths); 
+					hardwareGlyph = cache.addPathsAsHardwareGlyph(paths, originalPaths, printhead.font, printhead.textFormat.vertexDistance, glyphInstance.glyph.header.index); 
 				} 
 				glyphInstance.hardwareGlyph = hardwareGlyph; 
 				 

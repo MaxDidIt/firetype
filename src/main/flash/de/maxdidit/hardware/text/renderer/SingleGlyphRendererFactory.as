@@ -24,6 +24,7 @@ package de.maxdidit.hardware.text.renderer
 { 
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator; 
 	import de.maxdidit.hardware.font.triangulation.ITriangulator; 
+	import de.maxdidit.hardware.text.glyphbuilders.IGlyphBuilder;
 	import flash.display3D.Context3D; 
 	/** 
 	 * ... 
@@ -35,17 +36,15 @@ package de.maxdidit.hardware.text.renderer
 		// Member Fields 
 		/////////////////////// 
 		 
-		private var context3d:Context3D; 
-		private var triangulator:ITriangulator; 
+		private var context3d:Context3D;
 		 
 		/////////////////////// 
 		// Constructor 
 		/////////////////////// 
 		 
-		public function SingleGlyphRendererFactory(context3d:Context3D, triangulator:ITriangulator)  
+		public function SingleGlyphRendererFactory(context3d:Context3D)  
 		{ 
 			this.context3d = context3d; 
-			this.triangulator = triangulator; 
 		} 
 		 
 		/////////////////////// 
@@ -56,7 +55,7 @@ package de.maxdidit.hardware.text.renderer
 		 
 		public function retrieveHardwareTextRenderer():IHardwareTextRenderer  
 		{ 
-			var renderer:SingleGlyphRenderer = new SingleGlyphRenderer(context3d, triangulator); 
+			var renderer:SingleGlyphRenderer = new SingleGlyphRenderer(context3d); 
 			return renderer; 
 		} 
 		 

@@ -36,16 +36,14 @@ package de.maxdidit.hardware.text.renderer
 		/////////////////////// 
 		 
 		private var context3d:Context3D; 
-		private var triangulator:ITriangulator; 
 		 
 		/////////////////////// 
 		// Constructor 
 		/////////////////////// 
 		 
-		public function BatchedGlyphRendererFactory(context3d:Context3D, triangulator:ITriangulator)  
+		public function BatchedGlyphRendererFactory(context3d:Context3D)  
 		{ 
 			this.context3d = context3d; 
-			this.triangulator = triangulator; 
 		} 
 		 
 		/////////////////////// 
@@ -56,7 +54,7 @@ package de.maxdidit.hardware.text.renderer
 		 
 		public function retrieveHardwareTextRenderer():IHardwareTextRenderer  
 		{ 
-			var renderer:BatchedGlyphRenderer = new BatchedGlyphRenderer(context3d, triangulator); 
+			var renderer:BatchedGlyphRenderer = new BatchedGlyphRenderer(context3d); 
 			return renderer; 
 		} 
 		 

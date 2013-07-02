@@ -32,7 +32,7 @@ package de.maxdidit.hardware.text.renderer
 	 */ 
 	public interface IHardwareTextRenderer  
 	{ 
-		function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph; 
+		function addHardwareGlyph(glyph:HardwareGlyph):Boolean; 
 		function render(instanceMap:Object, textColorMap:TextColorMap):void; 
 		 
 		function clear():void; 

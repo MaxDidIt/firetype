@@ -33,7 +33,6 @@ package de.maxdidit.hardware.text.renderer
 		protected var _vertexBuffer:VertexBuffer3D;
 		protected var _indexBuffer:IndexBuffer3D; 
 		 
-		protected var _triangulator:ITriangulator;
 		protected var _context3d:Context3D; 
 		 
 		// shader 
@@ -46,12 +45,11 @@ package de.maxdidit.hardware.text.renderer
 		// Constructor
 		///////////////////////
 		
-		public function HardwareTextRenderer($context3d:Context3D, $triangulator:ITriangulator) 
+		public function HardwareTextRenderer($context3d:Context3D) 
 		{
-			_triangulator = $triangulator; 
 			_context3d = $context3d; 
 			
-			// init shaders 
+			// init shaders
 			vertexAssembly.assemble(Context3DProgramType.VERTEX, vertexShaderCode); 
 			fragmentAssembly.assemble(Context3DProgramType.FRAGMENT, fragmentShaderCode); 
 			 
@@ -62,16 +60,6 @@ package de.maxdidit.hardware.text.renderer
 		///////////////////////
 		// Member Properties
 		///////////////////////
-		
-		public function get triangulator():ITriangulator 
-		{ 
-			return _triangulator; 
-		} 
-		 
-		public function set triangulator(value:ITriangulator):void 
-		{ 
-			_triangulator = value; 
-		}
 		
 		protected function get fieldsPerVertex():uint
 		{
@@ -92,70 +80,82 @@ package de.maxdidit.hardware.text.renderer
 		// Member Functions
 		///////////////////////
 		
-		protected function addToVertexData(paths:Vector.<Vector.<Vertex>>, numVertices:uint):void 
+		protected function addToVertexData(vertices:Vector.<Vertex>):void 
 		{
 			throw new Error("addToVertexData has not been implemented yet. Please extend HardwareTextRenderer and implement this function.");
 		}
 		
-		protected function addToIndexData(indices:Vector.<uint>, numVertices:uint):void
+		protected function addToIndexData(indices:Vector.<uint>, numVertices:uint, vertexOffset:uint):void 
+		{ 
+			const l:uint = indices.length; 
+			 
+			var index:uint = _indexData.length; 
+			const newLength:uint = index + l; 
+			
+			_indexData.length = newLength;
+			 
+			for (var j:uint = 0; j < l; j++) 
+			{ 
+				_indexData[index++] = indices[j] + vertexOffset; 
+			}
+		} 
+		
+		protected function fitsIntoVertexBuffer(numberOfNewVertices:uint):Boolean 
+		{ 
+			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfNewVertices * fieldsPerVertex * 8); 
+			return vertexBufferSizeInBytes <= HardwareTextRenderer.MAX_VERTEXBUFFER_BYTES;
+		}
+		
+		protected function fitsIntoIndexBuffer(numberOfNewIndices:uint):Boolean
 		{
-			throw new Error("addToIndexData has not been implemented yet. Please extend HardwareTextRenderer and implement this function.");
+			var indexBufferSizeInBytes:uint = (_indexData.length + numberOfNewIndices) * 4;
+			return indexBufferSizeInBytes <= HardwareTextRenderer.MAX_INDEXBUFFER_BYTES;
 		}
 		
-		protected function fitsIntoVertexBuffer(paths:Vector.<Vector.<Vertex>>):Boolean 
-		{ 
-			throw new Error("fitsIntoVertexBuffer has not been implemented yet. Please extend HardwareTextRenderer and implement this function.");
-		}
-		
-		protected function fitsIntoIndexBuffer(numberOfNewIndices:uint):Boolean 
-		{ 
-			throw new Error("fitsIntoIndexBuffer has not been implemented yet. Please extend HardwareTextRenderer and implement this function.");
+		protected function updateBuffers():void
+		{
+			if (_buffersDirty) 
+			{
+				_vertexBuffer = _context3d.createVertexBuffer(_vertexData.length / fieldsPerVertex, fieldsPerVertex); 
+				_vertexBuffer.uploadFromVector(_vertexData, 0, _vertexData.length / fieldsPerVertex); 
+				 
+				_indexBuffer = _context3d.createIndexBuffer(_indexData.length); 
+				_indexBuffer.uploadFromVector(_indexData, 0, _indexData.length);
+				
+				_vertexData.length = 0;
+				_indexData.length = 0;
+				
+				_buffersDirty = false; 
+			}
 		}
 		
 		/* INTERFACE de.maxdidit.hardware.text.renderer.IHardwareTextRenderer */
 		
-		public function addPathsToRenderer(paths:Vector.<Vector.<Vertex>>):HardwareGlyph
+		public function addHardwareGlyph(glyph:HardwareGlyph):Boolean 
 		{
-			// test if vertices would fit 
-			if (!fitsIntoVertexBuffer(paths))
-			{
-				return null;
-			}
-			
-			// triangulate paths 
 			var vertexOffset:uint = _vertexData.length / fieldsPerVertex;
 			var indexOffset:uint = _indexData.length;
 			
-			var localIndexOffset:uint = 0;
-			var numTriangles:uint = 0;
-			
-			var indices:Vector.<uint> = new Vector.<uint>();
-			
-			const l:uint = paths.length;
-			for (var i:uint = 0; i < l; i++)
+			if (!fitsIntoVertexBuffer(glyph.vertices.length))
 			{
-				var path:Vector.<Vertex> = paths[i];
-				numTriangles += _triangulator.triangulatePath(path, indices, localIndexOffset + vertexOffset);
-				
-				localIndexOffset += path.length;
+				return false;
 			}
 			
-			if (!fitsIntoIndexBuffer(indices.length))
+			if (!fitsIntoIndexBuffer(glyph.indices.length))
 			{
-				return null;
+				return false;
 			}
 			
-			addToIndexData(indices, localIndexOffset);
-			addToVertexData(paths, localIndexOffset);
+			addToIndexData(glyph.indices, glyph.vertices.length, vertexOffset);
+			addToVertexData(glyph.vertices);
 			
-			var hardwareGlyph:HardwareGlyph = new HardwareGlyph();
-			hardwareGlyph.vertexOffset = vertexOffset;
-			hardwareGlyph.indexOffset = indexOffset;
-			hardwareGlyph.numTriangles = numTriangles;
+			glyph.vertexOffset = vertexOffset;
+			glyph.indexOffset = indexOffset;
+			glyph.numTriangles = glyph.indices.length / 3;
 			
 			_buffersDirty = true;
 			
-			return hardwareGlyph;
+			return true;
 		}
 		
 		public function render(instanceMap:Object, textColorMap:TextColorMap):void 

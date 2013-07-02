@@ -59,9 +59,9 @@ package de.maxdidit.hardware.text.renderer
 		// Constructor 
 		/////////////////////// 
 		
-		public function BatchedGlyphRenderer($context3d:Context3D, $triangulator:ITriangulator)
+		public function BatchedGlyphRenderer($context3d:Context3D)
 		{
-			super($context3d, $triangulator);
+			super($context3d);
 			
 			_fallbackTextColor = new TextColor();
 		}
@@ -75,12 +75,12 @@ package de.maxdidit.hardware.text.renderer
 			return 4;
 		}
 		
-		override protected function get vertexShaderCode():String 
+		override protected function get vertexShaderCode():String
 		{
 			return "m44 op, va0, vc[va1.x]";
 		}
 		
-		override protected function get fragmentShaderCode():String 
+		override protected function get fragmentShaderCode():String
 		{
 			return "mov oc, fc0";
 		}
@@ -89,16 +89,9 @@ package de.maxdidit.hardware.text.renderer
 		// Member Functions 
 		/////////////////////// 
 		
-		protected override function fitsIntoVertexBuffer(paths:Vector.<Vector.<Vertex>>):Boolean
+		protected override function fitsIntoVertexBuffer(numberOfNewVertices:uint):Boolean
 		{
-			var numberOfVertices:uint = 0;
-			const l:uint = paths.length;
-			for (var i:uint = 0; i < l; i++)
-			{
-				numberOfVertices += paths[i].length;
-			}
-			
-			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfVertices) * fieldsPerVertex * 8 * DRAW_CALLS_PER_BATCH;
+			var vertexBufferSizeInBytes:uint = (_vertexData.length + numberOfNewVertices) * fieldsPerVertex * 8 * DRAW_CALLS_PER_BATCH;
 			return vertexBufferSizeInBytes <= HardwareTextRenderer.MAX_VERTEXBUFFER_BYTES;
 		}
 		
@@ -108,7 +101,7 @@ package de.maxdidit.hardware.text.renderer
 			return indexBufferSizeInBytes <= HardwareTextRenderer.MAX_INDEXBUFFER_BYTES;
 		}
 		
-		protected override function addToIndexData(indices:Vector.<uint>, numVertices:uint):void
+		protected override function addToIndexData(indices:Vector.<uint>, numVertices:uint, vertexOffset:uint):void
 		{
 			const l:uint = indices.length;
 			
@@ -122,19 +115,19 @@ package de.maxdidit.hardware.text.renderer
 			{
 				for (var j:uint = 0; j < l; j++)
 				{
-					_indexData[index++] = indices[j] + indexOffset;
+					_indexData[index++] = indices[j] + indexOffset + vertexOffset;
 				}
 				
 				indexOffset += numVertices;
 			}
 		}
 		
-		protected override function addToVertexData(paths:Vector.<Vector.<Vertex>>, numVertices:uint):void
+		protected override function addToVertexData(vertices:Vector.<Vertex>):void
 		{
-			const l:uint = paths.length;
+			const l:uint = vertices.length;
 			
 			var index:uint = _vertexData.length;
-			const newLength:uint = index + numVertices * DRAW_CALLS_PER_BATCH * fieldsPerVertex;
+			const newLength:uint = index + l * DRAW_CALLS_PER_BATCH * fieldsPerVertex;
 			
 			_vertexData.length = newLength;
 			
@@ -142,39 +135,21 @@ package de.maxdidit.hardware.text.renderer
 			{
 				var bTimes4:uint = b * 4;
 				
-				for (var p:uint = 0; p < l; p++)
+				for (var i:uint = 0; i < l; i++)
 				{
-					var path:Vector.<Vertex> = paths[p];
-					var pl:uint = path.length;
+					var vertex:Vertex = vertices[i];
 					
-					for (var i:uint = 0; i < pl; i++)
-					{
-						var vertex:Vertex = path[i];
-						
-						_vertexData[index++] = vertex.x;
-						_vertexData[index++] = vertex.y;
-						_vertexData[index++] = 0;
-						_vertexData[index++] = bTimes4;
-					}
+					_vertexData[index++] = vertex.x;
+					_vertexData[index++] = vertex.y;
+					_vertexData[index++] = 0;
+					_vertexData[index++] = bTimes4;
 				}
 			}
 		}
 		
 		public override function render(instanceMap:Object, textColorMap:TextColorMap):void
 		{
-			if (_buffersDirty)
-			{
-				_vertexBuffer = _context3d.createVertexBuffer(_vertexData.length / fieldsPerVertex, fieldsPerVertex);
-				_vertexBuffer.uploadFromVector(_vertexData, 0, _vertexData.length / fieldsPerVertex);
-				
-				_indexBuffer = _context3d.createIndexBuffer(_indexData.length);
-				_indexBuffer.uploadFromVector(_indexData, 0, _indexData.length);
-				
-				_vertexData.length = 0;
-				_indexData.length = 0;
-				
-				_buffersDirty = false;
-			}
+			updateBuffers();
 			
 			var textColor:TextColor = textColor;
 			_context3d.setProgram(programPair);

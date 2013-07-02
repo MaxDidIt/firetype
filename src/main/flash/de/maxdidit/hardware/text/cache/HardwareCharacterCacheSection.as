@@ -91,9 +91,9 @@ package de.maxdidit.hardware.text.cache
 			instances.push(hardwareGlyphInstance); 
 		} 
 		 
-		public function addPathsToSection(paths:Vector.<Vector.<Vertex>>):HardwareGlyph 
+		public function addHardwareGlyph(glyph:HardwareGlyph):Boolean 
 		{ 
-			return _renderer.addPathsToRenderer(paths); 
+			return _renderer.addHardwareGlyph(glyph); 
 		} 
 		 
 		public function render(textColorMap:TextColorMap):void  

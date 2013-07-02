@@ -41,7 +41,7 @@ package de.maxdidit.hardware.font
 	 * @author Max Knoblich 
 	 */ 
 	public class HardwareGlyph 
-	{ 
+	{
 		/////////////////////// 
 		// Member Fields 
 		/////////////////////// 
@@ -56,9 +56,11 @@ package de.maxdidit.hardware.font
 		 
 		private var _cacheSectionIndex:uint; 
 		 
-		// bounding box 
-		 
+		// bounding box
 		private var _boundingBox:AxisAlignedBoundingBox; 
+		
+		private var _vertices:Vector.<Vertex>;
+		private var _indices:Vector.<uint>;
 		 
 		/////////////////////// 
 		// Constructor 
@@ -154,6 +156,26 @@ package de.maxdidit.hardware.font
 		{ 
 			_glyph = value; 
 		} 
+		
+		public function get indices():Vector.<uint>
+		{
+			return _indices;
+		}
+		
+		public function set indices(value:Vector.<uint>):void 
+		{
+			_indices = value;
+		}
+		
+		public function get vertices():Vector.<Vertex> 
+		{
+			return _vertices;
+		}
+		
+		public function set vertices(value:Vector.<Vertex>):void 
+		{
+			_vertices = value;
+		}
 	 
 		/////////////////////// 
 		// Member Functions 

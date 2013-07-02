@@ -75,7 +75,7 @@ package de.maxdidit.hardware.text
 			this._cache = cache; 
 			if (!_cache) 
 			{ 
-				_cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3D, new EarClippingTriangulator)); 
+				_cache = new HardwareCharacterCache(new SingleGlyphRendererFactory(context3D)); 
 			} 
 			this._cache.addClient(this); 
 			 

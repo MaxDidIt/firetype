@@ -117,7 +117,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 			// This glyph doesn't have any dependencies, everything is awesome; 
 		} 
 		 
-		public function retrievePaths(vertexDistance:Number):Vector.<Vector.<Vertex>> 
+		public function retrievePaths(vertexDistance:Number, connectedPaths:Vector.<Vector.<Vertex>>, originalPaths:Vector.<Vector.<Vertex>>):void
 		{ 
 			throw new Error("Can't execute retrieveShape for Glyph. Extend the Glyph class and implement this function."); 
 		} 

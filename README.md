@@ -29,6 +29,10 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 
 ## Where Do I Get *firetype*?
 
+[Download firetype-1.3.0.swc](http://bit.ly/10xoZfa)
+- API change: SingleGlyphRenderer, BatchedGlyphRenderer, SingleGlyphRendererFactory and BatchedGlyphRendererFactory don't require an ITriangulator parameter anymore.
+- Internal change: 
+
 [Download firetype-1.2.5.swc](http://www.max-did-it.de/projects/firetype/firetype-1.2.5.swc)
 
 ## What Does *firetype* Do?
@@ -353,11 +357,11 @@ This speeds up the render process considerably. However, the trade-off of this r
 To use the `BatchedGlyphRenderer`, you will have to initialize the `HardwareCharacterCache` yourself and pass it to the `HardwareText` object.
 
 ```ActionScript
-var cache:HardwareCharacterCache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d, new EarClippingTriangulator()));
+var cache:HardwareCharacterCache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d));
 _hardwareText = new HardwareText(null, cache);
 ```
 
-The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object and an `ITriangulator` object. *firetype* comes with the EarClippingTriangulator class, which implements the `ITriangulator` interface.
+The `HardwareCharacterCache` constructor receives a `BatchedGlyphRendererFactory` object as parameter. The factory object requires a valid `Context3D` object.
 
 The cache object is passed as a parameter to the `HardwareText` constructor. If you explictly pass a `HardwareCharacterCache` object to `HardwareText`, then the first parameter can be null.
 
@@ -368,7 +372,7 @@ You can save considerable amounts of memory and even rendering time by using the
 By assigning the same cache object to several objects you can prevent that the same characters are converted to polygon objects and stored in memory several times.
 
 ```ActionScript
-_cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d, new EarClippingTriangulator()));
+_cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d));
 _hardwareText1 = new HardwareText(null, _cache);
 _hardwareText2 = new HardwareText(null, _cache);
 ```

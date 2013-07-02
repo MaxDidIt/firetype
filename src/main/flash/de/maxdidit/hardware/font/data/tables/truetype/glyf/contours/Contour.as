@@ -119,29 +119,53 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return true; 
 		} 
 		 
-		public function retrievePath(vertexDistance:uint, expectedClockwise:Boolean = true):Vector.<Vertex> 
+		public function retrievePath(vertexDistance:uint, connectedPath:Vector.<Vertex>, originalPaths:Vector.<Vector.<Vertex>>, expectedClockwise:Boolean = true):void
 		{ 
 			var path:Vector.<Vertex> = new Vector.<Vertex>(); 
 			if (!_segments) 
 			{ 
-				return path; 
+				return; 
 			} 
 			 
 			const l:uint = _segments.length; 
 			for (var i:uint = 0; i < l; i++) 
 			{ 
 				_segments[i].addVerticesToList(path, vertexDistance, expectedClockwise == _clockWise); 
-			} 
+			}
+			
+			// calculate normals
+			const fl:uint = path.length;
+			for (i = 0; i < fl; i++)
+			{
+				var vertexA:Vertex = path[i];
+				var vertexB:Vertex = path[(i + 1) % fl];
+				var vertexC:Vertex = path[(i + 2) % fl];
+				
+				var vBAx:Number = vertexB.x - vertexA.x;
+				var vBAy:Number = vertexB.y - vertexA.y;
+				var vBAl:Number = Math.sqrt(vBAx * vBAx + vBAy * vBAy);
+				
+				var vBCx:Number = vertexC.x - vertexB.x;
+				var vBCy:Number = vertexC.y - vertexB.y;
+				var vBCl:Number = Math.sqrt(vBCx * vBCx + vBCy * vBCy);
+				
+				var nX:Number = -vBAy * vBCl + -vBCy * vBAl;
+				var nY:Number = vBAx * vBCl + vBCx * vBAl;
+				var nL:Number = Math.sqrt(nX * nX + nY * nY);
+				
+				vertexB.nX = nX / nL;
+				vertexB.nY = nY / nL;
+			}
 			 
+			originalPaths.push(path);
+			connectPaths(connectedPath, path);
+			
 			// add holes 
 			const h:uint = _holes.length; 
-			for (i = 0; i < h; i++) 
-			{ 
-				var holePath:Vector.<Vertex> = _holes[i].retrievePath(vertexDistance, !expectedClockwise); 
-				path = connectPaths(path, holePath); 
-			} 
-			 
-			return path; 
+			for (i = 0; i < h; i++)
+			{
+				_holes[i].retrievePath(vertexDistance, connectedPath, originalPaths, !expectedClockwise);
+			}
 		} 
 		 
 		public function addHole(hole:Contour):void 
@@ -256,13 +280,32 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 			return biggestI; 
 		} 
 		 
-		private function connectPaths(pathA:Vector.<Vertex>, pathB:Vector.<Vertex>):Vector.<Vertex> 
-		{ 
-			var result:Vector.<Vertex> = new Vector.<Vertex>(); 
-			 
+		private function connectPaths(pathA:Vector.<Vertex>, pathB:Vector.<Vertex>):void
+		{
 			// find shortest distance between vertices 
 			const lA:uint = pathA.length; 
-			const lB:uint = pathB.length; 
+			const lB:uint = pathB.length;
+			
+			if (lA == 0)
+			{
+				if (lB == 0)
+				{
+					return;
+				}
+				
+				pathA.length = lB;
+				for (var i:uint = 0; i < lB; i++)
+				{
+					pathA[i] = pathB[i];
+				}
+				
+				return;
+			}
+			
+			if (lB == 0)
+			{
+				return;
+			}
 			 
 			var a:uint = 0; 
 			var validA:uint = 0; 
@@ -295,33 +338,31 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 				 
 				a++; 
 			} 
+			
+			var newLength:uint = lA + lB + 2;
+			pathA.length = newLength;
+			
+			var sL:uint = lA - validA;
+			
+			for (i = 0; i < sL; i++)
+			{
+				var oldIndex:uint = lA - i - 1;
+				var newIndex:uint = newLength - i - 1;
+				pathA[newIndex] = pathA[oldIndex];
+			}
 			 
-			// fill result 
-			// fill up to bridge vertex in A 
-			for (var i:uint = 0; i <= validA; i++) 
-			{ 
-				result.push(pathA[i]); 
-			} 
-			 
-			// fill from bridge vertex in B till end 
+			 //fill from bridge vertex in B till end
+			var index:uint = validA + 1;
 			for (i = biggestB; i < lB; i++) 
-			{ 
-				result.push(pathB[i]); 
+			{
+				pathA[index++] = pathB[i];
 			} 
 			 
 			// fill from beginning to bridge vertex in B 
 			for (i = 0; i <= biggestB; i++) 
 			{ 
-				result.push(pathB[i]); 
-			} 
-			 
-			// fill from bridge vertex in A till end 
-			for (i = validA; i < lA; i++) 
-			{ 
-				result.push(pathA[i]); 
-			} 
-			 
-			return result; 
+				pathA[index++] = pathB[i];
+			}
 		} 
 		 
 		private function intersectsAllRelevantPaths(vertexA:Vertex, vertexB:Vertex, pathA:Vector.<Vertex>):Boolean 

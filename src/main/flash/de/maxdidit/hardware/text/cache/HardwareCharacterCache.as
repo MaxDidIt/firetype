@@ -22,10 +22,13 @@ along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>.
  
 package de.maxdidit.hardware.text.cache  
 { 
+	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance; 
 	import de.maxdidit.hardware.text.format.HardwareTextFormat; 
 	import de.maxdidit.hardware.text.components.HardwareGlyphInstance; 
 	import de.maxdidit.hardware.text.format.TextColor; 
+	import de.maxdidit.hardware.text.glyphbuilders.IGlyphBuilder;
+	import de.maxdidit.hardware.text.glyphbuilders.SimpleGlyphBuilder;
 	import de.maxdidit.hardware.text.HardwareText; 
 	import de.maxdidit.hardware.text.renderer.AGALMiniAssembler; 
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.contours.Vertex; 
@@ -53,10 +56,12 @@ package de.maxdidit.hardware.text.cache
 		/////////////////////// 
 		 
 		//private var _characterCache:Object = new Object(); 
-		private var _glyphCache:Object = new Object(); 
+		private var _glyphCache:Object = new Object();
 		 
 		private var _rendererFactory:IHardwareTextRendererFactory; 
-		private var _sections:Vector.<HardwareCharacterCacheSection>; 
+		private var _sections:Vector.<HardwareCharacterCacheSection>;
+		
+		private var _glyphBuilder:IGlyphBuilder;
 		 
 		private var _clientTexts:Vector.<HardwareText>; 
 		 
@@ -68,9 +73,15 @@ package de.maxdidit.hardware.text.cache
 		// Constructor 
 		/////////////////////// 
 		 
-		public function HardwareCharacterCache(rendererFactory:IHardwareTextRendererFactory)  
+		public function HardwareCharacterCache(rendererFactory:IHardwareTextRendererFactory, glyphBuilder:IGlyphBuilder = null)  
 		{ 
 			_rendererFactory = rendererFactory; 
+			
+			_glyphBuilder = glyphBuilder;
+			if (!_glyphBuilder)
+			{
+				_glyphBuilder = new SimpleGlyphBuilder(new EarClippingTriangulator());
+			}
 			 
 			_sections = new Vector.<HardwareCharacterCacheSection>(); 
 			 
@@ -114,18 +125,21 @@ package de.maxdidit.hardware.text.cache
 		// Member Functions 
 		/////////////////////// 
 		 
-		private function addPathsToSection(paths:Vector.<Vector.<Vertex>>):HardwareGlyph  
+		private function addPathsToSection(paths:Vector.<Vector.<Vertex>>, originalPaths:Vector.<Vector.<Vertex>>):HardwareGlyph  
 		{ 
 			var result:HardwareGlyph; 
 			var section:HardwareCharacterCacheSection; 
-			 
+			
+			// create hardware glyph
+			result = _glyphBuilder.buildGlyph(paths, originalPaths);
+			
+			// insert into section 
 			const l:uint = _sections.length; 
 			for (var i:uint = 0; i < l; i++) 
 			{ 
 				section = _sections[i]; 
-				 
-				result = section.addPathsToSection(paths); 
-				if (result) 
+				
+				if (section.addHardwareGlyph(result)) 
 				{ 
 					result.cacheSectionIndex = i; 
 					return result; 
@@ -135,8 +149,14 @@ package de.maxdidit.hardware.text.cache
 			section = new HardwareCharacterCacheSection(_rendererFactory.retrieveHardwareTextRenderer()); 
 			_sections.push(section); 
 			 
-			result = section.addPathsToSection(paths); 
-			result.cacheSectionIndex = l; 
+			if (section.addHardwareGlyph(result))
+			{
+				result.cacheSectionIndex = l; 
+			}
+			else
+			{
+				throw new Error("Can't render glyph. Glyph polygon data does not fit into buffers. Try increasing the vertex distance.");
+			}
 			 
 			return result; 
 		} 
@@ -214,30 +234,10 @@ package de.maxdidit.hardware.text.cache
 			return hardwareGlyph; 
 		} 
 		 
-		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, font:HardwareFont, vertexDistance:uint, glyphID:uint):HardwareGlyph  
+		public function addPathsAsHardwareGlyph(paths:Vector.<Vector.<Vertex>>, originalPaths:Vector.<Vector.<Vertex>>, font:HardwareFont, vertexDistance:Number, glyphID:int):HardwareGlyph  
 		{ 
-			const l:uint = _sections.length; 
-			 
-			for (var i:uint = 0; i < l; i++) 
-			{ 
-				var glyph:HardwareGlyph = _sections[i].addPathsToSection(paths); 
-				if (glyph) 
-				{ 
-					// cache glyph 
-					glyph.cacheSectionIndex = i; 
-					addHardwareGlyphToCache(glyph, font, vertexDistance, glyphID); 
-					return glyph; 
-				} 
-			} 
-			 
-			// glyph did not fit in any existing section, create new section 
-			var section:HardwareCharacterCacheSection = new HardwareCharacterCacheSection(_rendererFactory.retrieveHardwareTextRenderer()); 
-			 
-			glyph = section.addPathsToSection(paths); 
-			glyph.cacheSectionIndex = _sections.length; 
-			addHardwareGlyphToCache(glyph, font, vertexDistance, glyphID); 
-			 
-			_sections.push(section); 
+			var glyph:HardwareGlyph = addPathsToSection(paths, originalPaths);
+			addHardwareGlyphToCache(glyph, font, vertexDistance, glyphID);
 			 
 			return glyph; 
 		} 
