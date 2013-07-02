@@ -31,7 +31,6 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 
 [Download firetype-1.3.0.swc](http://bit.ly/10xoZfa)
 - API change: SingleGlyphRenderer, BatchedGlyphRenderer, SingleGlyphRendererFactory and BatchedGlyphRendererFactory don't require an ITriangulator parameter anymore.
-- Internal change: 
 
 [Download firetype-1.2.5.swc](http://www.max-did-it.de/projects/firetype/firetype-1.2.5.swc)
 
