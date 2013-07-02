@@ -35,7 +35,10 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours
 		public var x:Number; 
 		public var y:Number; 
 		 
-		public var onCurve:Boolean; 
+		public var onCurve:Boolean;
+		
+		public var nX:Number; 
+		public var nY:Number; 
 		 
 		/////////////////////// 
 		// Constructor 
