@@ -32,8 +32,12 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 [Download firetype-1.4.0.swc](http://bit.ly/1adyG99)
 - Texts can now be rendered with outlines. (As of this version, this feature still has minor issues. See [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines).
 
+*****
+
 [Download firetype-1.3.0.swc](http://bit.ly/10xoZfa)
 - API change: SingleGlyphRenderer, BatchedGlyphRenderer, SingleGlyphRendererFactory and BatchedGlyphRendererFactory don't require an ITriangulator parameter anymore.
+
+*****
 
 [Download firetype-1.2.5.swc](http://www.max-did-it.de/projects/firetype/firetype-1.2.5.swc)
 
