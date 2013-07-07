@@ -24,9 +24,12 @@ package de.maxdidit.hardware.font
 {
 	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator;
 	import de.maxdidit.hardware.text.cache.HardwareCharacterCache;
+	import de.maxdidit.hardware.text.glyphbuilders.IGlyphBuilder;
 	import de.maxdidit.hardware.text.glyphbuilders.OutlinedGlyphBuilder;
 	import de.maxdidit.hardware.text.HardwareText;
 	import de.maxdidit.hardware.text.renderer.BatchedGlyphRendererFactory;
+	import de.maxdidit.hardware.text.renderer.IHardwareTextRenderer;
+	import de.maxdidit.hardware.text.renderer.IHardwareTextRendererFactory;
 	import de.maxdidit.hardware.text.renderer.SingleGlyphRendererFactory;
 	import de.maxdidit.hardware.text.renderer.SingleTwoColorGlyphRendererFactory;
 	import flash.display.Sprite;
@@ -88,15 +91,17 @@ package de.maxdidit.hardware.font
 		
 		private function initializeText():void
 		{
-			var hardwareCache:HardwareCharacterCache = new HardwareCharacterCache(new SingleTwoColorGlyphRendererFactory(_context3d), new OutlinedGlyphBuilder(new EarClippingTriangulator, 120));
+			var rendererFactory:IHardwareTextRendererFactory = new SingleTwoColorGlyphRendererFactory(_context3d);
+			var glyphBuilder:IGlyphBuilder = new OutlinedGlyphBuilder(new EarClippingTriangulator(), 120)
+			var hardwareCache:HardwareCharacterCache = new HardwareCharacterCache(rendererFactory, glyphBuilder);
 			
 			_hardwareText = new HardwareText(_context3d, hardwareCache);
 			_hardwareText.standardFormat.color = 0xFFFF0000;
 			_hardwareText.text = "Hello World!\nThis text is being rendered\nwith an outline using firetype!"; 
 			
 			_hardwareText.scaleX = _hardwareText.scaleY = 0.03;
-			_hardwareText.x = -320;
-			_hardwareText.y = 300;
+			_hardwareText.x = -340;
+			_hardwareText.y = 175;
 		}
 		
 		/////////////////////// 

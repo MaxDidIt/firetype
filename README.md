@@ -29,6 +29,9 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 
 ## Where Do I Get *firetype*?
 
+[Download firetype-1.4.0.swc](http://bit.ly/1adyG99)
+- Texts can now be rendered with outlines. (As of this version, this feature still has minor issues. See [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines).
+
 [Download firetype-1.3.0.swc](http://bit.ly/10xoZfa)
 - API change: SingleGlyphRenderer, BatchedGlyphRenderer, SingleGlyphRendererFactory and BatchedGlyphRendererFactory don't require an ITriangulator parameter anymore.
 
@@ -99,6 +102,7 @@ Every subsequent text using the same font and level of detail should cause no la
 * [How Do I Control the Level of Detail of Characters?](#how-do-i-control-the-level-of-detail-of-characters)
 * [How Should I Handle Longer Texts?](#how-should-i-handle-longer-texts)
 * [How Should I Handle Multiple Texts?](#how-should-i-handle-multiple-texts)
+* [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines)
 
 ### Preliminaries
 
@@ -375,3 +379,33 @@ _cache = new HardwareCharacterCache(new BatchedGlyphRendererFactory(_context3d))
 _hardwareText1 = new HardwareText(null, _cache);
 _hardwareText2 = new HardwareText(null, _cache);
 ```
+
+### How Do I Render Texts With Outlines?
+
+You can find an implementation of this tutorial at [FiretypeTutorial6.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeTutorial8.as).
+
+You can render texts with outlines by passing an `OutlinedGlyphBuilder` object to the `HardwareCharacterCache` object used by the text. The constructor of `OutlinedGlyphBuilder` expects a second parameter in addition to the triangulator indicating the thickness of the outline.
+
+In order to render the text outline in a different color than the text itself, you should use the `SingleTwoColorGlyphRenderer`. In the example above, we create an instance of the respective factory class which we pass to the cache object.
+
+**Note:** As of version 1.4.0, firetype renders outlines only in black. The ability to use the text formatting features of firetype to set several different color values will be implemented in the next versions.
+
+```ActionScript
+var rendererFactory:IHardwareTextRendererFactory = new SingleTwoColorGlyphRendererFactory(_context3d);
+var glyphBuilder:IGlyphBuilder = new OutlinedGlyphBuilder(new EarClippingTriangulator(), 120)
+var hardwareCache:HardwareCharacterCache = new HardwareCharacterCache(rendererFactory, glyphBuilder);
+
+_hardwareText = new HardwareText(_context3d, hardwareCache);
+_hardwareText.standardFormat.color = 0xFFFF0000;
+_hardwareText.text = "Hello World!\nThis text is being rendered\nwith an outline using firetype!"; 
+```
+
+If you don't pass an object implementing `IGlyphBuilder` to the `HardwareCharacterCache` constructor, it will use the `SimpleGlyphBuilder` by default. `SimpleGlyphBuilder` simply converts the vertex paths into polygon objects without adding any extra geometry.
+
+**Note:** Rendering texts with outlines has the following known issues as of version 1.4.0:
+* Occasionally, certain characters will have minor glitches in their outlines. (Example: The lower case 'g' in the default font)
+* Certain characters might cause the library to freeze. (Example: The '@' sign will send the triangulator into an endless loop due to it's implementation.)
+
+These issues will be fixed in the upcoming versions.
+
+![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial8.png)
