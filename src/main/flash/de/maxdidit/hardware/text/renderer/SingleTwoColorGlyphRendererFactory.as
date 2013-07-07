@@ -20,38 +20,43 @@ You should have received a copy of the GNU Lesser General Public License
 along with 'firetype'.  If not, see <http://www.gnu.org/licenses/>. 
 */ 
  
-package de.maxdidit.hardware.font.data.tables.truetype.glyf.contours  
+package de.maxdidit.hardware.text.renderer  
 { 
+	import de.maxdidit.hardware.font.triangulation.EarClippingTriangulator; 
+	import de.maxdidit.hardware.font.triangulation.ITriangulator; 
+	import de.maxdidit.hardware.text.glyphbuilders.IGlyphBuilder;
+	import flash.display3D.Context3D; 
 	/** 
 	 * ... 
 	 * @author Max Knoblich 
 	 */ 
-	public class Vertex  
+	public class SingleTwoColorGlyphRendererFactory implements IHardwareTextRendererFactory 
 	{ 
 		/////////////////////// 
 		// Member Fields 
 		/////////////////////// 
 		 
-		public var x:Number; 
-		public var y:Number; 
-		 
-		public var onCurve:Boolean;
-		
-		public var nX:Number; 
-		public var nY:Number; 
-		
-		public var index:int = 0;
+		private var context3d:Context3D;
 		 
 		/////////////////////// 
 		// Constructor 
 		/////////////////////// 
 		 
-		public function Vertex($x:Number = 0, $y:Number = 0, $onCurve:Boolean = true)  
+		public function SingleTwoColorGlyphRendererFactory(context3d:Context3D)  
 		{ 
-			x = $x; 
-			y = $y; 
-			 
-			onCurve = $onCurve; 
+			this.context3d = context3d; 
+		} 
+		 
+		/////////////////////// 
+		// Member Functions 
+		/////////////////////// 
+		 
+		/* INTERFACE de.maxdidit.hardware.text.renderer.IHardwareTextRendererFactory */ 
+		 
+		public function retrieveHardwareTextRenderer():IHardwareTextRenderer  
+		{ 
+			var renderer:SingleTwoColorGlyphRenderer = new SingleTwoColorGlyphRenderer(context3d); 
+			return renderer; 
 		} 
 		 
 	} 

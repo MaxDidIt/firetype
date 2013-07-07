@@ -65,7 +65,7 @@ package de.maxdidit.hardware.text.cache
 		 
 		private var _clientTexts:Vector.<HardwareText>; 
 		 
-		private var _textFormatMap:HardwareTextFormatMap; 
+		private var _textFormatMap:HardwareTextFormatMap;
 		private var _textColorMap:TextColorMap; 
 		private var _fontMap:HardwareFontMap; 
 		 
