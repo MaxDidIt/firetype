@@ -64,6 +64,16 @@ package de.maxdidit.hardware.text.starling
 		// Member Properties
 		///////////////////////
 		
+		public function get cache():HardwareCharacterCache
+		{
+			if (!_hardwareText)
+			{
+				return null;
+			}
+			
+			return _hardwareText.cache;
+		}
+		
 		override public function get height():Number 
 		{
 			if (!_hardwareText)
