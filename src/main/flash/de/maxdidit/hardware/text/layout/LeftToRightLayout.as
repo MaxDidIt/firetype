@@ -76,7 +76,7 @@ package de.maxdidit.hardware.text.layout
 		 
 		/* INTERFACE de.maxdidit.hardware.text.layout.ILayout */ 
 		 
-		public function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void 
+		public function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):Number 
 		{ 
 			printhead.lineX = 0; 
 			printhead.y = 0; 
@@ -111,7 +111,9 @@ package de.maxdidit.hardware.text.layout
 			} 
 			 
 			endWord(hardwareText, printhead); 
-			startNewLine(hardwareText, printhead); 
+			startNewLine(hardwareText, printhead);
+			
+			return printhead.y;
 		} 
 		 
 		private function retrieveLookupIndices(scriptFeatureLookup:ScriptFeatureLookupTable, lookupIndices:Vector.<int>, textFormat:HardwareTextFormat):void 

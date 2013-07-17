@@ -49,11 +49,11 @@ package de.maxdidit.hardware.text
 		 
 		private var _textContainer:TransformedInstance; 
 		 
-		private var _width:Number; 
+		private var _width:Number;
+		private var _height:Number; 
+		
 		private var _fixedWidth:Boolean; 
 		private var _actualWidth:Number; 
-		 
-		private var _height:Number; 
 		 
 		private var _standardFormat:HardwareTextFormat; 
 		 
@@ -234,6 +234,11 @@ package de.maxdidit.hardware.text
 		{ 
 			_textContainer.scaleY = value; 
 		} 
+		
+		public function get height():Number 
+		{
+			return _height;
+		}
 		 
 		/////////////////////// 
 		// Member Functions 
@@ -254,7 +259,7 @@ package de.maxdidit.hardware.text
 			loseAllChildren(); 
 			 
 			var textSpans:Vector.<TextSpan> = _typesetter.createTextSpans(_text, _standardFormat, _cache); 
-			_layout.layout(this, textSpans, _cache); 
+			_height = _layout.layout(this, textSpans, _cache); 
 		} 
 		 
 		override public function loseAllChildren():void  

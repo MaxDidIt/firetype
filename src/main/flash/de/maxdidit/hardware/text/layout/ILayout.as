@@ -32,7 +32,7 @@ package de.maxdidit.hardware.text.layout
 	 */ 
 	public interface ILayout  
 	{ 
-		function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):void 
+		function layout(hardwareText:HardwareText, textSpans:Vector.<TextSpan>, cache:HardwareCharacterCache):Number 
 	} 
 	 
 } 
