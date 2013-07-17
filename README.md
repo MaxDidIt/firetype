@@ -29,8 +29,13 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 
 ## Where Do I Get *firetype*?
 
+[Download firetype-1.5.1.swc](http://bit.ly/1dFbhd4)
+- Added basic Starling Framework integration. See [How Do I Use *firetype* With Starling?](#how-do-i-use-firetype-with-starling).
+
+*****
+
 [Download firetype-1.4.0.swc](http://bit.ly/1adyG99)
-- Texts can now be rendered with outlines. (As of this version, this feature still has minor issues. See [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines).
+- Texts can now be rendered with outlines. (As of this version, this feature still has minor issues. See [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines)).
 
 *****
 
@@ -107,6 +112,7 @@ Every subsequent text using the same font and level of detail should cause no la
 * [How Should I Handle Longer Texts?](#how-should-i-handle-longer-texts)
 * [How Should I Handle Multiple Texts?](#how-should-i-handle-multiple-texts)
 * [How Do I Render Texts With Outlines?](#how-do-i-render-texts-with-outlines)
+* [How Do I Use *firetype* With Starling?](#how-do-i-use-firetype-with-starling)
 
 ### Preliminaries
 
@@ -413,3 +419,45 @@ If you don't pass an object implementing `IGlyphBuilder` to the `HardwareCharact
 These issues will be fixed in the upcoming versions.
 
 ![The text rendered with firetype.](http://www.max-did-it.com/projects/firetype/tutorial8.png)
+	
+### How Do I Use *firetype* With Starling?
+
+As of version 1.5.0, *firetype* offers a basic integration with the [Starling Framework](http://gamua.com/starling/). The *firetype* library offers a class named `FiretypeStarlingTextField` that wraps firetype's `HardwareText` object in a Starling `DisplayObjectContainer` and integrates it into the render process of Starling.
+
+You can find an implementation of this tutorial at [FiretypeStarlingTutorial.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeStarlingTutorial.as) and [FiretypeStarlingGame.as](https://github.com/MaxDidIt/firetype/blob/master/src/test/flash/de/maxdidit/hardware/font/FiretypeStarlingGame.as).
+	
+If you use `FiretypeStarlingTextField`, you initialize your `Starling` object just like you would in any other Starling project. However, it is recommended that you set the `antiAliasing` property to something greater than 0 for better text rendering quality.
+
+```ActionScript
+_starling = new Starling(FiretypeStarlingGame, stage);
+_starling.antiAliasing = 8;
+_starling.start();
+```
+
+In your game class, or any other Starling `DisplayObject` class, you simply instantiate a `FiretypeStarlingTextField` object, set it's properties and add it to the display list.
+
+```ActionScript
+var text:FiretypeStarlingTextField = new FiretypeStarlingTextField();
+text.text = "This text has been rendered in <format color='0xFFFF0000'>Starling</format> via <format color='0xFFFF6611'>firetype</format>.";
+text.x = 100;
+text.y = 100;
+text.width = 300;
+text.color = 0xFF666666;
+addChild(text);
+```
+
+The result might look something like this:
+
+![The text rendered with Starling and firetype.](http://www.max-did-it.com/projects/firetype/tutorialFiretype.png)
+
+You can use the following properties of the `FiretypeStarlingTextField` object to set it's standard text format properties.
+
+* `color`: Sets the text's color
+* `textAlign`: Aligns the displayed text. Should be set to either TextAlign.LEFT, TextAlign.CENTER or TextAlign.RIGHT. 
+* `textScale`: Uniformly scales the text's characters.
+* `textSkewX`: Applies a shearing effect to each of the text's characters along the X axis.
+* `textSkewY`: Applies a shearing effect to each of the text's characters along the Y axis.
+* `font`: Sets the `HardwareFont` oject that should be used by the text. See [How Can I Set The Font of a Text](#how-can-i-set-the-font-of-a-text) on how to load a TrueType font in *firetype*.
+* `vertexDistance`: Applies a value which indicates the level of detail in which the characters should be rendered. See [How Do I Control the Level of Detail of Characters](#how-do-i-control-the-level-of-detail-of-characters).
+
+You can use all methods shown in [How Do I Apply Formatting to Texts](#how-do-i-apply-formatting-to-texts) to apply further formatting to your texts. This way, you can apply `format` tags and font format objects to your text.
