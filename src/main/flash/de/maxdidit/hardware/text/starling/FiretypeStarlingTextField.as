@@ -81,7 +81,7 @@ package de.maxdidit.hardware.text.starling
 				return 0;
 			}
 			
-			return _hardwareText.height * _hardwareText.scaleY;
+			return _hardwareText.height * scaleY;
 		}
 		
 		override public function set height(value:Number):void 
@@ -89,12 +89,20 @@ package de.maxdidit.hardware.text.starling
 			//super.height = value;
 		}
 		
+		override public function get width():Number
+		{
+			if (!_hardwareText)
+			{
+				return 0;
+			}
+			
+			return _hardwareText.width * scaleX;
+		}
+		
 		override public function set width(value:Number):void
 		{
 			if (value != super.width)
-			{
-				super.width = value;
-				
+			{	
 				if (_hardwareText)
 				{
 					_hardwareText.width = value;

@@ -4,6 +4,7 @@ package de.maxdidit.hardware.font
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.filters.DropShadowFilter;
+	import starling.core.RenderSupport;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
@@ -19,6 +20,8 @@ package de.maxdidit.hardware.font
 		// Member Fields
 		///////////////////////
 		
+		private var text:FiretypeStarlingTextField;
+		
 		///////////////////////
 		// Constructor
 		///////////////////////
@@ -30,7 +33,7 @@ package de.maxdidit.hardware.font
 			var circle1:Image = createCircle(0xFFEE66);
 			addChild(circle1);
 			
-			var text:FiretypeStarlingTextField = new FiretypeStarlingTextField();
+			text = new FiretypeStarlingTextField();
 			text.text = "This text has been rendered in <format color='0xFFFF0000'>Starling</format> via <format color='0xFFFF6611'>firetype</format>.";
 			text.x = 100;
 			text.y = 100;
