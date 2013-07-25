@@ -83,10 +83,10 @@ package de.maxdidit.hardware.text.cache
 				instances = cachedInstancesForColor[indexKey] as Vector.<HardwareGlyphInstance>; 
 			} 
 			else 
-			{ 
+			{
 				instances = new Vector.<HardwareGlyphInstance>(); 
 				cachedInstancesForColor[indexKey] = instances; 
-			} 
+			}
 			 
 			instances.push(hardwareGlyphInstance); 
 		} 

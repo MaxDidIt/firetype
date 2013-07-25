@@ -277,9 +277,9 @@ package de.maxdidit.hardware.text.cache
 			var result:Object = map[key]; 
 			 
 			if (result) 
-			{ 
+			{
 				return result; 
-			} 
+			}
 			 
 			result = new Object(); 
 			map[key] = result; 

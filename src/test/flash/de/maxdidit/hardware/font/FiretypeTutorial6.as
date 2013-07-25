@@ -121,8 +121,8 @@ package de.maxdidit.hardware.font
 			 
 			// Set up the update loop. 
 			addEventListener(Event.ENTER_FRAME, update); 
-		} 
-		 
+		}
+		
 		private function handleResize(e:Event):void  
 		{ 
 			// The view has been scaled, re-initialize the backbuffer and the projection matrix. 

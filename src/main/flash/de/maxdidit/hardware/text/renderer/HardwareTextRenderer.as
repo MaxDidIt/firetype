@@ -122,8 +122,8 @@ package de.maxdidit.hardware.text.renderer
 				_indexBuffer = _context3d.createIndexBuffer(_indexData.length); 
 				_indexBuffer.uploadFromVector(_indexData, 0, _indexData.length);
 				
-				_vertexData.length = 0;
-				_indexData.length = 0;
+				//_vertexData.length = 0;
+				//_indexData.length = 0;
 				
 				_buffersDirty = false; 
 			}

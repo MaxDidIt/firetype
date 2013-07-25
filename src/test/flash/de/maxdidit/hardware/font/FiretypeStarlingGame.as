@@ -25,6 +25,8 @@ package de.maxdidit.hardware.font
 		
 		public function FiretypeStarlingGame()
 		{
+			super();
+			
 			var circle1:Image = createCircle(0xFFEE66);
 			addChild(circle1);
 			
