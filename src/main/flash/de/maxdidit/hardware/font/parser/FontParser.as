@@ -96,13 +96,13 @@ package de.maxdidit.hardware.font.parser
 		{ 
 			var hardwareFont:HardwareFont = new HardwareFont(); 
 			 
-			hardwareFont.data = parseFontData(data); 
+			hardwareFont.data = parseFontData(data, hardwareFont); 
 			hardwareFont.finalize(); 
 			 
 			return hardwareFont; 
 		} 
 		 
-		protected function parseFontData(data:ByteArray):HardwareFontData 
+		protected function parseFontData(data:ByteArray, hardwareFont:HardwareFont):HardwareFontData 
 		{ 
 			throw new Error("Function not implemented. Extend FontParser and implement function."); 
 			return null; 

@@ -28,6 +28,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.data.tables.Table; 
 	import de.maxdidit.hardware.font.data.tables.TableRecord; 
 	import de.maxdidit.hardware.font.data.tables.truetype.LocationTableData; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.DataTypeParser; 
 	import de.maxdidit.hardware.font.parser.tables.ITableParser; 
 	import de.maxdidit.hardware.font.parser.tables.TableNames; 
@@ -59,7 +60,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */ 
 		 
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):*  
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):*  
 		{ 
 			data.position = record.offset; 
 			 

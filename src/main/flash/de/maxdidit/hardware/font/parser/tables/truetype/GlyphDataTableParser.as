@@ -37,6 +37,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.simple.SimpleGlyph; 
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.simple.SimpleGlyphFlags; 
 	import de.maxdidit.hardware.font.data.tables.truetype.LocationTableData; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.DataTypeParser; 
 	import de.maxdidit.hardware.font.parser.tables.ITableParser; 
 	import de.maxdidit.hardware.font.parser.tables.TableNames; 
@@ -72,20 +73,20 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */ 
 		 
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):* 
 		{ 
 			var result:GlyphTableData = new GlyphTableData(); 
 			 
 			var locationTable:Table = tableMap.retrieveTable(TableNames.INDEX_TO_LOCATION); 
 			var glyphOffsets:Vector.<uint> = (locationTable.data as LocationTableData).offsets; 
 			 
-			var glyphs:Vector.<Glyph> = parseGlyphs(data, record.offset, glyphOffsets); 
+			var glyphs:Vector.<Glyph> = parseGlyphs(data, record.offset, glyphOffsets, font); 
 			result.glyphs = glyphs; 
 			 
-			return result; 
+			return result;
 		} 
 		 
-		private function parseGlyphs(data:ByteArray, offset:uint, glyphOffsets:Vector.<uint>):Vector.<Glyph> 
+		private function parseGlyphs(data:ByteArray, offset:uint, glyphOffsets:Vector.<uint>, font:HardwareFont):Vector.<Glyph> 
 		{ 
 			const l:uint = glyphOffsets.length; 
 			var result:Vector.<Glyph> = new Vector.<Glyph>(l); 
@@ -95,7 +96,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 				// if the next offset is the same as this one, then this glyph has no contours. 
 				var hasContour:Boolean = i + 1 == l ? true : glyphOffsets[i] != glyphOffsets[i + 1]; 
 				 
-				var glyph:Glyph = parseGlyph(data, offset + glyphOffsets[i], hasContour); 
+				var glyph:Glyph = parseGlyph(data, offset + glyphOffsets[i], hasContour, font); 
 				glyph.header.index = i; 
 				 
 				result[i] = glyph; 
@@ -104,7 +105,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			return result; 
 		} 
 		 
-		private function parseGlyph(data:ByteArray, offset:uint, hasContour:Boolean):Glyph 
+		private function parseGlyph(data:ByteArray, offset:uint, hasContour:Boolean, font:HardwareFont):Glyph 
 		{ 
 			data.position = offset; 
 			 
@@ -113,7 +114,7 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			 
 			if (!hasContour || header.numCountours == 0) 
 			{ 
-				result = new Glyph(); 
+				result = new Glyph();
 			} 
 			else if (header.numCountours > 0) 
 			{ 
@@ -123,7 +124,8 @@ package de.maxdidit.hardware.font.parser.tables.truetype
 			{ 
 				result = parseCompositeGlyph(data); 
 			} 
-			 
+			
+			result.font = font;
 			result.header = header; 
 			return result; 
 		} 

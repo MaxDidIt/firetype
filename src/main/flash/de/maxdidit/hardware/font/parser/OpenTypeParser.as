@@ -27,6 +27,7 @@ package de.maxdidit.hardware.font.parser
 	import de.maxdidit.hardware.font.data.SFNTWrapper; 
 	import de.maxdidit.hardware.font.data.tables.Table; 
 	import de.maxdidit.hardware.font.data.tables.TableRecord; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.tables.advanced.gpos.GlyphPositioningTableParser; 
 	import de.maxdidit.hardware.font.parser.tables.advanced.gsub.GlyphSubstitutionTableParser; 
 	import de.maxdidit.hardware.font.parser.tables.NotYetImplementedParser; 
@@ -180,7 +181,7 @@ package de.maxdidit.hardware.font.parser
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.IFontParser */ 
 		 
-		protected override function parseFontData(data:ByteArray):HardwareFontData  
+		protected override function parseFontData(data:ByteArray, hardwareFont:HardwareFont):HardwareFontData  
 		{ 
 			data.position = 0; 
 			 
@@ -191,7 +192,7 @@ package de.maxdidit.hardware.font.parser
 			 
 			sortTablesForParsing(hardwareFontData.tables); // bring tables into the correct order for parsing. example: maxp has to be parsed before loca. 
 			 
-			parseTables(data, hardwareFontData.tables, hardwareFontData); 
+			parseTables(data, hardwareFontData.tables, hardwareFontData, hardwareFont); 
 			 
 			return hardwareFontData; 
 		} 
@@ -209,17 +210,17 @@ package de.maxdidit.hardware.font.parser
 			return Number(priorityA) - Number(priorityB) 
 		} 
 		 
-		private function parseTables(data:ByteArray, tables:Vector.<Table>, tableMap:ITableMap):void  
+		private function parseTables(data:ByteArray, tables:Vector.<Table>, tableMap:ITableMap, font:HardwareFont):void  
 		{ 
 			const l:uint = tables.length; 
 			 
 			for (var i:uint = 0; i < l; i++) 
 			{ 
-				parseTable(data, tables[i], tableMap); 
+				parseTable(data, tables[i], tableMap, font); 
 			} 
 		} 
 		 
-		private function parseTable(data:ByteArray, table:Table, tableMap:ITableMap):void  
+		private function parseTable(data:ByteArray, table:Table, tableMap:ITableMap, font:HardwareFont):void  
 		{ 
 			if (!_tableParserMap.hasOwnProperty(table.record.tag)) 
 			{ 
@@ -228,7 +229,7 @@ package de.maxdidit.hardware.font.parser
 			} 
 			 
 			var tableParser:ITableParser = _tableParserMap[table.record.tag] as ITableParser; 
-			table.data = tableParser.parseTable(data, table.record, tableMap); 
+			table.data = tableParser.parseTable(data, table.record, tableMap, font); 
 		} 
 		 
 		private function parseTableRecords(data:ByteArray, numRecords:uint):Vector.<Table>  

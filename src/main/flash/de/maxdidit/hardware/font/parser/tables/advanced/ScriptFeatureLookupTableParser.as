@@ -30,6 +30,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.common.lookup.LookupTable; 
 	import de.maxdidit.hardware.font.data.tables.common.script.ScriptListTableData; 
 	import de.maxdidit.hardware.font.data.tables.TableRecord; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.DataTypeParser; 
 	import de.maxdidit.hardware.font.parser.tables.common.CoverageTableParser; 
 	import de.maxdidit.hardware.font.parser.tables.common.FeatureListTableParser; 
@@ -89,7 +90,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */ 
 		 
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):* 
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):* 
 		{ 
 			data.position = record.offset; 
 			 

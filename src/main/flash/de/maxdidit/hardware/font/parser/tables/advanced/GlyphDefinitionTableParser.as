@@ -29,6 +29,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.GlyphDefinitionTableData; 
 	import de.maxdidit.hardware.font.data.tables.advanced.gdef.ligature.LigatureCaretListTableData; 
 	import de.maxdidit.hardware.font.data.tables.TableRecord; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import de.maxdidit.hardware.font.parser.DataTypeParser; 
 	import de.maxdidit.hardware.font.parser.tables.common.ClassDefinitionTableParser; 
 	import de.maxdidit.hardware.font.parser.tables.ITableParser; 
@@ -60,7 +61,7 @@ package de.maxdidit.hardware.font.parser.tables.advanced
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */ 
 		 
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):*  
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):*  
 		{ 
 			data.position = record.offset; 
 			 

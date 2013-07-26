@@ -25,6 +25,7 @@ package de.maxdidit.hardware.font.parser.tables
 	import de.maxdidit.hardware.font.data.ITableMap; 
 	import de.maxdidit.hardware.font.data.tables.advanced.gpos.shared.MarkRecord; 
 	import de.maxdidit.hardware.font.data.tables.TableRecord; 
+	import de.maxdidit.hardware.font.HardwareFont;
 	import flash.utils.ByteArray; 
 	/** 
 	 * ... 
@@ -32,6 +33,6 @@ package de.maxdidit.hardware.font.parser.tables
 	 */ 
 	public interface ITableParser  
 	{ 
-		function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):*; 
+		function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):*; 
 	} 
 } 

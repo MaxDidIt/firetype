@@ -38,7 +38,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 	 * @author Max Knoblich 
 	 */ 
 	public class Glyph 
-	{ 
+	{
 		/////////////////////// 
 		// Member Fields 
 		/////////////////////// 
@@ -52,6 +52,8 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		 
 		private var _index:uint; 
 		private var _lookupMap:Vector.<Vector.<Vector.<IGlyphLookup>>>; 
+		
+		private var _font:HardwareFont;
 		 
 		/////////////////////// 
 		// Constructor 
@@ -107,6 +109,16 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		{ 
 			_glyphClass = value; 
 		} 
+		
+		public function get font():HardwareFont 
+		{
+			return _font;
+		}
+		
+		public function set font(value:HardwareFont):void 
+		{
+			_font = value;
+		}
 		 
 		/////////////////////// 
 		// Member Functions 

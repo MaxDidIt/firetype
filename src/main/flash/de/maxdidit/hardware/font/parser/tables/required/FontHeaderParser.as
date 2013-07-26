@@ -56,7 +56,7 @@ package de.maxdidit.hardware.font.parser.tables.required
 		 
 		/* INTERFACE de.maxdidit.hardware.font.parser.tables.ITableParser */ 
 		 
-		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap):*  
+		public function parseTable(data:ByteArray, record:TableRecord, tableMap:ITableMap, font:HardwareFont = null):*  
 		{ 
 			data.position = record.offset; 
 			 
