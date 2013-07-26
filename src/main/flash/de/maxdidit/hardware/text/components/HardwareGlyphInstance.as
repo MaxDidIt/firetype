@@ -24,6 +24,7 @@ package de.maxdidit.hardware.text.components
 { 
 	import de.maxdidit.hardware.font.data.tables.truetype.glyf.Glyph; 
 	import de.maxdidit.hardware.font.HardwareGlyph; 
+	import de.maxdidit.hardware.text.format.TextColor;
 	import de.maxdidit.hardware.text.TransformedInstance; 
 	import de.maxdidit.list.LinkedList; 
 	/** 
@@ -37,6 +38,9 @@ package de.maxdidit.hardware.text.components
 		/////////////////////// 
 		 
 		private static var _pool:LinkedList = new LinkedList(); 
+		
+		public var vertexDistance:uint;
+		public var textColor:TextColor;
 		 
 		/////////////////////// 
 		// Static Functions 
@@ -63,7 +67,7 @@ package de.maxdidit.hardware.text.components
 				instance.shearY = 0; 
 				 
 				_pool.removeElement(element); 
-			} 
+			}
 			else 
 			{ 
 				instance = new HardwareGlyphInstance(glyph); 

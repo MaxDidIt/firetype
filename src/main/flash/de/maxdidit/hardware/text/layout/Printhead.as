@@ -45,7 +45,8 @@ package de.maxdidit.hardware.text.layout
 		/////////////////////// 
 		 
 		public var lineX:Number = 0; 
-		public var wordX:Number = 0; 
+		public var wordX:Number = 0;
+		public var maxX:Number = 0;
 		public var y:Number = 0; 
 		 
 		public var currentLine:HardwareLine; 
@@ -64,8 +65,8 @@ package de.maxdidit.hardware.text.layout
 		/////////////////////// 
 		 
 		public function Printhead()  
-		{ 
-			 
+		{
+			
 		} 
 		 
 		/////////////////////// 

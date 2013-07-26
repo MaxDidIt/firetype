@@ -253,7 +253,7 @@ package de.maxdidit.hardware.text.cache
 			} 
 			 
 			flagAllClientTextsForUpdate(); 
-		} 
+		}
 		 
 		private function flagAllClientTextsForUpdate():void 
 		{ 
