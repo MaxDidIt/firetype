@@ -154,6 +154,7 @@ package de.maxdidit.hardware.text
 		{
 			_width = value;
 			_untransformedWidth = _width / scaleX;
+			_layoutDirty = true;
 			_fixedWidth = true;
 		}
 		
@@ -238,6 +239,7 @@ package de.maxdidit.hardware.text
 		override public function set scaleY(value:Number):void
 		{
 			_textContainer.scaleY = value;
+			_untransformedHeight = _height / scaleY;
 		}
 		
 		public function get height():Number
