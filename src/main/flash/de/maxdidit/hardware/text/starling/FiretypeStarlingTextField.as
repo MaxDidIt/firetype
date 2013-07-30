@@ -120,6 +120,26 @@ package de.maxdidit.hardware.text.starling
 			}
 		}
 		
+		public function get textWidth():Number
+		{
+			if (!_hardwareText)
+			{
+				return 0;
+			}
+			
+			return _hardwareText.textWidth * scaleX;
+		}
+		
+		public function get textHeight():Number
+		{
+			if (!_hardwareText)
+			{
+				return 0;
+			}
+			
+			return _hardwareText.textHeight * scaleY;
+		}
+		
 		public function get text():String
 		{
 			return _text;
