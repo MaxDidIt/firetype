@@ -325,6 +325,16 @@ package de.maxdidit.hardware.text.starling
 			super.render(support, parentAlpha);
 		}
 		
+		public function update(cacheGlyphs:Boolean = true):void
+		{
+			if (!_hardwareText)
+			{
+				return;
+			}
+			
+			_hardwareText.update(cacheGlyphs);
+		}
+		
 		///////////////////////
 		// Event Handler
 		///////////////////////
