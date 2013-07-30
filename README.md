@@ -30,11 +30,11 @@ along with *firetype* in the LICENSE.md file or at [http://www.gnu.org/licenses/
 ## Where Do I Get *firetype*?
 
 [Download firetype-1.6.0.swc](http://bit.ly/1e7Zq7C)
-- Closed #5: You can now set the `HardwareCharacterCache` used by `FiretypeStarlingTextField`. Either pass a `cache` as a parameter to the constructor or set the respective `cache` property.
-- Closed #6: `HardwareCharacterCache` can now explictly cache characters from a String. This can be used to pre-cache characters during the initialization of the application. Use either the `cacheHardwareCharacters` or `cacheHardwareCharactersByTextFormat` functions to let a `HardwareCharacterCache` explicitly cache characters.
-- Fixed #7: Fixed a bug in `HardwareCharacterCache` where adding new characters after invalidating the cache would overwrite old characters. This caused render glitches when changing the text of a `HardwareText` object unless the `HardwareCharacterCache` was cleared each time. This is not necessary anymore.
-- Fixed #8: The `width` and `height` properties of `FiretypeStarlingTextField` are now updated correctly.
-- Closed #9: Implemented layouting without caching for faster text dimensions measurement. The `update` method of `HardwareText` and `FiretypeStarlingTextField` now accept a Boolean parameter indicating whether glyphs should be cached or only layouting should be performed.
+- [Closed #5](https://github.com/MaxDidIt/firetype/issues/5): You can now set the `HardwareCharacterCache` used by `FiretypeStarlingTextField`. Either pass a `cache` as a parameter to the constructor or set the respective `cache` property.
+- [Closed #6](https://github.com/MaxDidIt/firetype/issues/6): `HardwareCharacterCache` can now explictly cache characters from a String. This can be used to pre-cache characters during the initialization of the application. Use either the `cacheHardwareCharacters` or `cacheHardwareCharactersByTextFormat` functions to let a `HardwareCharacterCache` explicitly cache characters.
+- [Fixed #7](https://github.com/MaxDidIt/firetype/issues/7): Fixed a bug in `HardwareCharacterCache` where adding new characters after invalidating the cache would overwrite old characters. This caused render glitches when changing the text of a `HardwareText` object unless the `HardwareCharacterCache` was cleared each time. This is not necessary anymore.
+- [Fixed #8](https://github.com/MaxDidIt/firetype/issues/8): The `width` and `height` properties of `FiretypeStarlingTextField` are now updated correctly.
+- [Closed #9](https://github.com/MaxDidIt/firetype/issues/9): Implemented layouting without caching for faster text dimensions measurement. The `update` method of `HardwareText` and `FiretypeStarlingTextField` now accept a Boolean parameter indicating whether glyphs should be cached or only layouting should be performed.
 - `HardwareText` and `FiretypeStarlingTextField` now exposes the textWidth and textHeight properties which store the measured dimensions of the contained, layouted text.
 
 *****
