@@ -11,6 +11,7 @@ Please help me to maintain *firetype*. If you found *firetype* useful or used it
 * [Advantages](#advantages)
 * [Drawbacks](#drawbacks)
 * [How Do I Use *firetype*?](#how-do-i-use-firetype)
+* [Where Can I Find the *firetype* API Documentation?](#where-can-i-find-the-firetype-api-documentation)
 
 ## License
 
@@ -471,3 +472,9 @@ You can use the following properties of the `FiretypeStarlingTextField` object t
 * `vertexDistance`: Applies a value which indicates the level of detail in which the characters should be rendered. See [How Do I Control the Level of Detail of Characters](#how-do-i-control-the-level-of-detail-of-characters).
 
 You can use all methods shown in [How Do I Apply Formatting to Texts](#how-do-i-apply-formatting-to-texts) to apply further formatting to your texts. This way, you can apply `format` tags and font format objects to your text.
+
+## Where Can I Find the *firetype* API Documentation?
+
+This is the link to the *firetype* ASDoc API documentation:
+	
+[www.maxdid.it/projects/firetype/docs](http://www.maxdid.it/projects/firetype/docs)
