@@ -180,36 +180,36 @@ package de.maxdidit.hardware.text.layout
 			printhead.wordX += (currentCharacter.advanceWidthAdjustment + currentCharacter.glyph.advanceWidth) * printhead.textFormat.scale; 
 			 
 			if (currentCharacter.charCode == CHAR_CODE_SPACE) 
-			{ 
+			{
 				endWord(hardwareText, printhead); 
 				return; 
-			} 
+			}
 			 
 			if (!printhead.currentWord) 
-			{ 
+			{
 				startWord(printhead); 
-			} 
+			}
 			 
 			printhead.glyphInstances.length = 0; 
 			currentCharacter.glyph.retrieveGlyphInstances(printhead.glyphInstances); 
 			 
 			var il:uint = printhead.glyphInstances.length; 
 			for (i = 0; i < il; i++) 
-			{ 
+			{
 				var glyphInstance:HardwareGlyphInstance = printhead.glyphInstances[i]; 
 				
 				glyphInstance.vertexDistance = printhead.textFormat.vertexDistance;
 				glyphInstance.textColor = printhead.textFormat.textColor;
 				
 				currentCharacter.addChild(glyphInstance);
-			} 
-			 
+			}
+			
 			currentCharacter.scaleX = currentCharacter.scaleY = printhead.textFormat.scale; 
 			currentCharacter.shearX = printhead.textFormat.shearX; 
 			currentCharacter.shearY = printhead.textFormat.shearY; 
 			 
 			printhead.currentWord.addChild(currentCharacter);
-		} 
+		}
 		 
 		private function startWord(printhead:Printhead):void 
 		{ 
@@ -223,7 +223,7 @@ package de.maxdidit.hardware.text.layout
 		{ 
 			if (printhead.currentWord) 
 			{ 
-				if (hardwareText.fixedWidth && printhead.lineX + printhead.wordX > hardwareText.textWidth) 
+				if (hardwareText.fixedWidth && printhead.lineX + printhead.wordX > hardwareText.untransformedWidth) 
 				{ 
 					// implicit line break 
 					startNewLine(hardwareText, printhead); 

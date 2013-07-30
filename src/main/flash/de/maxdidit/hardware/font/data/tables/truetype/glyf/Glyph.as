@@ -49,8 +49,7 @@ package de.maxdidit.hardware.font.data.tables.truetype.glyf
 		 
 		private var _advanceWidth:uint; 
 		private var _leftSideBearing:int; 
-		 
-		private var _index:uint; 
+		
 		private var _lookupMap:Vector.<Vector.<Vector.<IGlyphLookup>>>; 
 		
 		private var _font:HardwareFont;

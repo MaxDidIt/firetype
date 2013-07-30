@@ -35,24 +35,20 @@ package de.maxdidit.hardware.text.starling
 		private var _features:HardwareFontFeatures;
 		private var _vertexDistance:Number;
 		
-		private var _usedForLongTexts:Boolean;
+		private var _cache:HardwareCharacterCache;
 		
 		///////////////////////
 		// Constructor
 		///////////////////////
 		
-		public function FiretypeStarlingTextField(usedForLongTexts:Boolean = false)
+		public function FiretypeStarlingTextField(cache:HardwareCharacterCache = null)
 		{
-			this._usedForLongTexts = usedForLongTexts;
-			
 			Starling.current.addEventListener(Event.CONTEXT3D_CREATE, handleContext3DCreated);
+			
+			_cache = cache;
 			
 			if (Starling.current.context)
 			{
-				var cache:HardwareCharacterCache = new HardwareCharacterCache(_usedForLongTexts ? //
-					new BatchedGlyphRendererFactory(Starling.current.context) : //
-					new SingleGlyphRendererFactory(Starling.current.context));
-				
 				_hardwareText = new HardwareText(Starling.current.context, cache);
 				_hardwareText.scaleX = 0.025;
 				_hardwareText.scaleY = -0.025;
@@ -72,6 +68,20 @@ package de.maxdidit.hardware.text.starling
 			}
 			
 			return _hardwareText.cache;
+		}
+		
+		public function set cache(cache:HardwareCharacterCache):void
+		{
+			if (_cache != cache)
+			{
+				_cache = cache;
+				
+				if (_hardwareText)
+				{
+					_hardwareText.cache = cache;
+					_hardwareText.flagForUpdate();
+				}
+			}
 		}
 		
 		override public function get height():Number 
@@ -254,26 +264,6 @@ package de.maxdidit.hardware.text.starling
 			return _hardwareText.standardFormat.features;
 		}
 		
-		public function get usedForLongTexts():Boolean
-		{
-			return _usedForLongTexts;
-		}
-		
-		public function set usedForLongTexts(value:Boolean):void
-		{
-			if (_usedForLongTexts != value)
-			{
-				_usedForLongTexts = value;
-				
-				var cache:HardwareCharacterCache = new HardwareCharacterCache(_usedForLongTexts ? //
-					new BatchedGlyphRendererFactory(Starling.current.context) : //
-					new SingleGlyphRendererFactory(Starling.current.context));
-				
-				_hardwareText.cache = cache;
-				_hardwareText.flagForUpdate();
-			}
-		}
-		
 		public function get vertexDistance():Number
 		{
 			return _vertexDistance;
@@ -327,11 +317,7 @@ package de.maxdidit.hardware.text.starling
 				_hardwareText.cache.clearInstanceCache();
 			}
 			
-			var cache:HardwareCharacterCache = new HardwareCharacterCache(_usedForLongTexts ? //
-				new BatchedGlyphRendererFactory(Starling.current.context) : //
-				new SingleGlyphRendererFactory(Starling.current.context));
-			
-			_hardwareText = new HardwareText(Starling.current.context, cache);
+			_hardwareText = new HardwareText(Starling.current.context, _cache);
 			_hardwareText.scaleY = -0.025;
 			_hardwareText.scaleX = 0.025;
 			

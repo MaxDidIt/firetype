@@ -262,6 +262,11 @@ package de.maxdidit.hardware.text
 			return _textHeight * scaleY;
 		}
 		
+		public function get untransformedWidth():Number 
+		{
+			return _untransformedWidth;
+		}
+		
 		/////////////////////// 
 		// Member Functions 
 		/////////////////////// 
