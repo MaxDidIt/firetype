@@ -191,7 +191,7 @@ If you change any property of the `standardFormat` object after `text` has been 
 _hardwareText.standardFormat.color = 0x333333;
 ```
 
-The other way you can change the appeareance of sections of your text by using the `<format>` tag. 
+The other way you can change the appearance of sections of your text by using the `<format>` tag. 
 ```Actionscript
 _hardwareText.text = "Just <format color='0x666666'>like</format> this.";
 ```
